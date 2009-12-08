@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.2
+Version:	0.2.5
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,27 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.5-1
+- make ghc_pkg_ver only return pkg version
+
+* Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.4-1
+- change GHCRequires to ghc_pkg_ver
+
+* Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.3-1
+- use the latest installed pkg version for %%GHCRequires
+
+* Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.2-1
+- add %%GHCRequires for automatically versioned library deps
+
+* Tue Sep 22 2009 Jens Petersen <petersen@redhat.com> - 0.2.1-2
+- no, revert versioned ghcdocdir again!
+
+* Tue Sep 22 2009 Jens Petersen <petersen@redhat.com> - 0.2.1-1
+- version ghcdocdir to allow multiple doc versions like ghcpkgdir
+
+* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Tue Jun  9 2009 Jens Petersen <petersen@redhat.com> - 0.2-1
 - drop version from ghcdocdir since it breaks haddock indexing
 
