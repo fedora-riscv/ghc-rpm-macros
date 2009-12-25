@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.2.5
+Version:	0.2.6
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec 24 2009 Jens Petersen <petersen@redhat.com> - 0.2.6-1
+- backport:
+  - add ghc_requires, ghc_doc_requires, ghc_prof_requires
+  - allow ghc_version_override to override ghc_version (for ghc)
+
 * Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.5-1
 - make ghc_pkg_ver only return pkg version
 
