@@ -1,20 +1,23 @@
+# "cabal"
 %cabal %{_bindir}/runghc Setup
 
+# configure
 %cabal_configure \
 %cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} --htmldir=%{ghcdocdir} --libsubdir='$compiler/$pkgid' %{?with_shared:--enable-shared} %{?with_dynamic:--ghc-option=-dynamic}
 
-%cabal_makefile \
-%cabal makefile -f cabal-rpm.mk \
-make -f cabal-rpm.mk %{_smp_mflags} \
-%{nil}
-
+# install
 %cabal_install %cabal copy --destdir=${RPM_BUILD_ROOT} -v
 
+# root dir for ghc docs
 %ghcdocbasedir %{_docdir}/ghc/html
+# ghcdocdir [pkgname]
 %ghcdocdir() %{ghcdocbasedir}/libraries/%{?1}%{!?1:%{pkg_name}}-%{version}
+# top library dir
 %ghcpkgbasedir %{_libdir}/ghc-%{ghc_version}
+# ghcpkgdir [pkgname]
 %ghcpkgdir() %{ghcpkgbasedir}/%{?1}%{!?1:%{pkg_name}}-%{version}
 
+# ghc_gen_filelists [pkgname]
 %ghc_gen_filelists() \
 pkgname=%{?1}%{!?1:%{pkg_name}} \
 basefile=ghc-${pkgname} \
@@ -47,13 +50,17 @@ fi \
 sed -i -e "s!${RPM_BUILD_ROOT}!!g" ${basefile}.files ${basefile}-devel.files ${basefile}-prof.files \
 %{nil}
 
+# compiler version
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
 
+# create and install package.conf file
+# cabal_pkg_conf [pkgname]
 %cabal_pkg_conf \
 %cabal register --gen-pkg-config \
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/ghc-%{ghc_version}/package.conf.d \
 install --mode=0644 %{?1}%{!?1:%{pkg_name}}-%{version}.conf $RPM_BUILD_ROOT%{_libdir}/ghc-%{ghc_version}/package.conf.d
 
+# devel pkg basic requires
 %ghc_requires Requires:       ghc = %{ghc_version}\
 Requires(post): ghc = %{ghc_version}\
 Requires(postun): ghc = %{ghc_version}\
@@ -61,13 +68,16 @@ Requires(postun): ghc = %{ghc_version}\
 Requires:       ghc-%{-n:%{-n*}}%{!-n:%{pkg_name}} = %{-v:%{-v*}}%{!-v:%{version}}-%{release}\
 %endif
 
+# doc pkg basic requires
 %ghc_doc_requires Requires:       ghc-doc = %{ghc_version}\
 Requires(post): ghc-doc = %{ghc_version}\
 Requires(postun): ghc-doc = %{ghc_version}
 
+# prof pkg basic requires
 %ghc_prof_requires Requires:       ghc-prof = %{ghc_version}\
 Requires:       ghc-%{-n:%{-n*}}%{!-n:%{pkg_name}}-devel = %{-v:%{-v*}}%{!-v:%{version}}-%{release}
 
+# ghc_lib_package [-n pkgname] [-c cdepslist] [-h pkgdepslist]
 %ghc_lib_package(n:c:h:)\
 %define ghc_pkg_name %{-n:ghc-%{-n*}}%{!-n:ghc-%{pkg_name}}\
 %if %{with shared}\
@@ -82,17 +92,18 @@ Requires:       ghc-%{-n:%{-n*}}%{!-n:%{pkg_name}}-devel = %{-v:%{-v*}}%{!-v:%{v
 %ghc_package_prof\
 %{nil}
 
-%ghc_binlib_package(n:c:h:l:v:s:d:)\
+# ghc_binlib_package [-n pkgname] [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-v version]
+%ghc_binlib_package(n:c:h:l:v:)\
 %define local_pkg_name %{-n:%{-n*}}%{!-n:%{pkg_name}}\
 %define ghc_pkg_name ghc-%{local_pkg_name}\
 %package -n %{ghc_pkg_name}\
-Summary:        %{-s:%{-s*}}%{!-s:%{?common_summary}%{!?common_summary:%{local_pkg_name}}}\
+Summary:        %{?common_summary}%{!?common_summary:%{local_pkg_name} library}\
 Group:          System Environment/Libraries\
 %{-v:Version:        %{-v*}}\
 %{-l:License:        %{-l*}}\
 \
 %description -n %{ghc_pkg_name}\
-%{-d:%{-d*}}%{!-d:%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}}\
+%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}\
 \
 This package provides the shared library.\
 \
@@ -101,11 +112,12 @@ This package provides the shared library.\
 
 %ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-conf || :
 
-%ghc_package_devel(n:c:h:l:v:s:d:)\
+# ghc_package_devel [-n pkgname] [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-v version]
+%ghc_package_devel(n:c:h:l:v:)\
 %define local_pkg_name %{-n:%{-n*}}%{!-n:%{pkg_name}}\
 %define ghc_pkg_name ghc-%{local_pkg_name}\
 %package -n %{ghc_pkg_name}-devel\
-Summary:        %{-s:%{-s*}}%{!-s:%{?common_summary}%{!?common_summary:%{local_pkg_name}}} development files\
+Summary:        %{?common_summary}%{!?common_summary:%{local_pkg_name} library} development files\
 Group:          Development/Libraries\
 %{-v:Version:        %{-v*}}\
 %{-l:License:        %{-l*}}\
@@ -116,7 +128,7 @@ Group:          Development/Libraries\
 %{-c:Requires:       %{-c*}}\
 \
 %description -n %{ghc_pkg_name}-devel\
-%{-d:%{-d*}}%{!-d:%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}}\
+%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}\
 \
 This package contains the development files.\
 \
@@ -130,13 +142,16 @@ This package contains the development files.\
 %defattr(-,root,root,-)\
 %{nil}
 
+# for docs post and postun
+# re-index haddock
 %ghc_reindex_haddock ( cd %{ghcdocbasedir}/libraries && [ -x "./gen_contents_index" ] && ./gen_contents_index ) || :
 
-%ghc_package_doc(n:h:l:v:s:d:)\
+# ghc_package_doc [-n pkgname] [-h pkgdepslist] [-l licensetag] [-v version]
+%ghc_package_doc(n:h:l:v:)\
 %define local_pkg_name %{-n:%{-n*}}%{!-n:%{pkg_name}}\
 %define ghc_pkg_name ghc-%{local_pkg_name}\
 %package -n %{ghc_pkg_name}-doc\
-Summary:        Documentation for %{-s:%{-s*}}%{!-s:%{?common_summary}%{!?common_summary:%{local_pkg_name}}}\
+Summary:        Documentation for %{?common_summary}%{!?common_summary:%{local_pkg_name} library}\
 Group:          Development/Libraries\
 %{-v:Version:        %{-v*}}\
 %{-l:License:        %{-l*}}\
@@ -145,7 +160,7 @@ Group:          Development/Libraries\
 %{-h:Requires:       %(echo %{-h*} | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-doc/g")}\
 \
 %description -n %{ghc_pkg_name}-doc\
-%{-d:%{-d*}}%{!-d:%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}}\
+%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}\
 \
 This package contains development documentation files.\
 \
@@ -161,11 +176,12 @@ fi\
 %defattr(-,root,root,-)\
 %{nil}
 
-%ghc_package_prof(n:h:l:v:s:d:)\
+# ghc_package_prof [-n pkgname] [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-v version]
+%ghc_package_prof(n:h:l:v:)\
 %define local_pkg_name %{-n:%{-n*}}%{!-n:%{pkg_name}}\
 %define ghc_pkg_name ghc-%{local_pkg_name}\
 %package -n %{ghc_pkg_name}-prof\
-Summary:        Profiling libraries for %{-s:%{-s*}}%{!-s:%{?common_summary}%{!?common_summary:%{local_pkg_name}}}\
+Summary:        Profiling libraries for %{?common_summary}%{!?common_summary:%{local_pkg_name}}\
 Group:          Development/Libraries\
 %{-v:Version:        %{-v*}}\
 %{-l:License:        %{-l*}}\
@@ -174,10 +190,39 @@ Group:          Development/Libraries\
 %{-h:Requires:       %(echo %{-h*} | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}\
 \
 %description -n %{ghc_pkg_name}-prof\
-%{-d:%{-d*}}%{!-d:%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}}\
+%{?common_description}%{!?common_description:Haskell %{local_pkg_name} library.}\
 \
 This package contains the profiling library.\
 \
 %files -n %{ghc_pkg_name}-prof -f %{ghc_pkg_name}-prof.files\
 %defattr(-,root,root,-)\
 %{nil}
+
+# ghc_strip_dynlinked
+%ghc_strip_dynlinked\
+%if 0%{!?__debug_package:1}\
+find $RPM_BUILD_ROOT -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print | xargs strip\
+%endif
+
+# ghc_bin_build
+%ghc_bin_build\
+%cabal_configure --ghc\
+%cabal build
+
+# ghc_lib_build
+%ghc_lib_build\
+%cabal_configure --ghc -p\
+%cabal build\
+%cabal haddock %{?with_hscolour:--hyperlink-source}
+
+# ghc_bin_install
+%ghc_bin_install\
+%cabal_install\
+%ghc_strip_dynlinked
+
+# ghc_lib_install
+%ghc_lib_install\
+%cabal_install\
+%cabal_pkg_conf\
+%ghc_gen_filelists\
+%ghc_strip_dynlinked

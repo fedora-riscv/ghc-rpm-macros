@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.5.6
+Version:	0.7.1
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,33 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jun 28 2010 Jens Petersen <petersen@redhat.com> - 0.7.1-1
+- support hscolour'ing of src from haddock
+- really remove redundant summary and description option flags
+
+* Sat Jun 26 2010 Jens Petersen <petersen@redhat.com> - 0.7.0-1
+- new ghc_bin_build, ghc_bin_install, ghc_lib_build, ghc_lib_install
+
+* Thu Jun 24 2010 Jens Petersen <petersen@redhat.com> - 0.6.2-1
+- a couple more fallback summary tweaks
+
+* Thu Jun 24 2010 Jens Petersen <petersen@redhat.com> - 0.6.1-1
+- drop the summary -s and description -d package options since rpm does not
+  seem to allow white\ space in macro option args anyway
+
+* Wed Jun 23 2010 Jens Petersen <petersen@redhat.com> - 0.6.0-1
+- make ghc_strip_dynlinked conditional on no debug_package
+
+* Wed Jun 23 2010 Jens Petersen <petersen@redhat.com> - 0.5.9-1
+- replace ghc_strip_shared with ghc_strip_dynlinked
+
+* Sun Jun 20 2010 Jens Petersen <petersen@redhat.com> - 0.5.8-1
+- add ghc_strip_shared to strip shared libraries
+
+* Sun Jun 20 2010 Jens Petersen <petersen@redhat.com> - 0.5.7-1
+- add comments over macros
+- drop unused cabal_makefile
+
 * Mon Apr 12 2010 Jens Petersen <petersen@redhat.com> - 0.5.6-1
 - drop unused ghc_pkg_ver macro
 - add ghc_pkg_recache macro
