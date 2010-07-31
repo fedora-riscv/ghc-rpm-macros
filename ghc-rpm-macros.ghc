@@ -19,15 +19,18 @@
 
 # ghc_gen_filelists [pkgname]
 %ghc_gen_filelists() \
-rm -f %1-devel.files %1-prof.files %1-doc.files \
-echo '%defattr(-,root,root,-)' > %1-devel.files \
-find ${RPM_BUILD_ROOT}%{ghcpkgdir} -type d | sed 's/^/%dir /' >> %1-devel.files \
-find ${RPM_BUILD_ROOT}%{ghcpkgdir} ! \\( -type d -o -name '*_p.a' -o -name '*.p_hi' \\) >> %1-devel.files \
-echo '%defattr(-,root,root,-)' > %1-prof.files \
-find ${RPM_BUILD_ROOT}%{ghcpkgdir} \\( -name '*_p.a' -o -name '*.p_hi' \\) >> %1-prof.files \
-sed -i -e "s!${RPM_BUILD_ROOT}!!g" %1-devel.files %1-prof.files \
-echo '%defattr(-,root,root,-)' > %1-doc.files \
-echo '%{ghcdocdir}' >> %1-doc.files \
+pkgname=%{?1}%{!?1:%{pkg_name}} \
+basefile=ghc-${pkgname} \
+pkgnamever=${pkgname}-%{version} \
+rm -f ${basefile}-devel.files ${basefile}-prof.files ${basefile}-doc.files \
+echo '%defattr(-,root,root,-)' > ${basefile}-devel.files \
+find ${RPM_BUILD_ROOT}%{ghcpkgdir} -type d | sed 's/^/%dir /' >> ${basefile}-devel.files \
+find ${RPM_BUILD_ROOT}%{ghcpkgdir} ! \\( -type d -o -name '*_p.a' -o -name '*.p_hi' \\) >> ${basefile}-devel.files \
+echo '%defattr(-,root,root,-)' > ${basefile}-prof.files \
+find ${RPM_BUILD_ROOT}%{ghcpkgdir} \\( -name '*_p.a' -o -name '*.p_hi' \\) >> ${basefile}-prof.files \
+sed -i -e "s!${RPM_BUILD_ROOT}!!g" ${basefile}-devel.files ${basefile}-prof.files \
+echo '%defattr(-,root,root,-)' > ${basefile}-doc.files \
+echo '%{ghcdocdir}' >> ${basefile}-doc.files \
 %{nil}
 
 %ghc_gen_scripts %cabal register --gen-script ; %cabal unregister --gen-script

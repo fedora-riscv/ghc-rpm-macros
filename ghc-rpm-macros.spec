@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.0.610.2
+Version:	0.7.0.610.3
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.3-1
+- make ghc_gen_filelists pkg_name arg optional
+
 * Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.2-1
 - also backport cabal_pkg_conf for f13 compatibility
 - fix ghc_strip_dynlinked when no dynlinked files
@@ -64,6 +67,7 @@ rm -rf $RPM_BUILD_ROOT
   in current released f12 binlib packages
 - for same reason ghcdocdir, ghcpkgdir, ghc_gen_filelists do not take
   optional name arg
+- ghc-6.10.4 haddock does not support hscolour
 
 * Thu Dec 24 2009 Jens Petersen <petersen@redhat.com> - 0.2.6-1
 - backport:
