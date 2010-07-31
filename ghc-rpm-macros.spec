@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.2.6
+Version:	0.7.0.610.1
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,19 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.1-1
+- backport 0.7.1 to ghc-6.10:
+- add ghc_bin_build, ghc_bin_install, ghc_lib_build, ghc_lib_install,
+  ghc_strip_dynlinked, ghcdocbasedir, and drop unused cabal_makefile
+- ghc_reindex_haddock uses ghcdocbasedir
+- ghc_package_devel, ghc_package_doc, and ghc_package_prof helper macros
+- Notes:
+- no shared libraries in ghc-6.10.4 so shared and dynmic are not supported
+- no name-ver override to maintain compatibility with optional pkg_name
+  in current released f12 binlib packages
+- for same reason ghcdocdir, ghcpkgdir, ghc_gen_filelists do not take
+  optional name arg
+
 * Thu Dec 24 2009 Jens Petersen <petersen@redhat.com> - 0.2.6-1
 - backport:
   - add ghc_requires, ghc_doc_requires, ghc_prof_requires
