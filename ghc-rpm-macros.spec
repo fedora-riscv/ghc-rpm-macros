@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.0.610.1
+Version:	0.7.0.610.2
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.2-1
+- also backport cabal_pkg_conf for f13 compatibility
+- fix ghc_strip_dynlinked when no dynlinked files
+
 * Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.1-1
 - backport 0.7.1 to ghc-6.10:
 - add ghc_bin_build, ghc_bin_install, ghc_lib_build, ghc_lib_install,
