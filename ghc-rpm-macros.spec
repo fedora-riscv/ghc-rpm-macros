@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.1
+Version:	0.7.2
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.2-1
+- fix ghc_strip_dynlinked when no dynlinked files
+
 * Mon Jun 28 2010 Jens Petersen <petersen@redhat.com> - 0.7.1-1
 - support hscolour'ing of src from haddock
 - really remove redundant summary and description option flags
