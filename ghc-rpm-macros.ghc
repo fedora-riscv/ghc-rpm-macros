@@ -19,11 +19,12 @@
 
 # ghc_gen_filelists [pkgname]
 %ghc_gen_filelists() \
-pkgname=%{?1}%{!?1:%{pkg_name}} \
-basefile=ghc-${pkgname} \
-pkgnamever=${pkgname}-%{version} \
+basefile=%{?1}%{!?1:ghc-%{pkg_name}}\
 rm -f ${basefile}-devel.files ${basefile}-prof.files ${basefile}-doc.files \
 echo '%defattr(-,root,root,-)' > ${basefile}-devel.files \
+if [ -d "${RPM_BUILD_ROOT}%{_docdir}/%{name}-%{version}" ]; then \
+  %{!?1:echo "%{_docdir}/%{name}-%{version}" >> ${basefile}-devel.files} %{?1::} \
+fi \
 find ${RPM_BUILD_ROOT}%{ghcpkgdir} -type d | sed 's/^/%dir /' >> ${basefile}-devel.files \
 find ${RPM_BUILD_ROOT}%{ghcpkgdir} ! \\( -type d -o -name '*_p.a' -o -name '*.p_hi' \\) >> ${basefile}-devel.files \
 echo '%defattr(-,root,root,-)' > ${basefile}-prof.files \
@@ -195,5 +196,5 @@ find $RPM_BUILD_ROOT -type f -exec sh -c "file {} | grep -q 'dynamically linked'
 %ghc_lib_install\
 %cabal_install\
 %cabal_pkg_conf\
-%ghc_gen_filelists ghc-%{?pkg_name}%{!?pkg_name:%name}\
+%ghc_gen_filelists\
 %ghc_strip_dynlinked

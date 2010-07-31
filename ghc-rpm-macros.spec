@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.0.610.3
+Version:	0.7.0.610.4
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.4-1
+- fix backport of ghc_gen_filelists pkg_name arg handling
+
 * Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.3-1
 - make ghc_gen_filelists pkg_name arg optional
 
