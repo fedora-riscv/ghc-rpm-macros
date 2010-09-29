@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.0.610.4
+Version:	0.8.1
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,34 +48,94 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.4-1
-- fix backport of ghc_gen_filelists pkg_name arg handling
-
-* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.3-1
-- make ghc_gen_filelists pkg_name arg optional
-
-* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.2-1
-- also backport cabal_pkg_conf for f13 compatibility
+* Fri Jul 16 2010 Jens Petersen <petersen@redhat.com> - 0.8.1-1
 - fix ghc_strip_dynlinked when no dynlinked files
+- devel should provide doc also when not obsoleting
 
-* Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.0.610.1-1
-- backport 0.7.1 to ghc-6.10:
-- add ghc_bin_build, ghc_bin_install, ghc_lib_build, ghc_lib_install,
-  ghc_strip_dynlinked, ghcdocbasedir, and drop unused cabal_makefile
+* Fri Jul 16 2010 Jens Petersen <petersen@redhat.com> - 0.8.0-1
+- merge -doc into -devel and provide -o obsoletes doc subpackage option
+
+* Mon Jun 28 2010 Jens Petersen <petersen@redhat.com> - 0.7.1-1
+- support hscolour'ing of src from haddock
+- really remove redundant summary and description option flags
+
+* Sat Jun 26 2010 Jens Petersen <petersen@redhat.com> - 0.7.0-1
+- new ghc_bin_build, ghc_bin_install, ghc_lib_build, ghc_lib_install
+
+* Thu Jun 24 2010 Jens Petersen <petersen@redhat.com> - 0.6.2-1
+- a couple more fallback summary tweaks
+
+* Thu Jun 24 2010 Jens Petersen <petersen@redhat.com> - 0.6.1-1
+- drop the summary -s and description -d package options since rpm does not
+  seem to allow white\ space in macro option args anyway
+
+* Wed Jun 23 2010 Jens Petersen <petersen@redhat.com> - 0.6.0-1
+- make ghc_strip_dynlinked conditional on no debug_package
+
+* Wed Jun 23 2010 Jens Petersen <petersen@redhat.com> - 0.5.9-1
+- replace ghc_strip_shared with ghc_strip_dynlinked
+
+* Sun Jun 20 2010 Jens Petersen <petersen@redhat.com> - 0.5.8-1
+- add ghc_strip_shared to strip shared libraries
+
+* Sun Jun 20 2010 Jens Petersen <petersen@redhat.com> - 0.5.7-1
+- add comments over macros
+- drop unused cabal_makefile
+
+* Mon Apr 12 2010 Jens Petersen <petersen@redhat.com> - 0.5.6-1
+- drop unused ghc_pkg_ver macro
+- add ghc_pkg_recache macro
+
+* Fri Jan 15 2010 Jens Petersen <petersen@redhat.com> - 0.5.5-1
+- drop optional 2nd version arg from ghcdocdir, ghcpkgdir, and
+  ghc_gen_filelists: multiversion subpackages are not supported
+- add ghcpkgbasedir
+- bring back some shared conditions which were dropped temporarily
+- test for ghcpkgdir and ghcdocdir in ghc_gen_filelists
+- allow optional pkgname arg for cabal_pkg_conf
+- can now package gtk2hs
+
+* Mon Jan 11 2010 Jens Petersen <petersen@redhat.com> - 0.5.4-1
+- use -v in ghc_requires and ghc_prof_requires for version
+
+* Mon Jan 11 2010 Jens Petersen <petersen@redhat.com> - 0.5.3-1
+- drop "Library for" from base lib summary
+
+* Mon Jan 11 2010 Jens Petersen <petersen@redhat.com> - 0.5.2-1
+- use -n in ghc_requires and ghc_prof_requires for when no pkg_name
+
+* Mon Jan 11 2010 Jens Petersen <petersen@redhat.com> - 0.5.1-1
+- add ghcdocbasedir
+- revert ghcdocdir to match upstream ghc
+- ghcdocdir and ghcpkgdir now take optional name version args
+- update ghc_gen_filelists to new optional name version args
+- handle docdir in ghc_gen_filelists
 - ghc_reindex_haddock uses ghcdocbasedir
-- ghc_package_devel, ghc_package_doc, and ghc_package_prof helper macros
-- Notes:
-- no shared libraries in ghc-6.10.4 so shared and dynmic are not supported
-- no name-ver override to maintain compatibility with optional pkg_name
-  in current released f12 binlib packages
-- for same reason ghcdocdir, ghcpkgdir, ghc_gen_filelists do not take
-  optional name arg
-- ghc-6.10.4 haddock does not support hscolour
+- summary and description options to ghc_binlib_package, ghc_package_devel,
+  ghc_package_doc, and ghc_package_prof
 
-* Thu Dec 24 2009 Jens Petersen <petersen@redhat.com> - 0.2.6-1
-- backport:
-  - add ghc_requires, ghc_doc_requires, ghc_prof_requires
-  - allow ghc_version_override to override ghc_version (for ghc)
+* Sun Jan 10 2010 Jens Petersen <petersen@redhat.com> - 0.5.0-1
+- pkg_name must be set now for binlib packages too
+- new ghc_lib_package and ghc_binlib_package macros make packaging too easy
+- ghc_package_devel, ghc_package_doc, and ghc_package_prof helper macros
+- ghc_gen_filelists now defaults to ghc-%%{pkg_name}
+- add dynamic bcond to cabal_configure instead of cabal_configure_dynamic
+
+* Thu Dec 24 2009 Jens Petersen <petersen@redhat.com> - 0.4.0-1
+- add cabal_configure_dynamic
+- add ghc_requires, ghc_doc_requires, ghc_prof_requires
+
+* Tue Dec 15 2009 Jens Petersen <petersen@redhat.com> - 0.3.1-1
+- use ghc_version_override to override ghc_version
+- fix pkg .conf filelist match
+
+* Sat Dec 12 2009 Jens Petersen <petersen@redhat.com> - 0.3.0-1
+- major updates for ghc-6.12, package.conf.d, and shared libraries
+- add shared support to cabal_configure, ghc_gen_filelists
+- version ghcdocdir
+- replace ghc_gen_scripts, ghc_install_scripts, ghc_register_pkg, ghc_unregister_pkg
+  with cabal_pkg_conf
+- allow (ghc to) override ghc_version
 
 * Mon Nov 16 2009 Jens Petersen <petersen@redhat.com> - 0.2.5-1
 - make ghc_pkg_ver only return pkg version
