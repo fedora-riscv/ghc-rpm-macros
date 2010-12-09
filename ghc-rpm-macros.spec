@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.2
+Version:	0.7.3
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -19,8 +19,8 @@ BuildArch:	noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
-of the Haskell SIG. This package probably shouldn't be installed on its own
-as GHC is needed in order to make use of these macros.
+of the Fedora Haskell SIG. This package probably shouldn't be installed on
+its own as GHC is needed in order to make use of these macros.
 
 %prep
 %setup -c -T
@@ -34,7 +34,7 @@ echo no build stage needed
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
-cp -p %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
+install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
 
 %clean
@@ -48,6 +48,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec  7 2010 Jens Petersen <petersen@redhat.com> - 0.7.3-1
+- add ghc_pkg_obsoletes for obsoleting old packages
+- disable debuginfo by default
+- make shared default: use without_shared to disable
+- fix without_shared build so it actually works
+- use ghcpkgbasedir
+
 * Sat Jul 31 2010 Jens Petersen <petersen@redhat.com> - 0.7.2-1
 - fix ghc_strip_dynlinked when no dynlinked files
 
