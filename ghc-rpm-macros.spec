@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.7.3
+Version:	0.7.4
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -48,6 +48,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Dec 29 2010 Jens Petersen <petersen@redhat.com> - 0.7.4-1
+- revert disabling debug_package, since with redhat-rpm-config installed
+  the behaviour depended on the position of ghc_lib_package in the spec file
+  (reported by narasim_7)
+
 * Tue Dec  7 2010 Jens Petersen <petersen@redhat.com> - 0.7.3-1
 - add ghc_pkg_obsoletes for obsoleting old packages
 - disable debuginfo by default

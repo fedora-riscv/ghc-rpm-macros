@@ -116,7 +116,6 @@ This package provides the shared library.\
 
 # ghc_package_devel [-n pkgname] [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-v version]
 %ghc_package_devel(n:c:h:l:v:)\
-%global debug_package %{nil}\
 %define local_pkg_name %{-n:%{-n*}}%{!-n:%{pkg_name}}\
 %define ghc_pkg_name ghc-%{local_pkg_name}\
 %package -n %{ghc_pkg_name}-devel\
