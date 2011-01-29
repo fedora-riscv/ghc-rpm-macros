@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.8.3
+Version:	0.10.50
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -13,7 +13,6 @@ URL:		https://fedoraproject.org/wiki/Haskell_SIG
 Source0:	ghc-rpm-macros.ghc
 Source1:	COPYING
 Source2:	AUTHORS
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:	noarch
 
@@ -32,13 +31,8 @@ echo no build stage needed
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
 install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %files
@@ -48,10 +42,27 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan 29 2011 Jens Petersen <petersen@redhat.com> - 0.10.50-1
+- merge subpackaging support from 0.11.4:
+- drop ghcdocdir and ghcpkgdir
+- new ghclibdocdir
+- improve prof summary and description
+- add without_prof and without_haddock option macros
+- add ghc_binlib_package option to exclude package from ghc_packages_list
+- condition lib base package additional description for srpm
+- use buildroot instead of RPM_BUILD_ROOT
+- rename ghcpkgbasedir to ghclibdir
+- move name and version macro options (-n and -v) to optional args
+- ghc_gen_filelists, ghc_lib_build, ghc_lib_install, cabal_pkg_conf
+  now take optional "[name] [version]" args
+- drop with_devhelp since --html-help option gone from haddock-2.8.0
+- rename ghc_requires to ghc_devel_requires
+- drop ghc_doc_requires
+
 * Wed Dec 29 2010 Jens Petersen <petersen@redhat.com> - 0.8.3-1
 - revert disabling debug_package, since with redhat-rpm-config installed
   the behaviour depended on the position of ghc_lib_package in the spec file
-  (reported by narasim_7)
+  (reported by narasim)
 
 * Thu Sep 30 2010 Jens Petersen <petersen@redhat.com> - 0.8.2-1
 - add ghc_pkg_obsoletes for obsoleting old packages
