@@ -96,7 +96,7 @@ Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}}-devel = %{?pkgver}%{!?p
 %{nil}
 
 # ghc_binlib_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] (-o deprecated no-op) [-x] [name] [version]
-%ghc_binlib_package(c:h:l:o:x:)\
+%ghc_binlib_package(c:h:l:o:x)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\

@@ -1,5 +1,5 @@
 Name:		ghc-rpm-macros
-Version:	0.10.50
+Version:	0.10.51
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -42,6 +42,9 @@ install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
 
 %changelog
+* Fri Feb  4 2011 Jens Petersen <petersen@redhat.com> - 0.10.51-1
+- ghc_binlib_package's -x option does not take an arg
+
 * Sat Jan 29 2011 Jens Petersen <petersen@redhat.com> - 0.10.50-1
 - merge subpackaging support from 0.11.4:
 - drop ghcdocdir and ghcpkgdir
