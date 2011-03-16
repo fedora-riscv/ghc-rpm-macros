@@ -1,5 +1,7 @@
+%global debug_package %{nil}
+
 Name:		ghc-rpm-macros
-Version:	0.10.51
+Version:	0.10.52
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -13,8 +15,6 @@ URL:		https://fedoraproject.org/wiki/Haskell_SIG
 Source0:	ghc-rpm-macros.ghc
 Source1:	COPYING
 Source2:	AUTHORS
-
-BuildArch:	noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -34,6 +34,17 @@ echo no build stage needed
 mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
 install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
+# this is why this package is now arch-dependent:
+# turn off shared libs and dynamic linking on secondary archs
+%ifnarch %{ix86} x86_64
+cat >> ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc <<EOF
+
+# shared libraries are only supported on primary intel archs
+%%ghc_without_dynamic 1
+%%ghc_without_shared 1
+EOF
+%endif
+
 
 %files
 %defattr(-,root,root,-)
@@ -42,6 +53,22 @@ install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
 
 %changelog
+* Wed Mar 16 2011 Jens Petersen <petersen@redhat.com> - 0.10.52-1
+- backport ghc fixes and secondary arch support from 0.11.12:
+- add ghc_pkg_obsoletes to binlib base lib package too
+- add docdir when subpackaging packages too
+- this package is now arch-dependent
+- rename without_shared to ghc_without_shared and without_dynamic
+  to ghc_without_dynamic so that they can be globally defined for
+  secondary archs without shared libs
+- use %%undefined macro
+- disable debug_package in ghc_bin_build and ghc_lib_build
+- set ghc_without_shared and ghc_without_dynamic on secondary
+  (ie non main intel archs)
+- disable debuginfo for self
+- only link Setup dynamically if without_shared and without_dynamic not set
+- add cabal_configure_options to pass extra options to cabal_configure
+
 * Fri Feb  4 2011 Jens Petersen <petersen@redhat.com> - 0.10.51-1
 - ghc_binlib_package's -x option does not take an arg
 
