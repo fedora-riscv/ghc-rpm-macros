@@ -1,5 +1,7 @@
+%global debug_package %{nil}
+
 Name:		ghc-rpm-macros
-Version:	0.7.4
+Version:	0.7.5
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -13,9 +15,6 @@ URL:		https://fedoraproject.org/wiki/Haskell_SIG
 Source0:	ghc-rpm-macros.ghc
 Source1:	COPYING
 Source2:	AUTHORS
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-BuildArch:	noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -32,13 +31,19 @@ echo no build stage needed
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
 install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
+# this is why this package is now arch-dependent:
+# turn off shared libs and dynamic linking on secondary archs
+%ifnarch %{ix86} x86_64
+cat >> ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc <<EOF
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+# shared libraries are only supported on primary intel archs
+%%ghc_without_dynamic 1
+%%ghc_without_shared 1
+EOF
+%endif
 
 
 %files
@@ -48,6 +53,21 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 17 2011 Jens Petersen <petersen@redhat.com> - 0.7.5-1
+- backport secondary arch support from 0.10.52:
+- add ghc_pkg_obsoletes to binlib base lib package too
+- this package is now arch-dependent
+- rename without_shared to ghc_without_shared and without_dynamic
+  to ghc_without_dynamic so that they can be globally defined for
+  secondary archs without shared libs
+- use %%undefined macro
+- disable debug_package in ghc_bin_build and ghc_lib_build
+- set ghc_without_shared and ghc_without_dynamic on secondary
+  (ie non main intel archs)
+- disable debuginfo for self
+- add cabal_configure_options to pass extra options to cabal_configure
+- drop with_devhelp since --html-help option gone from haddock-2.8.0
+
 * Wed Dec 29 2010 Jens Petersen <petersen@redhat.com> - 0.7.4-1
 - revert disabling debug_package, since with redhat-rpm-config installed
   the behaviour depended on the position of ghc_lib_package in the spec file
