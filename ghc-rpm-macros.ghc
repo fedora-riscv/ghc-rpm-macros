@@ -138,13 +138,14 @@ This package provides the shared library.\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg ghc-%{pkgname}\
+%global _use_internal_dependency_generator 0\
+%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %package -n %{basepkg}-devel\
 Summary:        %{?common_summary}%{!?common_summary:Haskell %{pkgname} library} development files\
 Group:          Development/Libraries\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 %{?ghc_devel_requires}\
-%{!-h:%{?ghc_pkg_deps:Requires:       %{ghc_pkg_deps}}}\
 %{-h:Requires:       %{-h*}}\
 %{!-c:%{?ghc_pkg_c_deps:Requires:       %{ghc_pkg_c_deps}}}\
 %{-c:Requires:       %{-c*}}\
@@ -182,7 +183,6 @@ Group:          Development/Libraries\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 %{?ghc_prof_requires}\
-%{!-h:%{?ghc_pkg_deps:Requires:       %(echo "%{ghc_pkg_deps}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}}\
 %{-h:Requires:       %(echo "%{-h*}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}\
 \

@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:		ghc-rpm-macros
-Version:	0.10.52
+Version:	0.10.53
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -15,6 +15,7 @@ URL:		https://fedoraproject.org/wiki/Haskell_SIG
 Source0:	ghc-rpm-macros.ghc
 Source1:	COPYING
 Source2:	AUTHORS
+Source3:	ghc-deps.sh
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -34,6 +35,9 @@ echo no build stage needed
 mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
 install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
 
+mkdir -p ${RPM_BUILD_ROOT}/%{_prefix}/lib/rpm
+install -p %{SOURCE3} ${RPM_BUILD_ROOT}/%{_prefix}/lib/rpm
+
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
@@ -50,9 +54,16 @@ EOF
 %defattr(-,root,root,-)
 %doc COPYING AUTHORS
 %config(noreplace) %{_sysconfdir}/rpm/macros.ghc
+%{_prefix}/lib/rpm/ghc-deps.sh
 
 
 %changelog
+* Sat May  7 2011 Jens Petersen <petersen@redhat.com> - 0.10.53-1
+- backport ghc-deps.sh rpm dependency script for automatic versioned
+  library dependencies (without hashes)
+- drop ghc_pkg_deps from ghc_package_devel and ghc_package_prof since
+  ghc-deps.sh generates better inter-package dependencies already
+
 * Wed Mar 16 2011 Jens Petersen <petersen@redhat.com> - 0.10.52-1
 - backport ghc fixes and secondary arch support from 0.11.12:
 - add ghc_pkg_obsoletes to binlib base lib package too
