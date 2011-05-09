@@ -84,8 +84,7 @@ Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:
 %endif
 
 # prof pkg basic requires
-%ghc_prof_requires Requires:       ghc-prof = %{ghc_version}\
-Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}}-devel = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
+%ghc_prof_requires Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}}-devel = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %{nil}
 
 # ghc_lib_package [-c cdepslist] [-h pkgdepslist] (-o deprecated no-op)
