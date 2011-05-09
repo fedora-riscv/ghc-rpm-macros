@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:		ghc-rpm-macros
-Version:	0.10.54
+Version:	0.10.55
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -58,6 +58,9 @@ EOF
 
 
 %changelog
+* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.55-1
+- include ghc_pkg_c_deps even when -c option used
+
 * Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.54-1
 - ghc-deps.sh: ignore private ghc lib deps
 - macros.ghc: drop ghc-prof requires from ghc_prof_requires
