@@ -3,9 +3,9 @@
 
 # To use add the following lines to spec file:
 #   %define _use_internal_dependency_generator 0
-#   %define __find_requires /usr/lib/rpm/ghc-deps.sh --requires %{buildroot}%{ghcpkgbasedir}
+#   %define __find_requires /usr/lib/rpm/ghc-deps.sh --requires %{buildroot}%{ghclibdir}
 
-[ $# -ne 2 ] && echo "Usage: `basename $0` --requires %{buildroot}" && exit 1
+[ $# -ne 2 ] && echo "Usage: `basename $0` --requires %{buildroot}%{ghclibdir}" && exit 1
 
 MODE=$1
 PKGBASEDIR=$2
@@ -41,6 +41,11 @@ for i in $files; do
 		HASHS=$(ghc-pkg -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
 		for i in $HASHS; do
 		    case $i in
+			# ignore internal packages
+			bin-package-db-*) ;;
+			ghc-binary-*) ;;
+			ghc-prim-*) ;;
+			integer-gmp-*) ;;
 			*-*) echo $i | sed -e "s/\(.*\)-\(.*\)-.*/$DEP = \2/" ;;
 			*) ;;
 		    esac
