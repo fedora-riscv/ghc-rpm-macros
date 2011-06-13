@@ -7,7 +7,7 @@
 
 # configure
 %cabal_configure\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} --htmldir=%{ghclibdocdir}/%{pkg_name}-%{version} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{?cabal_configure_options}
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{?cabal_configure_options}
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -27,7 +27,7 @@
 %define basepkg ghc-%{pkgname}\
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
-rm -f %{basepkg}.files %{basepkg}-devel.files %{basepkg}-prof.files\
+rm -f %{basepkg}.files %{basepkg}-devel.files\
 %if %{undefined ghc_without_shared}\
 echo "%defattr(-,root,root,-)" > %{basepkg}.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
@@ -49,16 +49,12 @@ fi\
 echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" >> %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 find %{buildroot}%{pkgdir} -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
-find %{buildroot}%{pkgdir} ! \\( -type d -o -name "*_p.a" -o -name "*.p_hi" -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
-fi\
-echo "%defattr(-,root,root,-)" > %{basepkg}-prof.files\
-if [ -d "%{buildroot}%{pkgdir}" ]; then\
-find %{buildroot}%{pkgdir} \\( -name "*_p.a" -o -name "*.p_hi" \\) >> %{basepkg}-prof.files\
+find %{buildroot}%{pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
 fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
-sed -i -e "s!%{buildroot}!!g" %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files %{basepkg}-prof.files\
+sed -i -e "s!%{buildroot}!!g" %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files\
 %{nil}
 
 # compiler version
@@ -83,10 +79,6 @@ Requires(postun): ghc = %{ghc_version}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
-# prof pkg basic requires
-%ghc_prof_requires Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}}-devel = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
-%{nil}
-
 # ghc_lib_package [-c cdepslist] [-h pkgdepslist] (-o deprecated no-op)
 %ghc_lib_package(c:h:o:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
@@ -99,8 +91,6 @@ Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:
 %endif\
 \
 %ghc_package_devel\
-\
-%ghc_package_prof\
 %{nil}
 
 # ghc_binlib_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] (-o deprecated no-op) [-x] [name] [version]
@@ -152,6 +142,8 @@ Group:          Development/Libraries\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-doc/g")}\
 Obsoletes:      %{basepkg}-doc < %{version}-%{release}\
 Provides:       %{basepkg}-doc = %{version}-%{release}\
+Obsoletes:      %{basepkg}-prof < %{version}-%{release}\
+Provides:       %{basepkg}-prof = %{version}-%{release}\
 \
 %description -n %{basepkg}-devel\
 %{?common_description}%{!?common_description:Haskell %{pkgname} library.}\
@@ -167,30 +159,6 @@ This package contains the development files.\
 %ghc_reindex_haddock\
 \
 %files -n %{basepkg}-devel -f %{basepkg}-devel.files\
-%defattr(-,root,root,-)\
-%{nil}
-
-# ghc_package_prof [-h pkgdepslist] [-l licensetag]
-%ghc_package_prof(h:l:)\
-%define pkgname %{?1}%{!?1:%{pkg_name}}\
-%define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
-%define basepkg ghc-%{pkgname}\
-%package -n %{basepkg}-prof\
-Summary:        %{?common_summary}%{!?common_summary:Haskell %{pkgname}} profiling libraries\
-Group:          Development/Libraries\
-%{?1:Version:        %{pkgver}}\
-%{-l:License:        %{-l*}}\
-%{?ghc_prof_requires}\
-%{-h:Requires:       %(echo "%{-h*}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}\
-%{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-prof/g")}\
-\
-%description -n %{basepkg}-prof\
-%{?common_description}%{!?common_description:Haskell %{pkgname} library.}\
-\
-This package contains the profiling development files.\
-\
-%files -n %{basepkg}-prof -f %{basepkg}-prof.files\
 %defattr(-,root,root,-)\
 %{nil}
 
