@@ -42,6 +42,7 @@ for i in $files; do
 		for i in $HASHS; do
 		    case $i in
 			# ignore internal packages
+			base-3*) ;;
 			bin-package-db-*) ;;
 			ghc-binary-*) ;;
 			ghc-prim-*) ;;

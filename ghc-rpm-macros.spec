@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:		ghc-rpm-macros
-Version:	0.10.56
+Version:	0.10.57
 Release:	1%{?dist}
 Summary:	Macros for building packages for GHC
 
@@ -60,6 +60,9 @@ EOF
 
 
 %changelog
+* Wed Jun 22 2011 Jens Petersen <petersen@redhat.com> - 0.10.57-1
+- ghc-deps.sh: also ignore base-3 since it is part of ghc-base
+
 * Mon Jun 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.56-1
 - merge prof subpackages into devel to simplify packaging
 - condition --htmldir on pkg_name
