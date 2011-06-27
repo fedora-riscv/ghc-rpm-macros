@@ -2,27 +2,29 @@
 
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
-Name:		ghc-rpm-macros
-Version:	0.10.57
-Release:	1%{?dist}
-Summary:	Macros for building packages for GHC
+Name:           ghc-rpm-macros
+Version:        0.10.58
+Release:        1%{?dist}
+Summary:        Macros for building packages for GHC
 
-Group:		Development/Libraries
-License:	GPLv3
-URL:		https://fedoraproject.org/wiki/Haskell_SIG
+Group:          Development/Libraries
+License:        GPLv3
+URL:            https://fedoraproject.org/wiki/Haskell_SIG
 
 # This is a Fedora maintained package which is specific to
 # our distribution.  Thus the source is only available from
 # within this srpm.
-Source0:	ghc-rpm-macros.ghc
-Source1:	COPYING
-Source2:	AUTHORS
-Source3:	ghc-deps.sh
+Source0:        ghc-rpm-macros.ghc
+Source1:        COPYING
+Source2:        AUTHORS
+Source3:        ghc-deps.sh
+Requires:       redhat-rpm-config
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
 of the Fedora Haskell SIG.  ghc needs to be installed in order to make use of
 these macros.
+
 
 %prep
 %setup -c -T
@@ -34,11 +36,9 @@ echo no build stage needed
 
 
 %install
-mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
-install -p -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
+install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 
-mkdir -p %{buildroot}/%{_prefix}/lib/rpm
-install -p %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm
+install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
@@ -60,6 +60,9 @@ EOF
 
 
 %changelog
+* Mon Jun 27 2011 Jens Petersen <petersen@redhat.com> - 0.10.58-1
+- add requires for redhat-rpm-config for ghc_arches
+
 * Wed Jun 22 2011 Jens Petersen <petersen@redhat.com> - 0.10.57-1
 - ghc-deps.sh: also ignore base-3 since it is part of ghc-base
 
