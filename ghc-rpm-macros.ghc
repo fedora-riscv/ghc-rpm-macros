@@ -149,10 +149,10 @@ Group:          Development/Libraries\
 %{-c:Requires:       %{-c*}}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %{ghc_pkg_obsoletes}}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1-doc/g")}\
-Obsoletes:      %{basepkg}-doc < %{version}-%{release}\
-Provides:       %{basepkg}-doc = %{version}-%{release}\
-Obsoletes:      %{basepkg}-prof < %{version}-%{release}\
-Provides:       %{basepkg}-prof = %{version}-%{release}\
+Obsoletes:      %{basepkg}-doc < %{pkgver}-%{release}\
+Provides:       %{basepkg}-doc = %{pkgver}-%{release}\
+Obsoletes:      %{basepkg}-prof < %{pkgver}-%{release}\
+Provides:       %{basepkg}-prof = %{pkgver}-%{release}\
 \
 %description -n %{basepkg}-devel\
 %{?common_description}%{!?common_description:Haskell %{pkgname} library.}\
