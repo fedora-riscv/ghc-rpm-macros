@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:           ghc-rpm-macros
-Version:        0.10.59
+Version:        0.10.61
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -60,6 +60,14 @@ EOF
 
 
 %changelog
+* Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.10.61-1
+- test for HsColour directly when running "cabal haddock" instead of
+  checking for without_haddock
+
+* Fri Sep 30 2011 Jens Petersen <petersen@redhat.com> - 0.10.60-1
+- fix devel subpackage's prof and doc obsoletes and provides versions
+  for multiple lib packages like ghc (reported by Henrik Nordström)
+
 * Tue Sep 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.59-1
 - do not setup ghc-deps.sh when ghc_bootstrapping
 - add ghc_test build config
