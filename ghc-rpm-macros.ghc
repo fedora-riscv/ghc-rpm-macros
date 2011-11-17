@@ -188,7 +188,9 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{?1:cd %1-%2}\
 %cabal_configure %{!?without_prof:-p} %{?1:--docdir=%{_docdir}/ghc-%1-%2 --htmldir=%{ghclibdocdir}/%1-%2}\
 %cabal build\
-%{!?without_haddock:%cabal haddock %{!?without_hscolour:--hyperlink-source}}\
+%if %{undefined without_haddock}\
+%cabal haddock $(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)\
+%endif\
 %{?1:cd -}\
 %{nil}
 
