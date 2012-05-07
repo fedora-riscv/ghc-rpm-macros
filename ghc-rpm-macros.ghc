@@ -2,7 +2,7 @@
 # see https://fedoraproject.org/wiki/PackagingDrafts/Haskell for more details
 
 # "cabal"
-%cabal [ -x Setup ] || ghc --make %{!?ghc_without_shared:%{!?ghc_without_dynamic:-dynamic}} Setup\
+%cabal [ -x Setup ] || ghc --make %{!?ghc_user_conf:-no-user-package-conf} %{!?ghc_without_dynamic:-dynamic} Setup\
 ./Setup
 
 # check ghc version was rebuilt against self
@@ -21,7 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{?cabal_configure_options}
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options}
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -48,13 +48,20 @@ echo "%dir %{pkgdir}" >> %{basepkg}.files\
 echo "%attr(755,root,root) %{pkgdir}/libHS%{pkgnamever}-ghc%{ghc_version}.so" >> %{basepkg}.files\
 fi\
 %endif\
-%if 0%{!?1:1}\
-if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
-  echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
+%if 0%{!?1:1} && %{defined ghc_without_shared}\
+if [ "%{name}" = "ghc-%{pkg_name}" ]; then\
+  if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
+    mv %{buildroot}%{_docdir}/%{name}-%{version} %{buildroot}%{_docdir}/%{name}-devel-%{version}\
+%if %{undefined ghc_exclude_docdir}\
+    echo "%{_docdir}/%{name}-devel-%{version}" >> %{basepkg}-devel.files\
+%endif\
+  fi\
 fi\
 %endif\
-%if 0%{?1:1}\
-if [ -d "%{buildroot}%{_docdir}/ghc-%{pkgnamever}" ]; then\
+%if 0%{!?1:1} && %{undefined ghc_exclude_docdir}\
+if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
+  echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
+elif [ -d "%{buildroot}%{_docdir}/ghc-%{pkgnamever}" ]; then\
   echo "%{_docdir}/ghc-%{pkgnamever}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
 fi\
 %endif\
@@ -68,6 +75,10 @@ echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
 sed -i -e "s!%{buildroot}!!g" %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files\
 %{nil}
+
+%ghc_add_basepkg_file()\
+%define basepkg ghc-%{pkg_name}\
+echo "%*" >> %{basepkg}%{?ghc_without_shared:-devel}.files
 
 # compiler version
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
@@ -84,59 +95,90 @@ install --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d\
 %{nil}
 
 # devel pkg basic requires
-%ghc_devel_requires Requires:       ghc = %{ghc_version}\
-Requires(post): ghc = %{ghc_version}\
-Requires(postun): ghc = %{ghc_version}\
+%ghc_devel_requires Requires:       ghc-compiler = %{ghc_version}\
+Requires(post): ghc-compiler = %{ghc_version}\
+Requires(postun): ghc-compiler = %{ghc_version}\
 %if %{undefined ghc_without_shared}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
-# ghc_lib_package [-c cdepslist] [-h pkgdepslist] (-o deprecated no-op)
-%ghc_lib_package(c:h:o:)\
-%define pkgname %{?1}%{!?1:%{pkg_name}}\
-%define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
-%define basepkg ghc-%{pkgname}\
+%ghc_shared_files\
 %if %{undefined ghc_without_shared}\
 %files -n %{basepkg} -f %{basepkg}.files\
+%{?base_doc_files:%doc %base_doc_files}\
 %endif\
+%{nil}
+
+# ghc_lib_package [-c cdepslist] [-h pkgdepslist]
+%ghc_lib_package(c:h:)\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define basepkg ghc-%{pkgname}\
+%ghc_shared_files\
 \
 %ghc_package_devel\
 %{nil}
 
-# ghc_binlib_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] (-o deprecated no-op) [-x] [name] [version]
-%ghc_binlib_package(c:h:l:o:x)\
+# ghc_package [-l licensetag] [name] [version]
+%ghc_package(l:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
-%{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgnamever}}}\
 %define basepkg ghc-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        %{?common_summary}%{!?common_summary:Haskell %{pkgname} library}\
 Group:          System Environment/Libraries\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
-%{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1/g")}\
-\
+%{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1/g")}
+
+# ghc_description [name] [version]
+%ghc_description\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define basepkg ghc-%{pkgname}\
 %description -n %{basepkg}\
 %{?common_description}%{!?common_description:Haskell %{pkgname} library.}\
 %if %{defined ghc_version} && %{undefined ghc_without_shared}\
 This package provides the shared library.\
-%endif\
+%endif
+
+# ghc_binlib_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-x] [name] [version]
+%ghc_binlib_package(c:h:l:x)\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define pkgver %{?2}%{!?2:%{version}}\
+%define pkgnamever %{pkgname}-%{pkgver}\
+%{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgnamever}}}\
+%define basepkg ghc-%{pkgname}\
+%ghc_package\
+\
+%ghc_description\
 \
 %ghc_lib_package\
 %{nil}
 
 %ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-conf || :
 
-# for docs post and postun
-%ghc_reindex_haddock ( cd %{ghcdocbasedir}/libraries && [ -x "./gen_contents_index" ] && ./gen_contents_index ) || :
+# (deprecated) for docs post and postun
+%ghc_reindex_haddock :
 
-# ghc_package_devel [-c cdepslist] [-h pkgdepslist] [-l licensetag] (-o deprecated no-op) [name] [version]
-%ghc_package_devel(c:h:l:o:)\
+%ghc_devel_files\
+%files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%if %{defined ghc_without_shared}\
+%{?base_doc_files:%doc %base_doc_files}\
+%endif\
+%{?devel_doc_files:%doc %devel_doc_files}\
+%{nil}
+
+%ghc_files()\
+%{?1:%define base_doc_files %*}\
+%define basepkg ghc-%{pkg_name}\
+%ghc_shared_files\
+\
+%ghc_devel_files\
+%{nil}
+
+# ghc_devel_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] [name] [version]
+%ghc_devel_package(c:h:l:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg ghc-%{pkgname}\
 %package -n %{basepkg}-devel\
 Summary:        %{?common_summary}%{!?common_summary:Haskell %{pkgname} library} development files\
@@ -153,21 +195,37 @@ Obsoletes:      %{basepkg}-doc < %{pkgver}-%{release}\
 Provides:       %{basepkg}-doc = %{pkgver}-%{release}\
 Obsoletes:      %{basepkg}-prof < %{pkgver}-%{release}\
 Provides:       %{basepkg}-prof = %{pkgver}-%{release}\
-\
+
+# ghc_devel_description
+%ghc_devel_description\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define basepkg ghc-%{pkgname}\
 %description -n %{basepkg}-devel\
 %{?common_description}%{!?common_description:Haskell %{pkgname} library.}\
 \
-This package contains the development files.\
-\
+This package contains the development files.
+
+# ghc_devel_post_postun
+%ghc_devel_post_postun\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define basepkg ghc-%{pkgname}\
 %post -n %{basepkg}-devel\
 %ghc_pkg_recache\
-%ghc_reindex_haddock\
 \
 %postun -n %{basepkg}-devel\
-%ghc_pkg_recache\
-%ghc_reindex_haddock\
+%ghc_pkg_recache
+
+# ghc_package_devel [-c cdepslist] [-h pkgdepslist] [-l licensetag] [name] [version]
+%ghc_package_devel(c:h:l:)\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define basepkg ghc-%{pkgname}\
+%ghc_devel_package\
 \
-%files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%ghc_devel_description\
+\
+%ghc_devel_post_postun\
+\
+%ghc_devel_files\
 %{nil}
 
 # ghc_strip_dynlinked
@@ -179,7 +237,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 # ghc_bin_build
 %ghc_bin_build\
 %global debug_package %{nil}\
-%cabal_configure %{!?ghc_without_dynamic:--ghc-option=-dynamic}\
+%cabal_configure\
 %cabal build
 
 # ghc_lib_build [name] [version]
@@ -189,13 +247,17 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %cabal_configure %{!?without_prof:-p} %{?1:--docdir=%{_docdir}/ghc-%1-%2 --htmldir=%{ghclibdocdir}/%1-%2}\
 %cabal build\
 %if %{undefined without_haddock}\
-%cabal haddock $(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)\
+%cabal haddock %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)}\
 %endif\
 %{?1:cd -}\
 %{nil}
 
 # install bin package
 %ghc_bin_install\
+%if %{undefined ghc_bootstrapping}\
+%global _use_internal_dependency_generator 0\
+%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
+%endif\
 %cabal_install\
 %ghc_strip_dynlinked
 
@@ -203,6 +265,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %ghc_lib_install()\
 %if %{undefined ghc_bootstrapping}\
 %global _use_internal_dependency_generator 0\
+%global __find_provides %{_rpmconfigdir}/ghc-deps.sh --provides %{buildroot}%{ghclibdir}\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %endif\
 %{?1:cd %1-%2}\
@@ -213,18 +276,17 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
-# skip shared and prof libs, documentation, and testsuite
-# - without_hscolour needs to be set locally in the spec file
-%ghc_bootstrap\
-%global ghc_without_shared 1\
-%global ghc_without_dynamic 1\
-%global without_prof 1\
-%global without_haddock 1\
-%global without_manual 1
+# - without_hscolour, without_testsuite, and ghc_bootstrapping
+#   need to be set locally in the spec file
 
 # skip prof libs, and documentation
-# - without_hscolour needs to be set locally in the spec file
 %ghc_test\
 %global without_prof 1\
 %global without_haddock 1\
 %global without_manual 1
+
+# skip shared and prof libs, documentation, and testsuite
+%ghc_bootstrap\
+%global ghc_without_shared 1\
+%global ghc_without_dynamic 1\
+%ghc_test

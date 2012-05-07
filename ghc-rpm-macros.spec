@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:           ghc-rpm-macros
-Version:        0.10.61
+Version:        0.15.5
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -53,51 +53,119 @@ EOF
 
 
 %files
-%defattr(-,root,root,-)
 %doc COPYING AUTHORS
 %config(noreplace) %{macros_file}
 %{_prefix}/lib/rpm/ghc-deps.sh
 
 
 %changelog
-* Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.10.61-1
-- test for HsColour directly when running "cabal haddock" instead of
-  checking for without_haddock
+* Thu Feb 23 2012 Jens Petersen <petersen@redhat.com> - 0.15.5-1
+- fix handling of devel docdir for non-shared builds
+- simplify ghc_bootstrap
 
-* Fri Sep 30 2011 Jens Petersen <petersen@redhat.com> - 0.10.60-1
+* Thu Jan 19 2012 Jens Petersen <petersen@redhat.com> - 0.15.4-1
+- allow dynamic linking of Setup with ghc_without_shared set
+
+* Fri Jan  6 2012 Jens Petersen <petersen@redhat.com> - 0.15.3-1
+- new ghc_add_basepkg_file to add a path to base lib package filelist
+
+* Wed Dec 28 2011 Jens Petersen <petersen@redhat.com> - 0.15.2-1
+- add ghc_devel_post_postun to help koji/mock with new macros
+
+* Tue Dec 27 2011 Jens Petersen <petersen@redhat.com> - 0.15.1-1
+- add ghc_package, ghc_description, ghc_devel_package, ghc_devel_description
+
+* Tue Dec 27 2011 Jens Petersen <petersen@redhat.com> - 0.15-1
+- new ghc_files wrapper macro for files which takes base doc files as args
+  and uses new ghc_shared_files and ghc_devel_files macros
+- when building for non-shared archs move installed docfiles to devel docdir
+
+* Fri Dec  2 2011 Jens Petersen <petersen@redhat.com> - 0.14.3-1
+- do not use ghc user config by default when compiling Setup
+- do not setup hscolour if without_hscolour defined
+
+* Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.14.2-1
+- test for HsColour directly when running "cabal haddock" instead of
+  check hscolour is available (reported by Giam Teck Choon, #753833)
+
+* Sat Nov 12 2011 Jens Petersen <petersen@redhat.com> - 0.14.1-1
+- fix double listing of docdir in base lib package
+
+* Tue Nov  1 2011 Jens Petersen <petersen@redhat.com> - 0.14-1
+- replace devel ghc requires with ghc-compiler
+- disable testsuite in ghc_bootstrap
+
+* Mon Oct 17 2011 Jens Petersen <petersen@redhat.com> - 0.13.13-1
+- add ghc_bootstrapping to ghc_bootstrap for packages other than ghc
+- make ghc-deps.sh also work when bootstrapping a new ghc version
+
+* Sat Oct 15 2011 Jens Petersen <petersen@redhat.com> - 0.13.12-1
+- add ghc_exclude_docdir to exclude docdir from filelists
+
+* Fri Sep 30 2011 Jens Petersen <petersen@redhat.com> - 0.13.11-1
 - fix devel subpackage's prof and doc obsoletes and provides versions
   for multiple lib packages like ghc (reported by Henrik Nordström)
 
-* Tue Sep 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.59-1
+* Tue Sep 13 2011 Jens Petersen <petersen@redhat.com> - 0.13.10-1
 - do not setup ghc-deps.sh when ghc_bootstrapping
 - add ghc_test build config
+
+* Wed Aug  3 2011 Jens Petersen <petersen@redhat.com> - 0.13.9-1
+- drop without_testsuite from ghc_bootstrap since it breaks koji
+
+* Fri Jul  1 2011 Jens Petersen <petersen@redhat.com> - 0.13.8-1
 - drop redundant defattr from filelists
 - move dependency generator setup from ghc_package_devel to ghc_lib_install
-- ghc_bootstrap is now a macro providing bootstrap config
+  in line with ghc_bin_install
+
+* Mon Jun 27 2011 Jens Petersen <petersen@redhat.com> - 0.13.7-1
+- add requires for redhat-rpm-config for ghc_arches
+- drop ghc_bootstrapping from ghc_bootstrap: doesn't work for koji
+
+* Fri Jun 17 2011 Jens Petersen <petersen@redhat.com> - 0.13.6-1
+- also set ghc_without_dynamic for ghc_bootstrap
+- drop without_hscolour from ghc_bootstrap: doesn't work for koji
+
+* Fri Jun 17 2011 Jens Petersen <petersen@redhat.com> - 0.13.5-1
+- ghc_bootstrap is now a macro which sets ghc_bootstrapping,
+  ghc_without_shared, without_prof, without_haddock, without_hscolour,
+  without_manual, without_testsuite
+- tweaks to ghc_check_bootstrap
+
+* Fri Jun 17 2011 Jens Petersen <petersen@redhat.com> - 0.13.4-1
 - add ghc_check_bootstrap
 
-* Mon Jun 27 2011 Jens Petersen <petersen@redhat.com> - 0.10.58-1
-- add requires for redhat-rpm-config for ghc_arches
+* Thu Jun  2 2011 Jens Petersen <petersen@redhat.com> - 0.13.3-1
+- rename macros.ghc-pkg back to macros.ghc
+- move the devel summary prefix back to a suffix
 
-* Wed Jun 22 2011 Jens Petersen <petersen@redhat.com> - 0.10.57-1
-- ghc-deps.sh: also ignore base-3 since it is part of ghc-base
+* Sat May 28 2011 Jens Petersen <petersen@redhat.com> - 0.13.2-1
+- macros need to live in /etc/rpm
+- use macro_file for macros.ghc filepath
 
-* Mon Jun 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.56-1
+* Sat May 28 2011 Jens Petersen <petersen@redhat.com> - 0.13.1-1
+- move macros.ghc to /usr/lib/rpm to avoid conflict with redhat-rpm-config
+
+* Wed May 11 2011 Jens Petersen <petersen@redhat.com> - 0.13-1
 - merge prof subpackages into devel to simplify packaging
-- condition --htmldir on pkg_name
 
-* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.55-1
+* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.12.1-1
 - include ghc_pkg_c_deps even when -c option used
 
-* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.54-1
-- ghc-deps.sh: ignore private ghc lib deps
-- macros.ghc: drop ghc-prof requires from ghc_prof_requires
-
-* Sat May  7 2011 Jens Petersen <petersen@redhat.com> - 0.10.53-1
-- backport ghc-deps.sh rpm dependency script for automatic versioned
-  library dependencies (without hashes)
+* Sat May  7 2011 Jens Petersen <petersen@redhat.com> - 0.12.0-1
 - drop ghc_pkg_deps from ghc_package_devel and ghc_package_prof since
   ghc-deps.sh generates better inter-package dependencies already
+- condition --htmldir on pkg_name
+
+* Fri Apr  1 2011 Jens Petersen <petersen@redhat.com> - 0.11.14-1
+- provides ghc-*-doc still needed for current lib templates
+
+* Mon Mar 28 2011 Jens Petersen <petersen@redhat.com> - 0.11.13-1
+- ghc-deps.sh: check PKGBASEDIR exists to avoid warning for bin package
+- abort cabal_configure if ghc is not self-bootstrapped
+- make ghc_reindex_haddock a safe no-op
+- no longer provide ghc-*-doc
+- no longer run ghc_reindex_haddock in ghc-*-devel scripts
 
 * Wed Mar 16 2011 Jens Petersen <petersen@redhat.com> - 0.10.52-1
 - backport ghc fixes and secondary arch support from 0.11.12:
@@ -110,7 +178,7 @@ EOF
 - use %%undefined macro
 - disable debug_package in ghc_bin_build and ghc_lib_build
 - set ghc_without_shared and ghc_without_dynamic on secondary
-  (ie non main intel archs)
+  (ie non main intel) archs
 - disable debuginfo for self
 - only link Setup dynamically if without_shared and without_dynamic not set
 - add cabal_configure_options to pass extra options to cabal_configure
