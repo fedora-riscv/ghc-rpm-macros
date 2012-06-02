@@ -1,26 +1,30 @@
-Name:		ghc-rpm-macros
-Version:	0.8.1
-Release:	1%{?dist}
-Summary:	Macros for building packages for GHC
+%global debug_package %{nil}
 
-Group:		Development/Libraries
-License:	GPLv3
-URL:		https://fedoraproject.org/wiki/Haskell_SIG
+%global macros_file %{_sysconfdir}/rpm/macros.ghc
+
+Name:           ghc-rpm-macros
+Version:        0.10.61
+Release:        1%{?dist}
+Summary:        Macros for building packages for GHC
+
+Group:          Development/Libraries
+License:        GPLv3
+URL:            https://fedoraproject.org/wiki/Haskell_SIG
 
 # This is a Fedora maintained package which is specific to
 # our distribution.  Thus the source is only available from
 # within this srpm.
-Source0:	ghc-rpm-macros.ghc
-Source1:	COPYING
-Source2:	AUTHORS
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-BuildArch:	noarch
+Source0:        ghc-rpm-macros.ghc
+Source1:        COPYING
+Source2:        AUTHORS
+Source3:        ghc-deps.sh
+Requires:       redhat-rpm-config
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
-of the Haskell SIG. This package probably shouldn't be installed on its own
-as GHC is needed in order to make use of these macros.
+of the Fedora Haskell SIG.  ghc needs to be installed in order to make use of
+these macros.
+
 
 %prep
 %setup -c -T
@@ -32,24 +36,121 @@ echo no build stage needed
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm
-cp -p %{SOURCE0} ${RPM_BUILD_ROOT}/%{_sysconfdir}/rpm/macros.ghc
+install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 
+install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+# this is why this package is now arch-dependent:
+# turn off shared libs and dynamic linking on secondary archs
+%ifnarch %{ix86} x86_64
+cat >> %{buildroot}/%{macros_file} <<EOF
+
+# shared libraries are only supported on primary intel archs
+%%ghc_without_dynamic 1
+%%ghc_without_shared 1
+EOF
+%endif
 
 
 %files
 %defattr(-,root,root,-)
 %doc COPYING AUTHORS
-%config(noreplace) %{_sysconfdir}/rpm/macros.ghc
+%config(noreplace) %{macros_file}
+%{_prefix}/lib/rpm/ghc-deps.sh
 
 
 %changelog
+* Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.10.61-1
+- test for HsColour directly when running "cabal haddock" instead of
+  checking for without_haddock
+
+* Fri Sep 30 2011 Jens Petersen <petersen@redhat.com> - 0.10.60-1
+- fix devel subpackage's prof and doc obsoletes and provides versions
+  for multiple lib packages like ghc (reported by Henrik Nordström)
+
+* Tue Sep 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.59-1
+- do not setup ghc-deps.sh when ghc_bootstrapping
+- add ghc_test build config
+- drop redundant defattr from filelists
+- move dependency generator setup from ghc_package_devel to ghc_lib_install
+- ghc_bootstrap is now a macro providing bootstrap config
+- add ghc_check_bootstrap
+
+* Mon Jun 27 2011 Jens Petersen <petersen@redhat.com> - 0.10.58-1
+- add requires for redhat-rpm-config for ghc_arches
+
+* Wed Jun 22 2011 Jens Petersen <petersen@redhat.com> - 0.10.57-1
+- ghc-deps.sh: also ignore base-3 since it is part of ghc-base
+
+* Mon Jun 13 2011 Jens Petersen <petersen@redhat.com> - 0.10.56-1
+- merge prof subpackages into devel to simplify packaging
+- condition --htmldir on pkg_name
+
+* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.55-1
+- include ghc_pkg_c_deps even when -c option used
+
+* Mon May  9 2011 Jens Petersen <petersen@redhat.com> - 0.10.54-1
+- ghc-deps.sh: ignore private ghc lib deps
+- macros.ghc: drop ghc-prof requires from ghc_prof_requires
+
+* Sat May  7 2011 Jens Petersen <petersen@redhat.com> - 0.10.53-1
+- backport ghc-deps.sh rpm dependency script for automatic versioned
+  library dependencies (without hashes)
+- drop ghc_pkg_deps from ghc_package_devel and ghc_package_prof since
+  ghc-deps.sh generates better inter-package dependencies already
+
+* Wed Mar 16 2011 Jens Petersen <petersen@redhat.com> - 0.10.52-1
+- backport ghc fixes and secondary arch support from 0.11.12:
+- add ghc_pkg_obsoletes to binlib base lib package too
+- add docdir when subpackaging packages too
+- this package is now arch-dependent
+- rename without_shared to ghc_without_shared and without_dynamic
+  to ghc_without_dynamic so that they can be globally defined for
+  secondary archs without shared libs
+- use %%undefined macro
+- disable debug_package in ghc_bin_build and ghc_lib_build
+- set ghc_without_shared and ghc_without_dynamic on secondary
+  (ie non main intel archs)
+- disable debuginfo for self
+- only link Setup dynamically if without_shared and without_dynamic not set
+- add cabal_configure_options to pass extra options to cabal_configure
+
+* Fri Feb  4 2011 Jens Petersen <petersen@redhat.com> - 0.10.51-1
+- ghc_binlib_package's -x option does not take an arg
+
+* Sat Jan 29 2011 Jens Petersen <petersen@redhat.com> - 0.10.50-1
+- merge subpackaging support from 0.11.4:
+- drop ghcdocdir and ghcpkgdir
+- new ghclibdocdir
+- improve prof summary and description
+- add without_prof and without_haddock option macros
+- add ghc_binlib_package option to exclude package from ghc_packages_list
+- condition lib base package additional description for srpm
+- use buildroot instead of RPM_BUILD_ROOT
+- rename ghcpkgbasedir to ghclibdir
+- move name and version macro options (-n and -v) to optional args
+- ghc_gen_filelists, ghc_lib_build, ghc_lib_install, cabal_pkg_conf
+  now take optional "[name] [version]" args
+- drop with_devhelp since --html-help option gone from haddock-2.8.0
+- rename ghc_requires to ghc_devel_requires
+- drop ghc_doc_requires
+
+* Wed Dec 29 2010 Jens Petersen <petersen@redhat.com> - 0.8.3-1
+- revert disabling debug_package, since with redhat-rpm-config installed
+  the behaviour depended on the position of ghc_lib_package in the spec file
+  (reported by narasim)
+
+* Thu Sep 30 2010 Jens Petersen <petersen@redhat.com> - 0.8.2-1
+- add ghc_pkg_obsoletes for obsoleting old packages
+- always obsolete -doc packages, but keep -o for now for backward compatibility
+- disable debuginfo by default
+- make shared and hscolour default
+- use without_shared and without_hscolour to disable them
+- fix without_shared build so it actually works
+- use ghcpkgbasedir
+
 * Fri Jul 16 2010 Jens Petersen <petersen@redhat.com> - 0.8.1-1
-- fix ghc_strip_dynlinked for no dynlinked files
+- fix ghc_strip_dynlinked when no dynlinked files
 - devel should provide doc also when not obsoleting
 
 * Fri Jul 16 2010 Jens Petersen <petersen@redhat.com> - 0.8.0-1
