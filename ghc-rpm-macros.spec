@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:           ghc-rpm-macros
-Version:        0.10.61
+Version:        0.10.61.1
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -18,6 +18,7 @@ Source0:        ghc-rpm-macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       redhat-rpm-config
 
 %description
@@ -36,6 +37,8 @@ echo no build stage needed
 
 
 %install
+rm -rf $RPM_BUILD_ROOT
+
 install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
@@ -52,6 +55,10 @@ EOF
 %endif
 
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+
 %files
 %defattr(-,root,root,-)
 %doc COPYING AUTHORS
@@ -60,6 +67,10 @@ EOF
 
 
 %changelog
+* Sat Jun  2 2012 Jens Petersen <petersen@redhat.com> - 0.10.61.1-1
+- substitute _rpmconfigdir since not defined in el5 rpm
+- restore buildroot define and cleaning
+
 * Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.10.61-1
 - test for HsColour directly when running "cabal haddock" instead of
   checking for without_haddock

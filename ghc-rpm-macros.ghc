@@ -203,7 +203,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %ghc_lib_install()\
 %if %{undefined ghc_bootstrapping}\
 %global _use_internal_dependency_generator 0\
-%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
+%global __find_requires %{_prefix}/lib/rpm/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %endif\
 %{?1:cd %1-%2}\
 %cabal_install\
