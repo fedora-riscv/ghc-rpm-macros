@@ -21,7 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options}
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -73,7 +73,11 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
-sed -i -e "s!%{buildroot}!!g" %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files\
+for i in %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files; do\
+if [ -f "$i" ]; then\
+sed -i -e "s!%{buildroot}!!g" $i\
+fi\
+done\
 %{nil}
 
 %ghc_add_basepkg_file()\
@@ -98,7 +102,7 @@ install --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d\
 %ghc_devel_requires Requires:       ghc-compiler = %{ghc_version}\
 Requires(post): ghc-compiler = %{ghc_version}\
 Requires(postun): ghc-compiler = %{ghc_version}\
-%if %{undefined ghc_without_shared}\
+%if %{undefined ghc_without_shared} && 0%{!?-m:1}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
@@ -131,7 +135,7 @@ Group:          System Environment/Libraries\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1/g")}
 
 # ghc_description [name] [version]
-%ghc_description\
+%ghc_description()\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
 %description -n %{basepkg}\
@@ -175,8 +179,9 @@ This package provides the shared library.\
 %ghc_devel_files\
 %{nil}
 
-# ghc_devel_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] [name] [version]
-%ghc_devel_package(c:h:l:)\
+# ghc_devel_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-m] [name] [version]
+#  -m : meta-package
+%ghc_devel_package(c:h:l:m)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define basepkg ghc-%{pkgname}\
@@ -194,10 +199,12 @@ Group:          Development/Libraries\
 Obsoletes:      %{basepkg}-doc < %{pkgver}-%{release}\
 Provides:       %{basepkg}-doc = %{pkgver}-%{release}\
 Obsoletes:      %{basepkg}-prof < %{pkgver}-%{release}\
+%if %{undefined without_prof}\
 Provides:       %{basepkg}-prof = %{pkgver}-%{release}\
+%endif
 
 # ghc_devel_description
-%ghc_devel_description\
+%ghc_devel_description()\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
 %description -n %{basepkg}-devel\
@@ -206,7 +213,7 @@ Provides:       %{basepkg}-prof = %{pkgver}-%{release}\
 This package contains the development files.
 
 # ghc_devel_post_postun
-%ghc_devel_post_postun\
+%ghc_devel_post_postun()\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
 %post -n %{basepkg}-devel\

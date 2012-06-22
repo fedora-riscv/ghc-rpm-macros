@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:           ghc-rpm-macros
-Version:        0.15.5
+Version:        0.15.6
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -13,11 +13,13 @@ URL:            https://fedoraproject.org/wiki/Haskell_SIG
 
 # This is a Fedora maintained package which is specific to
 # our distribution.  Thus the source is only available from
-# within this srpm.
+# within this srpm.  But it could be moved to fedorahosted.org
+# if other rpm distros want to use it.
 Source0:        ghc-rpm-macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
+Source4:        cabal-tweak-dep-ver
 Requires:       redhat-rpm-config
 
 %description
@@ -40,6 +42,8 @@ install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
+install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
+
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
@@ -56,9 +60,23 @@ EOF
 %doc COPYING AUTHORS
 %config(noreplace) %{macros_file}
 %{_prefix}/lib/rpm/ghc-deps.sh
+%{_bindir}/cabal-tweak-dep-ver
 
 
 %changelog
+* Fri Jun  8 2012 Jens Petersen <petersen@redhat.com> - 0.15.6-1
+- cabal-tweak-dep-ver: new script to tweak depends version bounds in .cabal
+  from ghc-rpm-macros-0.95.5
+- ghc-dep.sh: only use buildroot package.conf.d if it exists
+- ghc-deps.sh: look in buildroot package.conf.d for program deps
+- add a meta-package option to ghc_devel_package and use in ghc_devel_requires
+- allow ghc_description, ghc_devel_description, ghc_devel_post_postun
+  to take args
+- support meta packages like haskell-platform without base lib files
+- add shell variable cabal_configure_extra_options to cabal_configure for
+  local configuration
+- do not provide prof when without_prof set
+
 * Thu Feb 23 2012 Jens Petersen <petersen@redhat.com> - 0.15.5-1
 - fix handling of devel docdir for non-shared builds
 - simplify ghc_bootstrap
