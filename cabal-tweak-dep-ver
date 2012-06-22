@@ -20,7 +20,9 @@ if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
    exit 1
 fi
 
-if ! grep -q "$DEP.*$OLD" $CABALFILE; then
+BREAK=[^[:alnum:]-]
+
+if ! grep -q "$BREAK$DEP$BREAK[^,]*$OLD" $CABALFILE; then
    echo "$CABALFILE does not match: $DEP $OLD"
    exit 1
 fi
@@ -29,4 +31,4 @@ if [ ! -f $CABALFILE.orig ]; then
     BACKUP=.orig
 fi
 
-sed -i$BACKUP -e "s/\($DEP.*\)$OLD/\1$NEW/g" $CABALFILE
+sed -i$BACKUP -e "s/\($BREAK$DEP$BREAK[^,]*\)$OLD/\1$NEW/g" $CABALFILE
