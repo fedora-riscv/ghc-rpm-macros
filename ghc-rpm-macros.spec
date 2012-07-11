@@ -3,7 +3,7 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 Name:           ghc-rpm-macros
-Version:        0.15.6.1
+Version:        0.15.7
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -64,6 +64,15 @@ EOF
 
 
 %changelog
+* Wed Jul 11 2012 Jens Petersen <petersen@redhat.com> - 0.15.7-1
+- let ghc_bin_install take an arg to disable implicit stripping for subpackages
+- fix doc handling of subpackages for ghc_without_shared
+- without ghc_exclude_docdir include doc dir also for subpackages
+- rename ghc_binlib_package to ghc_lib_subpackage
+- add ghc_lib_build_without_haddock
+- no longer drop into package dirs when subpackaging with ghc_lib_build and
+  ghc_lib_install
+
 * Fri Jun 22 2012 Jens Petersen <petersen@redhat.com> - 0.15.6.1-1
 - cabal-tweak-dep-ver: be careful only to match complete dep name and
   do not match beyond ","

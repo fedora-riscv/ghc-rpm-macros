@@ -21,7 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_shared:--enable-shared} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -48,17 +48,17 @@ echo "%dir %{pkgdir}" >> %{basepkg}.files\
 echo "%attr(755,root,root) %{pkgdir}/libHS%{pkgnamever}-ghc%{ghc_version}.so" >> %{basepkg}.files\
 fi\
 %endif\
-%if 0%{!?1:1} && %{defined ghc_without_shared}\
-if [ "%{name}" = "ghc-%{pkg_name}" ]; then\
-  if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
-    mv %{buildroot}%{_docdir}/%{name}-%{version} %{buildroot}%{_docdir}/%{name}-devel-%{version}\
+%if %{defined ghc_without_shared}\
+if [ "%{name}" = "%{basepkg}" -o -n "%{?1}" ]; then\
+  if [ -d "%{buildroot}%{_docdir}/%{basepkg}-%{pkgver}" ]; then\
+    mv %{buildroot}%{_docdir}/%{basepkg}-%{pkgver} %{buildroot}%{_docdir}/%{basepkg}-devel-%{pkgver}\
 %if %{undefined ghc_exclude_docdir}\
-    echo "%{_docdir}/%{name}-devel-%{version}" >> %{basepkg}-devel.files\
+    echo "%{_docdir}/%{basepkg}-devel-%{version}" >> %{basepkg}-devel.files\
 %endif\
   fi\
 fi\
 %endif\
-%if 0%{!?1:1} && %{undefined ghc_exclude_docdir}\
+%if %{undefined ghc_exclude_docdir}\
 if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
   echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
 elif [ -d "%{buildroot}%{_docdir}/ghc-%{pkgnamever}" ]; then\
@@ -144,8 +144,8 @@ Group:          System Environment/Libraries\
 This package provides the shared library.\
 %endif
 
-# ghc_binlib_package [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-x] [name] [version]
-%ghc_binlib_package(c:h:l:x)\
+# ghc_lib_subpackage [-c cdepslist] [-h pkgdepslist] [-l licensetag] [-x] [name] [version]
+%ghc_lib_subpackage(c:h:l:x)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
@@ -247,38 +247,36 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %cabal_configure\
 %cabal build
 
+# ghc_lib_build_without_haddock [name] [version]
+%ghc_lib_build_without_haddock()\
+%global debug_package %{nil}\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?1:--docdir=%{_docdir}/ghc-%1-%2 --htmldir=%{ghclibdocdir}/%1-%2}\
+%cabal build\
+%{nil}
+
 # ghc_lib_build [name] [version]
 %ghc_lib_build()\
-%global debug_package %{nil}\
-%{?1:cd %1-%2}\
-%cabal_configure %{!?without_prof:-p} %{?1:--docdir=%{_docdir}/ghc-%1-%2 --htmldir=%{ghclibdocdir}/%1-%2}\
-%cabal build\
+%ghc_lib_build_without_haddock\
 %if %{undefined without_haddock}\
 %cabal haddock %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)}\
 %endif\
-%{?1:cd -}\
 %{nil}
 
 # install bin package
-%ghc_bin_install\
-%if %{undefined ghc_bootstrapping}\
+%ghc_bin_install()\
 %global _use_internal_dependency_generator 0\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
-%endif\
 %cabal_install\
-%ghc_strip_dynlinked
+%{!?1:%ghc_strip_dynlinked}\
+%{nil}
 
 # ghc_lib_install [name] [version]
 %ghc_lib_install()\
-%if %{undefined ghc_bootstrapping}\
 %global _use_internal_dependency_generator 0\
 %global __find_provides %{_rpmconfigdir}/ghc-deps.sh --provides %{buildroot}%{ghclibdir}\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
-%endif\
-%{?1:cd %1-%2}\
 %cabal_install\
 %cabal_pkg_conf\
-%{?1:cd -}\
 %ghc_gen_filelists\
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
