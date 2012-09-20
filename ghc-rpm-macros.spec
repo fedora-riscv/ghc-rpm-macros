@@ -2,9 +2,12 @@
 
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
+# uncomment to bootstrap without hscolour
+#%%global without_hscolour 1
+
 Name:           ghc-rpm-macros
-Version:        0.95.6
-Release:        2%{?dist}
+Version:        0.95.7
+Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
 Group:          Development/Libraries
@@ -21,6 +24,11 @@ Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Requires:       redhat-rpm-config
+%if %{undefined without_hscolour}
+ExclusiveArch:  %{ghc_arches}
+BuildRequires:  ghc-rpm-macros
+Requires:       hscolour
+%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -55,6 +63,14 @@ cat >> %{buildroot}/%{macros_file} <<EOF
 EOF
 %endif
 
+%if %{defined without_hscolour}
+cat >> %{buildroot}/%{macros_file} <<EOF
+
+# bootstrap
+%%without_hscolour 1
+EOF
+%endif
+
 
 %files
 %doc COPYING AUTHORS
@@ -64,6 +80,13 @@ EOF
 
 
 %changelog
+* Wed Sep 19 2012 Jens Petersen <petersen@redhat.com> - 0.95.7-1
+- fix broken duplicate hash output for haskell-platform binaries buildhack
+  when haskell-platform locally installed
+- ghc-rpm-macros now requires hscolour so packages no longer need to BR it
+- this can be disabled for bootstrapping by setting without_hscolour
+- make haddock build hoogle files
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.95.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 

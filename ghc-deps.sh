@@ -73,7 +73,7 @@ for i in $files; do
 		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
 	    fi
 	    for p in ${BIN_DEPS}; do
-		HASH=$(${GHC_PKG} --global $PACKAGE_CONF_OPT field $p id | sed -e "s/^id: \+//")
+		HASH=$(${GHC_PKG} --global $PACKAGE_CONF_OPT field $p id | sed -e "s/^id: \+//" | uniq)
 		echo "ghc($HASH)"
 	    done
 	fi
