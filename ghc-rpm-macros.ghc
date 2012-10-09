@@ -258,7 +258,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %ghc_lib_build()\
 %ghc_lib_build_without_haddock\
 %if %{undefined without_haddock}\
-%cabal haddock %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)} --hoogle\
+%cabal haddock --html %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)} --hoogle\
 %endif\
 %{nil}
 

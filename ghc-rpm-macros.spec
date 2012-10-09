@@ -4,9 +4,11 @@
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
+# uncomment to unbootstrap hscolour on again
+#%%undefine without_hscolour
 
 Name:           ghc-rpm-macros
-Version:        0.95.7
+Version:        0.95.8
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -80,6 +82,9 @@ EOF
 
 
 %changelog
+* Tue Oct  9 2012 Jens Petersen <petersen@redhat.com> - 0.95.8-1
+- "cabal haddock" needs --html option with --hoogle to output html
+
 * Wed Sep 19 2012 Jens Petersen <petersen@redhat.com> - 0.95.7-1
 - fix broken duplicate hash output for haskell-platform binaries buildhack
   when haskell-platform locally installed
