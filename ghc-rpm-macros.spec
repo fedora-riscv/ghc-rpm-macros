@@ -4,9 +4,11 @@
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
+# uncomment to unbootstrap hscolour on again
+#%%undefine without_hscolour
 
 Name:           ghc-rpm-macros
-Version:        0.15.8
+Version:        0.15.9
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -80,6 +82,9 @@ EOF
 
 
 %changelog
+* Tue Oct  9 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-1
+- "cabal haddock" needs --html option with --hoogle to output html
+
 * Thu Sep 20 2012 Jens Petersen <petersen@redhat.com> - 0.15.8-1
 - ghc-rpm-macros now requires hscolour so packages no longer need to BR it
 - this can be disabled for bootstrapping by setting without_hscolour
