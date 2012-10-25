@@ -4,8 +4,6 @@
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
-# uncomment to unbootstrap hscolour on again
-#%%undefine without_hscolour
 
 Name:           ghc-rpm-macros
 Version:        0.15.9
@@ -27,8 +25,8 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Requires:       redhat-rpm-config
 %if %{undefined without_hscolour}
+BuildRequires:  redhat-rpm-config
 ExclusiveArch:  %{ghc_arches}
-BuildRequires:  ghc-rpm-macros
 Requires:       hscolour
 %endif
 
@@ -65,14 +63,6 @@ cat >> %{buildroot}/%{macros_file} <<EOF
 EOF
 %endif
 
-%if %{defined without_hscolour}
-cat >> %{buildroot}/%{macros_file} <<EOF
-
-# bootstrap
-%%without_hscolour 1
-EOF
-%endif
-
 
 %files
 %doc COPYING AUTHORS
@@ -82,6 +72,10 @@ EOF
 
 
 %changelog
+* Thu Oct 25 2012 Jens Petersen <petersen@redhat.com>
+- BR redhat-rpm-config instead of ghc-rpm-macros
+- no longer set without_hscolour in macros.ghc for bootstrapping
+
 * Tue Oct  9 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-1
 - "cabal haddock" needs --html option with --hoogle to output html
 
