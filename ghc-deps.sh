@@ -16,7 +16,7 @@ GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
 if [ ! -x "/usr/bin/ghc-pkg-${GHC_VER}" -a -x "$PKGBASEDIR/ghc-pkg" ]; then
     GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
 else
-    GHC_PKG=/usr/bin/ghc-pkg
+    GHC_PKG="/usr/bin/ghc-pkg"
 fi
 
 case $MODE in
@@ -70,8 +70,11 @@ for i in $files; do
     elif [ "$MODE" = "--requires" ]; then
 	if file $i | grep -q 'executable, .* dynamically linked'; then
 	    BIN_DEPS=$(ldd $i | grep libHS | grep -v libHSrts | sed -e "s%^\\tlibHS\(.*\)-ghc${GHCVERSION}.so =.*%\1%")
+	    if [ -d "$PKGCONFDIR" ]; then
+		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
+	    fi
 	    for p in ${BIN_DEPS}; do
-		HASH=$(${GHC_PKG} --global field $p id | sed -e "s/^id: \+//")
+		HASH=$(${GHC_PKG} --global $PACKAGE_CONF_OPT field $p id | sed -e "s/^id: \+//")
 		echo $HASH | sed -e "s/\(.*\)-\(.*\)/ghc(\1) = \2/"
 	    done
 	fi
