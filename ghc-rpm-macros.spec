@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        0.15.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Macros for building packages for GHC
 
 Group:          Development/Libraries
@@ -72,7 +72,7 @@ EOF
 
 
 %changelog
-* Thu Oct 25 2012 Jens Petersen <petersen@redhat.com>
+* Thu Oct 25 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-2
 - BR redhat-rpm-config instead of ghc-rpm-macros
 - no longer set without_hscolour in macros.ghc for bootstrapping
 
