@@ -42,9 +42,9 @@ fi
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
+echo "%dir %{pkgdir}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
 %if %{undefined ghc_without_shared}\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
-echo "%dir %{pkgdir}" >> %{basepkg}.files\
 echo "%attr(755,root,root) %{pkgdir}/libHS%{pkgnamever}-ghc%{ghc_version}.so" >> %{basepkg}.files\
 fi\
 %endif\
@@ -67,7 +67,7 @@ fi\
 %endif\
 echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" >> %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
-find %{buildroot}%{pkgdir} -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
+find %{buildroot}%{pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
 find %{buildroot}%{pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
 fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\

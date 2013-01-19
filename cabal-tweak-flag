@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# TODO:
+# support "$0 FLAG NEW" when no upstream default
+
+set -e +x
+
+USAGE="Usage: $0 FLAG OLD NEW"
+
+if [ $# -ne 3 ]; then
+    echo "$USAGE"
+    exit 1
+fi
+
+FLAG=$1
+OLD=$2
+NEW=$3
+
+if [ "$OLD" = "$NEW" ]; then
+  echo "Old and new value can't be the same!"
+  exit 1
+fi
+
+CABALFILE=$(ls *.cabal)
+
+if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
+   echo "There needs to be one .cabal file in the current dir!"
+   exit 1
+fi
+
+if ! grep -q -i "^flag *$FLAG" $CABALFILE; then
+   echo "$CABALFILE does have flag $FLAG"
+   exit 1
+fi
+
+if ! grep -A3 -i "^flag *$FLAG" $CABALFILE | grep -q -i "default:"; then
+   echo "$CABALFILE: $FLAG flag might not have a default"
+   exit 1
+fi
+
+if ! grep -A3 -i "^flag *$FLAG" $CABALFILE | grep -q -i "default: *$OLD"; then
+   echo "$CABALFILE: $FLAG flag already defaults to $NEW"
+   exit 1
+fi
+
+if [ ! -f $CABALFILE.orig ]; then
+    BACKUP=.orig
+fi
+
+sed -i$BACKUP -e "/[Ff]lag *$FLAG/,/[Dd]efault: *$OLD/ s/\([Dd]efault: *\)$OLD/\1$NEW/" $CABALFILE

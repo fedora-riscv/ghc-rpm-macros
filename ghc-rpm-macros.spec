@@ -6,8 +6,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.9
-Release:        2%{?dist}
+Version:        0.15.10
+Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
 Group:          Development/Libraries
@@ -23,6 +23,7 @@ Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
+Source5:        cabal-tweak-flag
 Requires:       redhat-rpm-config
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
@@ -51,6 +52,7 @@ install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
+install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
@@ -69,9 +71,14 @@ EOF
 %config(noreplace) %{macros_file}
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
+%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Jan 19 2013 Jens Petersen <petersen@redhat.com> - 0.15.10-1
+- be more careful about library pkgdir ownership (#893777)
+- add cabal-tweak-flag script for toggling flag default
+
 * Thu Oct 25 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-2
 - BR redhat-rpm-config instead of ghc-rpm-macros
 - no longer set without_hscolour in macros.ghc for bootstrapping
