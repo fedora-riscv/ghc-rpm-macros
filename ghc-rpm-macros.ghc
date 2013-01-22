@@ -281,6 +281,23 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
+# ghc_fix_dynamic_rpath prog ...
+%ghc_fix_dynamic_rpath()\
+%if %{undefined ghc_without_dynamic}\
+PDIR=$(cd ..; pwd)\
+for i in %*; do\
+  PROG=%{buildroot}%{_bindir}/$i\
+  RPATH=$(chrpath $PROG| sed -e "s@^$PROG: RPATH=@@")\
+  case $RPATH in\
+    $PDIR*)\
+      NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
+      chrpath -r $NEWRPATH $PROG\
+      ;;\
+  esac\
+done\
+%endif\
+%{nil}
+
 # - without_hscolour, without_testsuite, and ghc_bootstrapping
 #   need to be set locally in the spec file
 
