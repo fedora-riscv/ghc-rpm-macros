@@ -1,25 +1,25 @@
 #!/bin/sh
 
 # TODO:
-# support "$0 FLAG NEW" when no upstream default
+# support setting flag when no upstream default
 
 set -e +x
 
-USAGE="Usage: $0 FLAG OLD NEW"
+USAGE="Usage: $0 FLAG [True|False]"
 
-if [ $# -ne 3 ]; then
+if [ $# -ne 2 ]; then
     echo "$USAGE"
     exit 1
 fi
 
 FLAG=$1
-OLD=$2
-NEW=$3
 
-if [ "$OLD" = "$NEW" ]; then
-  echo "Old and new value can't be the same!"
-  exit 1
-fi
+NEW=$2
+case $NEW in
+    True) OLD=False ;;
+    False) OLD=True ;;
+    *) echo "Flag value can only be set to True or False" ; exit 1 ;;
+esac
 
 CABALFILE=$(ls *.cabal)
 
