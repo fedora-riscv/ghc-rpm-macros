@@ -6,13 +6,12 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.98.1
-Release:        4%{?dist}
+Version:        0.98.2
+Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
-Group:          Development/Libraries
 License:        GPLv3
-URL:            https://fedoraproject.org/wiki/Haskell_SIG
+URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
 # This is a Fedora maintained package, originally made for
 # the distribution.  Hence the source is currently only available
@@ -75,6 +74,13 @@ EOF
 
 
 %changelog
+* Thu Jun 20 2013 Jens Petersen <petersen@redhat.com> - 0.98.2-1
+- ghc_fix_dynamic_rpath: do not assume first RPATH
+- packaging for without_shared is now done the same way as shared
+  to make non-shared arch packages same as shared ones:
+  so all archs will now have base library binary packages
+- remove deprecated ghc_exclude_docdir
+
 * Wed Mar 20 2013 Ralf Corsépius <corsepiu@fedoraproject.org> - 0.98.1-4
 - Remove %%config from %%{_sysconfdir}/rpm/macros.*
   (https://fedorahosted.org/fpc/ticket/259).
