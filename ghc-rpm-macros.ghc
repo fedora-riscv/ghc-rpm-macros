@@ -42,29 +42,12 @@ fi
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
-echo "%dir %{pkgdir}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
-%if %{undefined ghc_without_shared}\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
+echo "%dir %{pkgdir}" >> %{basepkg}.files\
+%if %{undefined ghc_without_shared}\
 echo "%attr(755,root,root) %{pkgdir}/libHS%{pkgnamever}-ghc%{ghc_version}.so" >> %{basepkg}.files\
+%endif\
 fi\
-%endif\
-%if %{defined ghc_without_shared}\
-if [ "%{name}" = "%{basepkg}" -o -n "%{?1}" ]; then\
-  if [ -d "%{buildroot}%{_docdir}/%{basepkg}-%{pkgver}" ]; then\
-    mv %{buildroot}%{_docdir}/%{basepkg}-%{pkgver} %{buildroot}%{_docdir}/%{basepkg}-devel-%{pkgver}\
-%if %{undefined ghc_exclude_docdir}\
-    echo "%{_docdir}/%{basepkg}-devel-%{version}" >> %{basepkg}-devel.files\
-%endif\
-  fi\
-fi\
-%endif\
-%if %{undefined ghc_exclude_docdir}\
-if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
-  echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
-elif [ -d "%{buildroot}%{_docdir}/ghc-%{pkgnamever}" ]; then\
-  echo "%{_docdir}/ghc-%{pkgnamever}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
-fi\
-%endif\
 echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" >> %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 find %{buildroot}%{pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
@@ -73,7 +56,7 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
-for i in %{!?ghc_without_shared:%{basepkg}.files} %{basepkg}-devel.files; do\
+for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
 fi\
@@ -289,7 +272,7 @@ for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
   RPATH=$(chrpath $PROG| sed -e "s@^$PROG: RPATH=@@")\
   case $RPATH in\
-    $PDIR*)\
+    *$PDIR*)\
       NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
       chrpath -r $NEWRPATH $PROG\
       ;;\
@@ -312,5 +295,3 @@ done\
 %global ghc_without_shared 1\
 %global ghc_without_dynamic 1\
 %ghc_test
-
-%ghc_exclude_docdir 1

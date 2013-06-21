@@ -6,13 +6,12 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.95.10
+Version:        0.95.11
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
-Group:          Development/Libraries
 License:        GPLv3
-URL:            https://fedoraproject.org/wiki/Haskell_SIG
+URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
 # This is a Fedora maintained package, originally made for
 # the distribution.  Hence the source is currently only available
@@ -68,13 +67,24 @@ EOF
 
 %files
 %doc COPYING AUTHORS
-%config(noreplace) %{macros_file}
+%{macros_file}
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Jun 21 2013 Jens Petersen <petersen@redhat.com> - 0.95.11-1
+- ghc_fix_dynamic_rpath: do not assume first RPATH
+- packaging for without_shared is now done the same way as shared
+  to make non-shared arch packages same as shared ones:
+  so all archs will now have base library binary packages
+- remove deprecated ghc_exclude_docdir
+- Remove %%config from %%{_sysconfdir}/rpm/macros.*
+  (https://fedorahosted.org/fpc/ticket/259).
+- only add lib pkgdir to filelist if it exists
+  to fix haskell-platform build on secondary archs (no shared libs)
+
 * Tue Jan 22 2013 Jens Petersen <petersen@redhat.com> - 0.95.10-1
 - simplify cabal-tweak-flag script to take one flag value
 - new ghc_fix_dynamic_rpath macro for cleaning up package executables
