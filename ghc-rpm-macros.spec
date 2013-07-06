@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.12
+Version:        0.15.13
 Release:        1%{?dist}
 Summary:        Macros for building packages for GHC
 
@@ -74,6 +74,9 @@ EOF
 
 
 %changelog
+* Sat Jul  6 2013 Jens Petersen <petersen@redhat.com> - 0.15.13-1
+- restore docdir autopackaging for f17 and el6
+
 * Fri Jun 21 2013 Jens Petersen <petersen@redhat.com> - 0.15.12-1
 - ghc_fix_dynamic_rpath: do not assume first RPATH
 - packaging for without_shared is now done the same way as shared
