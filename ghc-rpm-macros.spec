@@ -6,9 +6,9 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.13
+Version:        0.15.14
 Release:        1%{?dist}
-Summary:        Macros for building packages for GHC
+Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3
 URL:            https://fedoraproject.org/wiki/Packaging:Haskell
@@ -74,6 +74,10 @@ EOF
 
 
 %changelog
+* Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 0.15.14-1
+- create lib base package also when ghc_without_shared is set (#983137)
+  and other ghc_without_shared cleanup
+
 * Sat Jul  6 2013 Jens Petersen <petersen@redhat.com> - 0.15.13-1
 - restore docdir autopackaging for f17 and el6
 
