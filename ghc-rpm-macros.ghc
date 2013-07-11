@@ -65,7 +65,7 @@ done\
 
 %ghc_add_basepkg_file()\
 %define basepkg ghc-%{pkg_name}\
-echo "%*" >> %{basepkg}%{?ghc_without_shared:-devel}.files
+echo "%*" >> %{basepkg}.files
 
 # compiler version
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
@@ -85,15 +85,13 @@ install --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d\
 %ghc_devel_requires Requires:       ghc-compiler = %{ghc_version}\
 Requires(post): ghc-compiler = %{ghc_version}\
 Requires(postun): ghc-compiler = %{ghc_version}\
-%if %{undefined ghc_without_shared} && 0%{!?-m:1}\
+%if 0%{!?-m:1}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
 %ghc_shared_files\
-%if %{undefined ghc_without_shared}\
 %files -n %{basepkg} -f %{basepkg}.files\
 %{?base_doc_files:%doc %base_doc_files}\
-%endif\
 %{nil}
 
 # ghc_lib_package [-c cdepslist] [-h pkgdepslist]
@@ -141,16 +139,11 @@ This package provides the shared library.\
 %ghc_lib_package\
 %{nil}
 
-%ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-conf || :
-
 # (deprecated) for docs post and postun
 %ghc_reindex_haddock :
 
 %ghc_devel_files\
 %files -n %{basepkg}-devel -f %{basepkg}-devel.files\
-%if %{defined ghc_without_shared}\
-%{?base_doc_files:%doc %base_doc_files}\
-%endif\
 %{?devel_doc_files:%doc %devel_doc_files}\
 %{nil}
 
@@ -218,12 +211,6 @@ This package contains the development files.
 %ghc_devel_files\
 %{nil}
 
-# ghc_strip_dynlinked
-%ghc_strip_dynlinked\
-%if %{undefined __debug_package}\
-find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -exec strip "{}" \\;\
-%endif
-
 # ghc_bin_build
 %ghc_bin_build\
 %global debug_package %{nil}\
@@ -245,12 +232,25 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %endif\
 %{nil}
 
+# ghc_strip_dynlinked
+%ghc_strip_dynlinked\
+%if %{undefined __debug_package}\
+find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -exec strip "{}" \\;\
+%endif
+
+# ghc_clear_execstack
+%ghc_clear_execstack\
+if [ -d "%{buildroot}%{_bindir}" ]; then\
+find %{buildroot}%{_bindir} -type f -exec sh -c "file {} | grep -q ' ELF '" \\; -exec execstack -c "{}" \\;\
+fi
+
 # install bin package
 %ghc_bin_install()\
 %global _use_internal_dependency_generator 0\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
+%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_lib_install [name] [version]
@@ -262,6 +262,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %cabal_pkg_conf\
 %ghc_gen_filelists\
 %{!?1:%ghc_strip_dynlinked}\
+%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
@@ -280,6 +281,8 @@ for i in %*; do\
 done\
 %endif\
 %{nil}
+
+%ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-conf || :
 
 # - without_hscolour, without_testsuite, and ghc_bootstrapping
 #   need to be set locally in the spec file
