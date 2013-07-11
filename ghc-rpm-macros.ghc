@@ -238,19 +238,12 @@ This package contains the development files.
 find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -exec strip "{}" \\;\
 %endif
 
-# ghc_clear_execstack
-%ghc_clear_execstack\
-if [ -d "%{buildroot}%{_bindir}" ]; then\
-find %{buildroot}%{_bindir} -type f -exec sh -c "file {} | grep -q ' ELF '" \\; -exec execstack -c "{}" \\;\
-fi
-
 # install bin package
 %ghc_bin_install()\
 %global _use_internal_dependency_generator 0\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
-%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_lib_install [name] [version]
@@ -262,7 +255,6 @@ fi
 %cabal_pkg_conf\
 %ghc_gen_filelists\
 %{!?1:%ghc_strip_dynlinked}\
-%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
