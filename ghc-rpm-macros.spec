@@ -6,9 +6,9 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.95.11
+Version:        0.95.12
 Release:        1%{?dist}
-Summary:        Macros for building packages for GHC
+Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3
 URL:            https://fedoraproject.org/wiki/Packaging:Haskell
@@ -29,6 +29,8 @@ BuildRequires:  redhat-rpm-config
 ExclusiveArch:  %{ghc_arches}
 Requires:       hscolour
 %endif
+# for execstack
+Requires:       prelink
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -74,6 +76,12 @@ EOF
 
 
 %changelog
+* Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 0.95.12-1
+- add new ghc_clear_execstack to ghc_bin_install and ghc_lib_install (#973512)
+  and require prelink for execstack
+- create lib base package also when ghc_without_shared is set (#983137)
+  and other ghc_without_shared cleanup
+
 * Fri Jun 21 2013 Jens Petersen <petersen@redhat.com> - 0.95.11-1
 - ghc_fix_dynamic_rpath: do not assume first RPATH
 - packaging for without_shared is now done the same way as shared
