@@ -50,9 +50,9 @@ echo "%attr(755,root,root) %{pkgdir}/libHS%{pkgnamever}-ghc%{ghc_version}.so" >>
 fi\
 %if %{undefined ghc_exclude_docdir}\
 if [ -d "%{buildroot}%{_docdir}/%{name}-%{version}" ]; then\
-  echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
+  echo "%{_docdir}/%{name}-%{version}" >> %{basepkg}.files\
 elif [ -d "%{buildroot}%{_docdir}/ghc-%{pkgnamever}" ]; then\
-  echo "%{_docdir}/ghc-%{pkgnamever}" >> %{basepkg}%{?ghc_without_shared:-devel}.files\
+  echo "%{_docdir}/ghc-%{pkgnamever}" >> %{basepkg}.files\
 fi\
 %endif\
 echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" >> %{basepkg}-devel.files\
