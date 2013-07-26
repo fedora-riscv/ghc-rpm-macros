@@ -21,11 +21,12 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_docdir}/%{name}-%{version} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{ghc_docdir} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
+%ghc_docdir %{_docdir}/%{name}-%{version}
 # root dir for ghc docs
 %ghcdocbasedir %{_docdir}/ghc/html
 # libraries doc dir
