@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        0.95.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3
@@ -29,8 +29,6 @@ BuildRequires:  redhat-rpm-config
 ExclusiveArch:  %{ghc_arches}
 Requires:       hscolour
 %endif
-# for execstack
-Requires:       prelink
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -76,6 +74,9 @@ EOF
 
 
 %changelog
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.95.14-2
+- remove redundant prelink requires
+
 * Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.95.14-1
 - add ghcpkgdocdir
 - use _pkgdocdir
