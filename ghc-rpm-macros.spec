@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.15
+Version:        0.15.16
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -74,6 +74,9 @@ EOF
 
 
 %changelog
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1
+- add ghcpkgdocdir
+
 * Mon Jul 22 2013 Jens Petersen <petersen@redhat.com> - 0.15.15-1
 - include docdir in library base package also when no shared library
 

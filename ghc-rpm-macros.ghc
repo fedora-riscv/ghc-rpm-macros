@@ -1,5 +1,5 @@
 # RPM Macros for packaging Haskell cabalized packages  -*-rpm-spec-*-
-# see https://fedoraproject.org/wiki/PackagingDrafts/Haskell for more details
+# see https://fedoraproject.org/wiki/Packaging:Haskell for more details
 
 # "cabal"
 %cabal [ -x Setup ] || ghc --make %{!?ghc_user_conf:-no-user-package-conf} %{!?ghc_without_dynamic:-dynamic} Setup\
@@ -30,6 +30,8 @@ fi
 %ghcdocbasedir %{_docdir}/ghc/html
 # libraries doc dir
 %ghclibdocdir %{ghcdocbasedir}/libraries
+# pkg doc dir
+%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}-%{version}
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
