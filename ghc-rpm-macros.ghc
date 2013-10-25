@@ -21,17 +21,17 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{ghc_docdir} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_pkgdocdir} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
-# F20 has unversioned docdir's
-%ghc_docdir %{_docdir}/%{name}
 # root dir for ghc docs
 %ghcdocbasedir %{_docdir}/ghc/html
 # libraries doc dir
 %ghclibdocdir %{ghcdocbasedir}/libraries
+# pkg doc dir
+%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
@@ -75,8 +75,7 @@ done\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %cabal register --gen-pkg-config\
-mkdir -p %{buildroot}%{ghclibdir}/package.conf.d\
-install --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d\
+install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}.conf\
 %{nil}
 
 # ghc_bin_build
