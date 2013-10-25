@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.95.13
+Version:        0.95.14
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -76,6 +76,10 @@ EOF
 
 
 %changelog
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.95.14-1
+- add ghcpkgdocdir
+- use _pkgdocdir
+
 * Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 0.95.13-1
 - remove ghc_clear_execstack since the executable stack issue does seem
   to happen with ghc-7.4.1
