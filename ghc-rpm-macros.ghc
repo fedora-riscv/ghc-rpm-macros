@@ -31,7 +31,7 @@ fi
 # libraries doc dir
 %ghclibdocdir %{ghcdocbasedir}/libraries
 # pkg doc dir
-%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}
+%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}-%{version}
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 

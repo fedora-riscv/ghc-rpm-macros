@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.7.1
+Version:        1.0.7.2
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -90,6 +90,9 @@ EOF
 
 
 %changelog
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 1.0.7.2-1
+- ghcpkgdocdir should be versioned (for F20 and earlier)
+
 * Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 1.0.7.1-1
 - add ghcpkgdocdir, which like _pkgdocdir allows for unversioned haddock dirs
 - drop ghc_docdir in favor of _pkgdocdir
