@@ -2,24 +2,33 @@
 
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
+# uncomment to bootstrap without hscolour
+%global without_hscolour 1
+
 Name:           ghc-rpm-macros
-Version:        0.10.61.1
-Release:        1%{?dist}
-Summary:        Macros for building packages for GHC
+Version:        0.15.16
+Release:        0.1%{?dist}
+Summary:        RPM macros for building packages for GHC
 
 Group:          Development/Libraries
 License:        GPLv3
-URL:            https://fedoraproject.org/wiki/Haskell_SIG
+URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
-# This is a Fedora maintained package which is specific to
-# our distribution.  Thus the source is only available from
-# within this srpm.
+# This is a Fedora maintained package, originally made for
+# the distribution.  Hence the source is currently only available
+# from this package.  But it could be hosted on fedorahosted.org
+# for example if other rpm distros would prefer that.
 Source0:        ghc-rpm-macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
+Source4:        cabal-tweak-dep-ver
+Source5:        cabal-tweak-flag
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       redhat-rpm-config
+%if %{undefined without_hscolour}
+Requires:       hscolour
+%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -43,6 +52,9 @@ install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
+install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
+install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
+
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
@@ -62,14 +74,115 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc COPYING AUTHORS
-%config(noreplace) %{macros_file}
+%{macros_file}
 %{_prefix}/lib/rpm/ghc-deps.sh
+%{_bindir}/cabal-tweak-dep-ver
+%{_bindir}/cabal-tweak-flag
 
 
 %changelog
-* Sat Jun  2 2012 Jens Petersen <petersen@redhat.com> - 0.10.61.1-1
+* Wed Dec 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1.el5
+- rebase from 0.10.61.1 to 0.15.16 from epel6
 - substitute _rpmconfigdir since not defined in el5 rpm
 - restore buildroot define and cleaning
+- bootstrap without hscolour
+
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1
+- add ghcpkgdocdir
+
+* Mon Jul 22 2013 Jens Petersen <petersen@redhat.com> - 0.15.15-1
+- include docdir in library base package also when no shared library
+
+* Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 0.15.14-1
+- create lib base package also when ghc_without_shared is set (#983137)
+  and other ghc_without_shared cleanup
+
+* Sat Jul  6 2013 Jens Petersen <petersen@redhat.com> - 0.15.13-1
+- restore docdir autopackaging for f17 and el6
+
+* Fri Jun 21 2013 Jens Petersen <petersen@redhat.com> - 0.15.12-1
+- ghc_fix_dynamic_rpath: do not assume first RPATH
+- packaging for without_shared is now done the same way as shared
+  to make non-shared arch packages same as shared ones:
+  so all archs will now have base library binary packages
+- remove deprecated ghc_exclude_docdir
+- Remove %%config from %%{_sysconfdir}/rpm/macros.*
+  (https://fedorahosted.org/fpc/ticket/259).
+- only add lib pkgdir to filelist if it exists
+  to fix haskell-platform build on secondary archs (no shared libs)
+
+* Tue Jan 22 2013 Jens Petersen <petersen@redhat.com> - 0.15.11-1
+- simplify cabal-tweak-flag script to take one flag value
+- new ghc_fix_dynamic_rpath macro for cleaning up package executables
+  linked against their own libraries
+
+* Sat Jan 19 2013 Jens Petersen <petersen@redhat.com> - 0.15.10-1
+- be more careful about library pkgdir ownership (#893777)
+- add cabal-tweak-flag script for toggling flag default
+
+* Thu Oct 25 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-2
+- BR redhat-rpm-config instead of ghc-rpm-macros
+- no longer set without_hscolour in macros.ghc for bootstrapping
+
+* Tue Oct  9 2012 Jens Petersen <petersen@redhat.com> - 0.15.9-1
+- "cabal haddock" needs --html option with --hoogle to output html
+
+* Thu Sep 20 2012 Jens Petersen <petersen@redhat.com> - 0.15.8-1
+- ghc-rpm-macros now requires hscolour so packages no longer need to BR it
+- this can be disabled for bootstrapping by setting without_hscolour
+- make haddock build hoogle files
+- ghc_lib_build no longer builds redundant ghci .o library files
+
+* Wed Jul 11 2012 Jens Petersen <petersen@redhat.com> - 0.15.7-1
+- let ghc_bin_install take an arg to disable implicit stripping for subpackages
+- fix doc handling of subpackages for ghc_without_shared
+- without ghc_exclude_docdir include doc dir also for subpackages
+- rename ghc_binlib_package to ghc_lib_subpackage
+- add ghc_lib_build_without_haddock
+- no longer drop into package dirs when subpackaging with ghc_lib_build and
+  ghc_lib_install
+
+* Fri Jun 22 2012 Jens Petersen <petersen@redhat.com> - 0.15.6.1-1
+- cabal-tweak-dep-ver: be careful only to match complete dep name and
+  do not match beyond ","
+
+* Fri Jun 22 2012 Jens Petersen <petersen@redhat.com> - 0.15.6-1
+- cabal-tweak-dep-ver: new script to tweak depends version bounds in .cabal
+  from ghc-rpm-macros-0.95.5
+- ghc-dep.sh: only use buildroot package.conf.d if it exists
+- ghc-deps.sh: look in buildroot package.conf.d for program deps
+- add a meta-package option to ghc_devel_package and use in ghc_devel_requires
+- allow ghc_description, ghc_devel_description, ghc_devel_post_postun
+  to take args
+- support meta packages like haskell-platform without base lib files
+- add shell variable cabal_configure_extra_options to cabal_configure for
+  local configuration
+- do not provide prof when without_prof set
+
+* Thu Feb 23 2012 Jens Petersen <petersen@redhat.com> - 0.15.5-1
+- fix handling of devel docdir for non-shared builds
+- simplify ghc_bootstrap
+
+* Thu Jan 19 2012 Jens Petersen <petersen@redhat.com> - 0.15.4-1
+- allow dynamic linking of Setup with ghc_without_shared set
+
+* Fri Jan  6 2012 Jens Petersen <petersen@redhat.com> - 0.15.3-1
+- new ghc_add_basepkg_file to add a path to base lib package filelist
+
+* Wed Dec 28 2011 Jens Petersen <petersen@redhat.com> - 0.15.2-1
+- add ghc_devel_post_postun to help koji/mock with new macros
+
+* Tue Dec 27 2011 Jens Petersen <petersen@redhat.com> - 0.15.1-1
+- add ghc_package, ghc_description, ghc_devel_package, ghc_devel_description
+
+* Tue Dec 27 2011 Jens Petersen <petersen@redhat.com> - 0.15-1
+- new ghc_files wrapper macro for files which takes base doc files as args
+  and uses new ghc_shared_files and ghc_devel_files macros
+- when building for non-shared archs move installed docfiles to devel docdir
+
+* Fri Dec  2 2011 Jens Petersen <petersen@redhat.com> - 0.14.3-1
+- do not use ghc user config by default when compiling Setup
+- do not setup hscolour if without_hscolour defined
 
 * Thu Nov 17 2011 Jens Petersen <petersen@redhat.com> - 0.10.61-1
 - test for HsColour directly when running "cabal haddock" instead of

@@ -4,16 +4,25 @@
 # To use add the following lines to spec file:
 #   %define _use_internal_dependency_generator 0
 #   %define __find_requires /usr/lib/rpm/ghc-deps.sh --requires %{buildroot}%{ghclibdir}
+#   %define __find_provides /usr/lib/rpm/ghc-deps.sh --provides %{buildroot}%{ghclibdir}
 
-[ $# -ne 2 ] && echo "Usage: `basename $0` --requires %{buildroot}%{ghclibdir}" && exit 1
+[ $# -ne 2 ] && echo "Usage: `basename $0` [--provides|--requires] %{buildroot}%{ghclibdir}" && exit 1
 
 MODE=$1
 PKGBASEDIR=$2
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
+GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
+
+if [ ! -x "/usr/bin/ghc-pkg-${GHC_VER}" -a -x "$PKGBASEDIR/ghc-pkg" ]; then
+    GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
+else
+    GHC_PKG="/usr/bin/ghc-pkg"
+fi
 
 case $MODE in
+    --provides) FIELD=id ;;
     --requires) FIELD=depends ;;
-    *) echo "`basename $0`: Need --requires" ; exit 1
+    *) echo "`basename $0`: Need --provides or --requires" ; exit 1
 esac
 
 if [ -d "$PKGBASEDIR" ]; then
@@ -30,28 +39,44 @@ for i in $files; do
     LIB_FILE=$(echo $i | grep /libHS | egrep -v "$PKGBASEDIR/libHS")
     if [ "$LIB_FILE" ]; then
 	if [ -d "$PKGCONFDIR" ]; then
-	    DEP=""
+	    META=""
+	    SELF=""
 	    case $LIB_FILE in
-		*.so) ;;
-		*_p.a) DEP=ghc-\\1-prof ;;
-		*.a) DEP=ghc-\\1-devel ;;
+		*.so) META=ghc ;;
+		*_p.a) META=ghc-prof SELF=ghc-devel ;;
+		*.a) META=ghc-devel
+		    if [ "$SHARED" ]; then
+			SELF=ghc
+		    fi
+		    ;;
 	    esac
-	    if [ "$DEP" ]; then
+	    if [ "$META" ]; then
 		PKGVER=$(echo $LIB_FILE | sed -e "s%$PKGBASEDIR/\([^/]\+\)/libHS.*%\1%")
-		HASHS=$(ghc-pkg -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
+		HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
 		for i in $HASHS; do
 		    case $i in
-			# ignore internal packages
-			base-3*) ;;
-			bin-package-db-*) ;;
-			ghc-binary-*) ;;
-			ghc-prim-*) ;;
-			integer-gmp-*) ;;
-			*-*) echo $i | sed -e "s/\(.*\)-\(.*\)-.*/$DEP = \2/" ;;
+			*-*) echo $i | sed -e "s/\(.*\)-\(.*\)/$META(\1) = \2/" ;;
 			*) ;;
 		    esac
 		done
+		if [ "$MODE" = "--requires" -a "$SELF" ]; then
+		    HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER id | sed -e "s/^id: \+//")
+		    for i in $HASHS; do
+			echo $i | sed -e "s/\(.*\)-\(.*\)/$SELF(\1) = \2/"
+		    done
+		fi
 	    fi
+	fi
+    elif [ "$MODE" = "--requires" ]; then
+	if file $i | grep -q 'executable, .* dynamically linked'; then
+	    BIN_DEPS=$(ldd $i | grep libHS | grep -v libHSrts | sed -e "s%^\\tlibHS\(.*\)-ghc${GHCVERSION}.so =.*%\1%")
+	    if [ -d "$PKGCONFDIR" ]; then
+		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
+	    fi
+	    for p in ${BIN_DEPS}; do
+		HASH=$(${GHC_PKG} --global $PACKAGE_CONF_OPT field $p id | sed -e "s/^id: \+//")
+		echo $HASH | sed -e "s/\(.*\)-\(.*\)/ghc(\1) = \2/"
+	    done
 	fi
     fi
 done
