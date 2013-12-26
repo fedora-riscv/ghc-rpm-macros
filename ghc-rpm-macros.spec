@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.16
+Version:        0.15.15.1
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -55,16 +55,12 @@ install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# this is why this package is now arch-dependent:
-# turn off shared libs and dynamic linking on secondary archs
-%ifnarch %{ix86} x86_64
+# ghc does not build dyn rts
 cat >> %{buildroot}/%{macros_file} <<EOF
 
-# shared libraries are only supported on primary intel archs
 %%ghc_without_dynamic 1
 %%ghc_without_shared 1
 EOF
-%endif
 
 
 %clean
@@ -81,12 +77,15 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Wed Dec 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1.el5
+* Thu Dec 26 2013 Jens Petersen <petersen@redhat.com> - 0.15.15.1-1
 - rebase from 0.10.61.1 to 0.15.16 from epel6
+- disable shared libraries and dynamic linking
+  since ghc rts fails to dyn link
+- no base library packages
 - substitute _rpmconfigdir since not defined in el5 rpm
 - restore buildroot define and cleaning
 
-* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1
+* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com>
 - add ghcpkgdocdir
 
 * Mon Jul 22 2013 Jens Petersen <petersen@redhat.com> - 0.15.15-1

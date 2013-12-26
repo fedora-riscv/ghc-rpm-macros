@@ -68,6 +68,8 @@ fi\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
+cat %{basepkg}-devel.files >> %{basepkg}.files\
+mv -f %{basepkg}.files %{basepkg}-devel.files\
 fi\
 done\
 %{nil}
@@ -98,17 +100,10 @@ Requires(postun): ghc-compiler = %{ghc_version}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
-%ghc_shared_files\
-%files -n %{basepkg} -f %{basepkg}.files\
-%{?base_doc_files:%doc %base_doc_files}\
-%{nil}
-
 # ghc_lib_package [-c cdepslist] [-h pkgdepslist]
 %ghc_lib_package(c:h:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
-%ghc_shared_files\
-\
 %ghc_package_devel\
 %{nil}
 
@@ -153,6 +148,7 @@ This package provides the shared library.\
 
 %ghc_devel_files\
 %files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%defattr(-,root,root,-)\
 %{?devel_doc_files:%doc %devel_doc_files}\
 %{nil}
 
@@ -211,7 +207,7 @@ This package contains the development files.
 %ghc_package_devel(c:h:l:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
-%ghc_devel_package\
+%ghc_devel_package -m\
 \
 %ghc_devel_description\
 \
