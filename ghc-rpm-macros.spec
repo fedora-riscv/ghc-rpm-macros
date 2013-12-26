@@ -3,11 +3,11 @@
 %global macros_file %{_sysconfdir}/rpm/macros.ghc
 
 # uncomment to bootstrap without hscolour
-%global without_hscolour 1
+#%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
 Version:        0.15.16
-Release:        0.1%{?dist}
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 Group:          Development/Libraries
@@ -85,7 +85,6 @@ rm -rf $RPM_BUILD_ROOT
 - rebase from 0.10.61.1 to 0.15.16 from epel6
 - substitute _rpmconfigdir since not defined in el5 rpm
 - restore buildroot define and cleaning
-- bootstrap without hscolour
 
 * Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.15.16-1
 - add ghcpkgdocdir
