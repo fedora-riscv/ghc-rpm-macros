@@ -155,8 +155,6 @@ This package provides the shared library.\
 %ghc_files()\
 %{?1:%define base_doc_files %*}\
 %define basepkg ghc-%{pkg_name}\
-%ghc_shared_files\
-\
 %ghc_devel_files\
 %{nil}
 
