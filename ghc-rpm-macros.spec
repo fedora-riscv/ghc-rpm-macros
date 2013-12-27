@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.15.1
+Version:        0.15.15.2
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -77,6 +77,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Dec 27 2013 Jens Petersen <petersen@redhat.com> - 0.15.15.2-1
+- drop the base lib pkg requires properly
+
 * Thu Dec 26 2013 Jens Petersen <petersen@redhat.com> - 0.15.15.1-1
 - rebase from 0.10.61.1 to 0.15.16 from epel6
 - disable shared libraries and dynamic linking

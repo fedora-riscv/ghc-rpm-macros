@@ -96,7 +96,7 @@ install --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d\
 %ghc_devel_requires Requires:       ghc-compiler = %{ghc_version}\
 Requires(post): ghc-compiler = %{ghc_version}\
 Requires(postun): ghc-compiler = %{ghc_version}\
-%if 0%{!?-m:1}\
+%if 0\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
 %endif
 
@@ -205,7 +205,7 @@ This package contains the development files.
 %ghc_package_devel(c:h:l:)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define basepkg ghc-%{pkgname}\
-%ghc_devel_package -m\
+%ghc_devel_package\
 \
 %ghc_devel_description\
 \
