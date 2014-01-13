@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.15.15.2
+Version:        0.15.15.3
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -55,12 +55,16 @@ install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# ghc does not build dyn rts
+# this is why this package is now arch-dependent:
+# turn off shared libs and dynamic linking on secondary archs
+%ifnarch %{ix86} x86_64
 cat >> %{buildroot}/%{macros_file} <<EOF
 
+# shared libraries are only supported on primary intel archs
 %%ghc_without_dynamic 1
 %%ghc_without_shared 1
 EOF
+%endif
 
 
 %clean
@@ -77,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan 13 2014 Jens Petersen <petersen@redhat.com> - 0.15.15.3-1
+- enable shared subpackages and dynamic linking on intel archs
+
 * Fri Dec 27 2013 Jens Petersen <petersen@redhat.com> - 0.15.15.2-1
 - drop the base lib pkg requires properly
 
