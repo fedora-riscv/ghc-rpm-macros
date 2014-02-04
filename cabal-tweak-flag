@@ -47,4 +47,4 @@ if [ ! -f $CABALFILE.orig ]; then
     BACKUP=.orig
 fi
 
-sed -i$BACKUP -e "/[Ff]lag *$FLAG/,/[Dd]efault: *$OLD/ s/\([Dd]efault: *\)$OLD/\1$NEW/" $CABALFILE
+sed -i$BACKUP -e "/[Ff]lag *$FLAG/,/[Dd]efault: *$OLD/ s/\( \+\)\([Dd]efault:[ \t]*\)$OLD/\1\2$NEW\n\1manual: True/" $CABALFILE

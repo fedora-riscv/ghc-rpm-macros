@@ -138,13 +138,18 @@ fi
 PDIR=$(cd ..; pwd)\
 for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
-  RPATH=$(chrpath $PROG| sed -e "s@^$PROG: RPATH=@@")\
-  case $RPATH in\
-    *$PDIR*)\
-      NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
-      chrpath -r $NEWRPATH $PROG\
-      ;;\
-  esac\
+  if [ -x "$PROG" ]; then\
+    RPATH=$(chrpath $PROG| sed -e "s@^$PROG: RPATH=@@")\
+    case $RPATH in\
+         *$PDIR*)\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
+         chrpath -r $NEWRPATH $PROG\
+         ;;\
+    esac\
+  else\
+    echo "%%ghc_fix_dynamic_rpath: no such file $PROG"\
+    exit 1\
+  fi\
 done\
 %endif\
 %{nil}
