@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.98.5
+Version:        0.98.6
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -76,6 +76,13 @@ EOF
 
 
 %changelog
+* Wed Mar 26 2014 Jens Petersen <petersen@redhat.com> - 0.98.6-1
+- ghc_fix_dynamic_rpath: abort for non-existent executable name with error msg
+- cabal-tweak-flag: add manual field to enforce flag changes
+- fix ghc-deps.sh when bootstrapping a new ghc version
+- use objdump -p instead of ldd to read executable dependencies
+- add --global to cabal_configure if not subpackaging libs
+
 * Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.98.5-1
 - add versioned ghcpkgdocdir
 - drop ghc_docdir in favor of _pkgdocdir
