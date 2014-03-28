@@ -1,12 +1,12 @@
 %global debug_package %{nil}
 
-%global macros_file %{_sysconfdir}/rpm/macros.ghc
+%global macros_dir %{_sysconfdir}/rpm
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.98.6
+Version:        1.0.4.1
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -23,6 +23,7 @@ Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
+Source6:        ghc-rpm-macros.ghc-extra
 Requires:       redhat-rpm-config
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
@@ -38,6 +39,13 @@ of the Fedora Haskell SIG.  ghc needs to be installed in order to make use of
 these macros.
 
 
+%package extra
+Summary:        Extra RPM macros for building Haskell packages with several libs
+Requires:       %{name} = %{version}-%{release}
+
+%description extra
+
+
 %prep
 %setup -c -T
 cp %{SOURCE1} %{SOURCE2} .
@@ -48,7 +56,8 @@ echo no build stage needed
 
 
 %install
-install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
+install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
+install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -58,7 +67,7 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
-cat >> %{buildroot}/%{macros_file} <<EOF
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
 
 # shared libraries are only supported on primary intel archs
 %%ghc_without_dynamic 1
@@ -69,39 +78,75 @@ EOF
 
 %files
 %doc COPYING AUTHORS
-%{macros_file}
+%{macros_dir}/macros.ghc
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
 
 
+%files extra
+%{macros_dir}/macros.ghc-extra
+
+
 %changelog
-* Wed Mar 26 2014 Jens Petersen <petersen@redhat.com> - 0.98.6-1
+* Fri Mar 28 2014 Jens Petersen <petersen@redhat.com> - 1.0.4.1-1
+- backport recent changes from F20:
 - ghc_fix_dynamic_rpath: abort for non-existent executable name with error msg
 - cabal-tweak-flag: add manual field to enforce flag changes
+- ghc-deps.sh: fix ghc-pkg path when bootstrapping new ghc version
 - fix ghc-deps.sh when bootstrapping a new ghc version
 - use objdump -p instead of ldd to read executable dependencies
-- add --global to cabal_configure if not subpackaging libs
+- update ghc-deps.sh to handling ghc-7.8 rts
+- ghcpkgdocdir should be versioned (for F20 and earlier)
+- add ghcpkgdocdir, which like _pkgdocdir allows for unversioned haddock dirs
 
-* Fri Oct 25 2013 Jens Petersen <petersen@redhat.com> - 0.98.5-1
-- add versioned ghcpkgdocdir
-- drop ghc_docdir in favor of _pkgdocdir
+* Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 1.0.4-1
+- check for bindir before looking for executables in ghc_clear_execstack
 
-* Fri Jul 26 2013 Jens Petersen <petersen@redhat.com> - 0.98.4-1
-- add ghc_docdir for package docdir
-
-* Thu Jul 11 2013 Jens Petersen <petersen@redhat.com> - 0.98.3-1
-- add new ghc_clear_execstack to ghc_bin_install and ghc_lib_install (#973512)
+* Wed Jul 10 2013 Jens Petersen <petersen@redhat.com> - 1.0.3-1
+- add ghc_clear_execstack and use it also in ghc_lib_install (#973512)
   and require prelink for execstack
-- create lib base package also when ghc_without_shared is set (#983137)
-  and other ghc_without_shared cleanup
 
-* Thu Jun 20 2013 Jens Petersen <petersen@redhat.com> - 0.98.2-1
+* Tue Jul  9 2013 Jens Petersen <petersen@redhat.com> - 1.0.2-1
+- drop doc and prof obsoletes and provides from ghc_lib_subpackage
+- clear executable stack flag when installing package executables (#973512)
+
+* Thu Jun 20 2013 Jens Petersen <petersen@redhat.com> - 1.0.1-1
+- only configure with --global if not subpackaging libs
+
+* Thu Jun 20 2013 Jens Petersen <petersen@redhat.com> - 1.0-3
+- reenable hscolour
+
+* Thu Jun 20 2013 Jens Petersen <petersen@redhat.com> - 1.0-2
+- turn off hscolour for bootstrap
+
+* Wed Jun 19 2013 Jens Petersen <petersen@redhat.com> - 1.0-1
+- add --global to cabal_configure
+
+* Mon Jun 17 2013 Jens Petersen <petersen@redhat.com> - 0.99.4-1
+- merge remaining extra macros into ghc_lib_subpackage
+
+* Thu Jun  6 2013 Jens Petersen <petersen@redhat.com> - 0.99.3-1
+- configure builds with ghc -O2 (#880135)
+
+* Wed Jun  5 2013 Jens Petersen <petersen@redhat.com> - 0.99.2-1
+- drop -h option from extra macros and make -m work again
+
+* Fri May 17 2013 Jens Petersen <petersen@redhat.com> - 0.99.1-1
+- drop new ghc_compiler macro since it is not good for koji
 - ghc_fix_dynamic_rpath: do not assume first RPATH
+
+* Tue Apr 23 2013 Jens Petersen <petersen@redhat.com> - 0.99-1
+- update for simplified revised Haskell Packaging Guidelines
+  (https://fedorahosted.org/fpc/ticket/194)
 - packaging for without_shared is now done the same way as shared
   to make non-shared arch packages same as shared ones:
   so all archs will now have base library binary packages
-- remove deprecated ghc_exclude_docdir
+- move spec section metamacros and multiple library packaging macros still
+  needed for ghc and haskell-platform to new extra subpackage
+- drop ghc_add_basepkg_file macro and ghc_exclude_docdir
+- for ghc-7.6 --global-package-db replaces --global-conf and
+  --no-user-package-db deprecates --no-user-package-conf
 
 * Wed Mar 20 2013 Ralf Corsépius <corsepiu@fedoraproject.org> - 0.98.1-4
 - Remove %%config from %%{_sysconfdir}/rpm/macros.*
