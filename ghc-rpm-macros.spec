@@ -6,11 +6,11 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.5
+Version:        1.2.6
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
-License:        GPLv3
+License:        GPLv3+
 URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
 # This is a Fedora maintained package, originally made for
@@ -24,11 +24,12 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        ghc-rpm-macros.ghc-extra
+Source7:        ghc-rpm-macros.ghc-srpm
 # ver-rel for unversioned docdir
 Requires:       redhat-rpm-config >= 9.1.0-50.fc20
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
-ExclusiveArch:  %{ghc_arches}
+ExclusiveArch:  %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x
 Requires:       hscolour
 %endif
 # for execstack
@@ -41,10 +42,20 @@ these macros.
 
 
 %package extra
-Summary:        Extra RPM macros for building Haskell packages with several libs
+Summary:        Extra RPM macros for building Haskell library subpackages
 Requires:       %{name} = %{version}-%{release}
 
 %description extra
+Extra macros used for subpackaging of Haskell libraries,
+for example in ghc and haskell-platform.
+
+
+%package -n ghc-srpm-macros
+Summary:        RPM macros for building Haskell source packages
+Requires:       %{name} = %{version}-%{release}
+
+%description -n ghc-srpm-macros
+Macros used when generating source Haskell rpm packages.
 
 
 %prep
@@ -59,6 +70,7 @@ echo no build stage needed
 %install
 install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
+install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{macros_dir}/macros.ghc-srpm
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -89,7 +101,16 @@ EOF
 %{macros_dir}/macros.ghc-extra
 
 
+%files -n ghc-srpm-macros
+%{macros_dir}/macros.ghc-srpm
+
+
 %changelog
+* Mon Apr 28 2014 Jens Petersen <petersen@redhat.com> - 1.2.6-1
+- move macros.ghc-srpm from redhat-rpm-config to new ghc-srpm-macros subpackage:
+  defines ghc_arches_with_ghci and drops no longer used ghc_arches (#1089102)
+- update license tag to GPLv3+
+
 * Fri Mar 28 2014 Jens Petersen <petersen@redhat.com> - 1.2.5-1
 - handle no _pkgdocdir in RHEL7 and docdir path different to F20+
 
