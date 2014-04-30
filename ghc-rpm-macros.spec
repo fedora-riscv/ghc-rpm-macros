@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.6
+Version:        1.2.7
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -25,12 +25,13 @@ Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        ghc-rpm-macros.ghc-extra
 Source7:        ghc-rpm-macros.ghc-srpm
-# ver-rel for unversioned docdir
-Requires:       redhat-rpm-config >= 9.1.0-50.fc20
+Requires:       ghc-srpm-macros = %{version}-%{release}
+# macros.ghc-srpm moved out from redhat-rpm-config-21
+Requires:       redhat-rpm-config > 20-1.fc21
 %if %{undefined without_hscolour}
-BuildRequires:  redhat-rpm-config
-ExclusiveArch:  %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x
+%ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x
 Requires:       hscolour
+%endif
 %endif
 # for execstack
 Requires:       prelink
@@ -52,7 +53,8 @@ for example in ghc and haskell-platform.
 
 %package -n ghc-srpm-macros
 Summary:        RPM macros for building Haskell source packages
-Requires:       %{name} = %{version}-%{release}
+BuildArch:      noarch
+
 
 %description -n ghc-srpm-macros
 Macros used when generating source Haskell rpm packages.
@@ -106,6 +108,13 @@ EOF
 
 
 %changelog
+* Wed Apr 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.7-1
+- ghc-rpm-macros requires ghc-srpm-macros
+- ghc-srpm-macros does not require ghc-rpm-macros
+- drop ExclusiveArch and make hscolour requires arch conditional
+- make ghc-srpm-macros subpackage noarch
+- set Url field when generating subpackages
+
 * Mon Apr 28 2014 Jens Petersen <petersen@redhat.com> - 1.2.6-1
 - move macros.ghc-srpm from redhat-rpm-config to new ghc-srpm-macros subpackage:
   defines ghc_arches_with_ghci and drops no longer used ghc_arches (#1089102)
