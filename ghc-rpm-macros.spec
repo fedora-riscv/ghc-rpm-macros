@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.7
+Version:        1.2.8
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -108,6 +108,9 @@ EOF
 
 
 %changelog
+* Tue May 13 2014 Jens Petersen <petersen@redhat.com> - 1.2.8-1
+- use -O2 also for executable (Bin) packages and allow it to be overrided
+
 * Wed Apr 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.7-1
 - ghc-rpm-macros requires ghc-srpm-macros
 - ghc-srpm-macros does not require ghc-rpm-macros
