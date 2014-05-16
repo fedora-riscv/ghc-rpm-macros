@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.8
+Version:        1.2.9
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -108,6 +108,9 @@ EOF
 
 
 %changelog
+* Fri May 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.9-1
+- enable configure bcond check for tests
+
 * Tue May 13 2014 Jens Petersen <petersen@redhat.com> - 1.2.8-1
 - use -O2 also for executable (Bin) packages and allow it to be overrided
 
