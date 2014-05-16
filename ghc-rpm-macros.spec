@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.9
+Version:        1.2.10
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -108,6 +108,9 @@ EOF
 
 
 %changelog
+* Fri May 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.10-1
+- do bcond cabal configure --enable-tests also for Bin packages
+
 * Fri May 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.9-1
 - enable configure bcond check for tests
 
