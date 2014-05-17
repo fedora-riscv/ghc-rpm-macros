@@ -1,16 +1,16 @@
 %global debug_package %{nil}
 
-%global macros_file %{_sysconfdir}/rpm/macros.ghc
+%global macros_dir %{_rpmconfigdir}/macros.d
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.98.6
+Version:        0.98.7
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
-License:        GPLv3
+License:        GPLv3+
 URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
 # This is a Fedora maintained package, originally made for
@@ -23,6 +23,7 @@ Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
+Source6:        ghc-rpm-macros.ghc-extra
 Requires:       redhat-rpm-config
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
@@ -48,7 +49,8 @@ echo no build stage needed
 
 
 %install
-install -p -D -m 0644 %{SOURCE0} ${RPM_BUILD_ROOT}/%{macros_file}
+install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
+install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -58,7 +60,7 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 # this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
-cat >> %{buildroot}/%{macros_file} <<EOF
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
 
 # shared libraries are only supported on primary intel archs
 %%ghc_without_dynamic 1
@@ -69,15 +71,29 @@ EOF
 
 %files
 %doc COPYING AUTHORS
-%{macros_file}
+%{macros_dir}/macros.ghc
+%{macros_dir}/macros.ghc-extra
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat May 17 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-1
+- do bcond cabal configure --enable-tests also for Bin packages
+- enable configure bcond check for tests
+- set Url field when generating subpackages
+- update license tag to GPLv3+
+- handle no _pkgdocdir in RHEL7 and docdir path different to F20+
+- abort ghc_fix_dynamic_rpath if no chrpath
+- Install macros to %%{_rpmconfigdir}/macros.d.
+- set datasubdir in cabal_configure for ghc-7.8
+- move spec section metamacros and multiple library packaging macros still
+  needed for ghc and haskell-platform to macros.ghc-extra
+
 * Wed Mar 26 2014 Jens Petersen <petersen@redhat.com> - 0.98.6-1
-- ghc_fix_dynamic_rpath: abort for non-existent executable name with error msg
+- quote the ghc_fix_dynamic_rpath error message
+- ghc_fix_dynamic_rpath: abort for non-existent executable name
 - cabal-tweak-flag: add manual field to enforce flag changes
 - fix ghc-deps.sh when bootstrapping a new ghc version
 - use objdump -p instead of ldd to read executable dependencies
