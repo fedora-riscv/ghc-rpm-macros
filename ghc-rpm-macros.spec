@@ -17,14 +17,14 @@ URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 # the distribution.  Hence the source is currently only available
 # from this package.  But it could be hosted on fedorahosted.org
 # for example if other rpm distros would prefer that.
-Source0:        ghc-rpm-macros.ghc
+Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
-Source6:        ghc-rpm-macros.ghc-extra
-Source7:        ghc-rpm-macros.ghc-srpm
+Source6:        macros.ghc-extra
+Source7:        macros.ghc-srpm
 Requires:       ghc-srpm-macros = %{version}-%{release}
 # macros.ghc-srpm moved out from redhat-rpm-config-21
 Requires:       redhat-rpm-config > 20-1.fc21
