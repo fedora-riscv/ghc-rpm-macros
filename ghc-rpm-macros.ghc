@@ -21,7 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_pkgdocdir} --libsubdir='$compiler/$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} --ghc-option=-O2 %{?with_tests:--enable-tests} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -87,7 +87,7 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_docdir}/ghc-%1 --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci} --ghc-option=-O2\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build\
 %{nil}
 
@@ -133,13 +133,15 @@ fi
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
+# (assumes cwd = pkg_name!)
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
+if ! type chrpath > /dev/null; then exit 1; fi\
 PDIR=$(cd ..; pwd)\
 for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
   if [ -x "$PROG" ]; then\
-    RPATH=$(chrpath $PROG| sed -e "s@^$PROG: RPATH=@@")\
+    RPATH=$(chrpath $PROG | sed -e "s@^$PROG: RPATH=@@")\
     case $RPATH in\
          *$PDIR*)\
          NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\

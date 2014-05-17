@@ -11,6 +11,7 @@
 Summary:        Haskell %{pkgname} library\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
+Url:            http://hackage.haskell.org/package/%{pkgname}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(ghc-[^, ]*\\)-devel/\\1/g")}\
 \
 %description -n %{basepkg}\

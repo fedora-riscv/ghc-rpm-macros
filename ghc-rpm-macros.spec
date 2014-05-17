@@ -1,16 +1,16 @@
 %global debug_package %{nil}
 
-%global macros_dir %{_sysconfdir}/rpm
+%global macros_dir %{_rpmconfigdir}/macros.d
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.7.3
+Version:        1.0.7.4
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
-License:        GPLv3
+License:        GPLv3+
 URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 
 # This is a Fedora maintained package, originally made for
@@ -41,10 +41,12 @@ these macros.
 
 
 %package extra
-Summary:        Extra RPM macros for building Haskell packages with several libs
+Summary:        Extra RPM macros for building Haskell library subpackages
 Requires:       %{name} = %{version}-%{release}
 
 %description extra
+Extra macros used for subpackaging of Haskell libraries,
+for example in ghc and haskell-platform.
 
 
 %prep
@@ -90,8 +92,20 @@ EOF
 
 
 %changelog
+* Sat May 17 2014 Jens Petersen <petersen@redhat.com> - 1.0.7.4-1
+- do bcond cabal configure --enable-tests also for Bin packages
+- enable configure bcond check for tests
+- use -O2 also for executable (Bin) packages and allow it to be overrided
+- set Url field when generating subpackages
+- update license tag to GPLv3+
+- handle no _pkgdocdir in RHEL7 and docdir path different to F20+
+- abort ghc_fix_dynamic_rpath if no chrpath
+- Install macros to %%{_rpmconfigdir}/macros.d.
+- set datasubdir in cabal_configure for ghc-7.8
+
 * Tue Feb  4 2014 Jens Petersen <petersen@redhat.com> - 1.0.7.3-1
-- ghc_fix_dynamic_rpath: abort for non-existent executable name with error msg
+- quote the ghc_fix_dynamic_rpath error message
+- ghc_fix_dynamic_rpath: abort for non-existent executable name
 - cabal-tweak-flag: add manual field to enforce flag changes
 - ghc-deps.sh: fix ghc-pkg path when bootstrapping new ghc version
 - fix ghc-deps.sh when bootstrapping a new ghc version
@@ -109,7 +123,7 @@ EOF
 - add ghc_docdir for package's docdir since not provided by standard macros
 
 * Fri Jul 26 2013 Jens Petersen <petersen@redhat.com> - 1.0.6-1
-- also make %ghc_lib_build docdir unversioned
+- also make %%ghc_lib_build docdir unversioned
 - require redhat-rpm-config >= 9.1.0-50.fc20 for unversioned docdir
 
 * Fri Jul 26 2013 Jens Petersen <petersen@redhat.com> - 1.0.5-1
