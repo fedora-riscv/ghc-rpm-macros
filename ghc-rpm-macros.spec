@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.2.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -108,6 +108,10 @@ EOF
 
 
 %changelog
+* Wed May 21 2014 Dennis Gilmore <dennis@ausil.us> - 1.2.10-2
+- add %%ghc_arches back to macros.ghc-srpm to maintain compatability with
+- existing specs
+
 * Fri May 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.10-1
 - do bcond cabal configure --enable-tests also for Bin packages
 
