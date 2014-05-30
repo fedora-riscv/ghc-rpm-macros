@@ -6,8 +6,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.10
-Release:        2%{?dist}
+Version:        1.2.11
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -33,8 +33,10 @@ Requires:       redhat-rpm-config > 20-1.fc21
 Requires:       hscolour
 %endif
 %endif
-# for execstack
+# for execstack (hack not needed for ghc-7.8)
+%ifnarch ppc64le aarch64
 Requires:       prelink
+%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -108,6 +110,9 @@ EOF
 
 
 %changelog
+* Fri May 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.9-1
+- condition use of execstack since no prelink on ppc64le or arm64
+
 * Wed May 21 2014 Dennis Gilmore <dennis@ausil.us> - 1.2.10-2
 - add %%ghc_arches back to macros.ghc-srpm to maintain compatability with
 - existing specs
