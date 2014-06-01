@@ -110,7 +110,7 @@ EOF
 
 
 %changelog
-* Fri May 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.9-1
+* Fri May 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.11-1
 - condition use of execstack since no prelink on ppc64le or arm64
 
 * Wed May 21 2014 Dennis Gilmore <dennis@ausil.us> - 1.2.10-2
