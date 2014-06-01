@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.11
+Version:        1.2.12
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -110,6 +110,10 @@ EOF
 
 
 %changelog
+* Sun Jun  1 2014 Jens Petersen <petersen@redhat.com> - 1.2.12-1
+- add missing ppc64, s390, and s390x to ghc_arches
+- add new ppc64le to ghc_arches
+
 * Fri May 30 2014 Jens Petersen <petersen@redhat.com> - 1.2.11-1
 - condition use of execstack since no prelink on ppc64le or arm64
 
