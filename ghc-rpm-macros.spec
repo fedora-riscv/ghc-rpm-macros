@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        0.98.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -79,6 +79,9 @@ EOF
 
 
 %changelog
+* Mon Jun  2 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-2
+- fix missing backslash in macros.ghc-extra
+
 * Sat May 17 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-1
 - do bcond cabal configure --enable-tests also for Bin packages
 - enable configure bcond check for tests

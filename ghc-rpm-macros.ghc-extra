@@ -61,7 +61,7 @@ Requires(post): ghc-compiler = %{ghc_version}\
 Requires(postun): ghc-compiler = %{ghc_version}\
 %if 0%{!?-m:1}\
 Requires:       ghc-%{?pkg_name}%{!?pkg_name:%{pkgname}} = %{?pkgver}%{!?pkgver:%{version}}-%{release}\
-%endif
+%endif\
 %{?ghc_pkg_c_deps:Requires:       %{ghc_pkg_c_deps}}\
 %{-c:Requires:       %{-c*}}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %{ghc_pkg_obsoletes}}\
