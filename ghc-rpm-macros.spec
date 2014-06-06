@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.12
+Version:        1.2.13
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -29,7 +29,7 @@ Requires:       ghc-srpm-macros = %{version}-%{release}
 # macros.ghc-srpm moved out from redhat-rpm-config-21
 Requires:       redhat-rpm-config > 20-1.fc21
 %if %{undefined without_hscolour}
-%ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x
+%ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
 %endif
 %endif
@@ -110,6 +110,9 @@ EOF
 
 
 %changelog
+* Fri Jun  6 2014 Jens Petersen <petersen@redhat.com> - 1.2.13-1
+- add aarch64
+
 * Sun Jun  1 2014 Jens Petersen <petersen@redhat.com> - 1.2.12-1
 - add missing ppc64, s390, and s390x to ghc_arches
 - add new ppc64le to ghc_arches
