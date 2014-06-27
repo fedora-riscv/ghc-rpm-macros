@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.2.13
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -24,8 +24,7 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
-Source7:        macros.ghc-srpm
-Requires:       ghc-srpm-macros = %{version}-%{release}
+Requires:       ghc-srpm-macros
 # macros.ghc-srpm moved out from redhat-rpm-config-21
 Requires:       redhat-rpm-config > 20-1.fc21
 %if %{undefined without_hscolour}
@@ -53,15 +52,6 @@ Extra macros used for subpackaging of Haskell libraries,
 for example in ghc and haskell-platform.
 
 
-%package -n ghc-srpm-macros
-Summary:        RPM macros for building Haskell source packages
-BuildArch:      noarch
-
-
-%description -n ghc-srpm-macros
-Macros used when generating source Haskell rpm packages.
-
-
 %prep
 %setup -c -T
 cp %{SOURCE1} %{SOURCE2} .
@@ -74,7 +64,6 @@ echo no build stage needed
 %install
 install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
-install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{macros_dir}/macros.ghc-srpm
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -105,11 +94,10 @@ EOF
 %{macros_dir}/macros.ghc-extra
 
 
-%files -n ghc-srpm-macros
-%{macros_dir}/macros.ghc-srpm
-
-
 %changelog
+* Fri Jun 27 2014 Jens Petersen <petersen@redhat.com> - 1.2.13-2
+- ghc-srpm-macros is now a separate source package
+
 * Fri Jun  6 2014 Jens Petersen <petersen@redhat.com> - 1.2.13-1
 - add aarch64
 
