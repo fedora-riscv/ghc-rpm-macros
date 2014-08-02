@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        0.98.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -24,6 +24,7 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        ghc-rpm-macros.ghc-extra
+Provides:       ghc-rpm-macros-extra = %{version}-%{release}
 Requires:       redhat-rpm-config
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
@@ -79,6 +80,9 @@ EOF
 
 
 %changelog
+* Sat Aug  2 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-3
+- provide ghc-rpm-macros-extra
+
 * Mon Jun  2 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-2
 - fix missing backslash in macros.ghc-extra
 
