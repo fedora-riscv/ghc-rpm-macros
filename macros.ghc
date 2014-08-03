@@ -87,7 +87,7 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal_configure %{!?without_prof:-p} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build\
 %{nil}
 
@@ -105,19 +105,12 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -exec strip "{}" \\;\
 %endif
 
-# ghc_clear_execstack
-%ghc_clear_execstack\
-if [ -d "%{buildroot}%{_bindir}" -a -x "%{_bindir}/execstack" ]; then\
-find %{buildroot}%{_bindir} -type f -exec sh -c "file {} | grep -q ' ELF '" \\; -exec %{_bindir}/execstack -c "{}" \\;\
-fi
-
 # install bin package
 %ghc_bin_install()\
 %global _use_internal_dependency_generator 0\
 %global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
-%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_lib_install [name] [version]
@@ -129,11 +122,10 @@ fi
 %cabal_pkg_conf\
 %ghc_gen_filelists\
 %{!?1:%ghc_strip_dynlinked}\
-%{!?1:%ghc_clear_execstack}\
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
-# (assumes cwd = pkg_name!)
+# (assumes cwd = pkg_name !)
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
 if ! type chrpath > /dev/null; then exit 1; fi\
@@ -161,14 +153,8 @@ done\
 # - without_hscolour, without_testsuite, and ghc_bootstrapping
 #   need to be set locally in the spec file
 
-# skip prof libs, and documentation
-%ghc_test\
+# skip prof libs and documentation
+%ghc_bootstrap\
 %global without_prof 1\
 %global without_haddock 1\
 %global without_manual 1
-
-# skip shared and prof libs, documentation, and testsuite
-%ghc_bootstrap\
-%global ghc_without_shared 1\
-%global ghc_without_dynamic 1\
-%ghc_test
