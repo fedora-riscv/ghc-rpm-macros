@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -80,6 +80,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sat Aug  2 2014 Jens Petersen <petersen@redhat.com> - 1.3.0-1
 - shared libs available for all archs in ghc-7.8
 - cabal_configure --disable-shared with ghc_without_shared
