@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.2.13
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -95,6 +95,9 @@ EOF
 
 
 %changelog
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.13-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Fri Jun 27 2014 Jens Petersen <petersen@redhat.com> - 1.2.13-2
 - ghc-srpm-macros is now a separate source package
 
