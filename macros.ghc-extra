@@ -4,8 +4,7 @@
 %ghc_lib_subpackage(c:l:x)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
-%{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgnamever}}}\
+%{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define basepkg ghc-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        Haskell %{pkgname} library\
