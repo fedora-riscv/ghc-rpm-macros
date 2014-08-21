@@ -24,7 +24,7 @@ ARCH=$(arch)
 if [ -f /etc/os-release ]; then
     eval $(grep VERSION_ID /etc/os-release)
     case $VERSION_ID in
-        21) BRANCH=master ;;
+        22) BRANCH=master ;;
         7.*) BRANCH=el7 ;;
         *) BRANCH="f$VERSION_ID" ;;
     esac

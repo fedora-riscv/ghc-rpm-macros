@@ -107,17 +107,12 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 
 # install bin package
 %ghc_bin_install()\
-%global _use_internal_dependency_generator 0\
-%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
 # ghc_lib_install [name] [version]
 %ghc_lib_install()\
-%global _use_internal_dependency_generator 0\
-%global __find_provides %{_rpmconfigdir}/ghc-deps.sh --provides %{buildroot}%{ghclibdir}\
-%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %cabal_pkg_conf\
 %ghc_gen_filelists\
