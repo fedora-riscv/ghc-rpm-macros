@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.2
+Version:        1.3.3
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -68,6 +68,16 @@ install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.a
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
+# turn off shared libs and dynamic linking on secondary archs
+%ifnarch %{ix86} x86_64
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
+
+# shared libraries are only supported on primary intel archs
+%%ghc_without_dynamic 1
+%%ghc_without_shared 1
+EOF
+%endif
+
 
 %files
 %doc COPYING AUTHORS
@@ -83,6 +93,10 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Aug 22 2014 Jens Petersen <petersen@redhat.com> - 1.3.3-1
+- temporarily revert to ghc-7.6 config for shared libs
+  until we move to ghc-7.8
+
 * Thu Aug 21 2014 Jens Petersen <petersen@redhat.com> - 1.3.2-1
 - add an rpm .attr file for ghc-deps.sh rather than running it
   as an external dep generator (#1132275)
