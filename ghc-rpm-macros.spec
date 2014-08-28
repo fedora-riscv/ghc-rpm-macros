@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.3
+Version:        1.3.4
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -93,6 +93,9 @@ EOF
 
 
 %changelog
+* Thu Aug 28 2014 Jens Petersen <petersen@redhat.com> - 1.3.4-1
+- drop -O2 for ghc-7.8: it uses too much build mem
+
 * Fri Aug 22 2014 Jens Petersen <petersen@redhat.com> - 1.3.3-1
 - temporarily revert to ghc-7.6 config for shared libs
   until we move to ghc-7.8
