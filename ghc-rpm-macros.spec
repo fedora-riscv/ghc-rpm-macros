@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.4
+Version:        1.3.5
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -93,6 +93,10 @@ EOF
 
 
 %changelog
+* Fri Aug 29 2014 Jens Petersen <petersen@redhat.com> - 1.3.5-1
+- no longer disable debuginfo by default:
+  packages now need to explicitly opt out of debuginfo if appropriate
+
 * Thu Aug 28 2014 Jens Petersen <petersen@redhat.com> - 1.3.4-1
 - drop -O2 for ghc-7.8: it uses too much build mem
 
