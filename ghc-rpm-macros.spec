@@ -6,8 +6,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        0.98.7
-Release:        3%{?dist}
+Version:        0.98.8
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -80,6 +80,9 @@ EOF
 
 
 %changelog
+* Wed Sep  3 2014 Jens Petersen <petersen@redhat.com> - 0.98.8-1
+- backport ghc-dep.sh support for ghc-pkg 7.8 from F20
+
 * Sat Aug  2 2014 Jens Petersen <petersen@redhat.com> - 0.98.7-3
 - provide ghc-rpm-macros-extra
 

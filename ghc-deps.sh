@@ -15,7 +15,10 @@ PKGBASEDIR=$2
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
 
-if [ -x "$PKGBASEDIR/ghc-pkg" ]; then
+if [ -x "$PKGBASEDIR/bin/ghc-pkg" ]; then
+    # ghc-7.8
+    GHC_PKG="$PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
+elif [ -x "$PKGBASEDIR/ghc-pkg" ]; then
     GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
 else
     GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER}"
@@ -34,7 +37,7 @@ fi
 files=$(cat)
 
 for i in $files; do
-    LIB_FILE=$(echo $i | grep /libHS | egrep -v "$PKGBASEDIR/libHS")
+    LIB_FILE=$(echo $i | grep /libHS | egrep -v "/libHSrts")
     if [ "$LIB_FILE" ]; then
 	if [ -d "$PKGCONFDIR" ]; then
 	    META=""
