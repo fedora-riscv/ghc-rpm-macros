@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.14
+Version:        1.2.15
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -24,6 +24,7 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
+Source7:        ghc.attr
 Requires:       ghc-srpm-macros
 # macros.ghc-srpm moved out from redhat-rpm-config-21
 Requires:       redhat-rpm-config > 20-1.fc21
@@ -66,11 +67,12 @@ install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
+install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.attr
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# this is why this package is now arch-dependent:
+# this is why this package is arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
@@ -85,6 +87,7 @@ EOF
 %files
 %doc COPYING AUTHORS
 %{macros_dir}/macros.ghc
+%{_prefix}/lib/rpm/fileattrs/ghc.attr
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
@@ -95,6 +98,13 @@ EOF
 
 
 %changelog
+* Wed Sep 10 2014 Jens Petersen <petersen@redhat.com> - 1.2.15-1
+- improve ghc_fix_dynamic_rpath not to assume cwd = pkg_name
+- drop -O2: it often uses too much build mem
+- add an rpm .attr file for ghc-deps.sh rather than running it
+  as an external dep generator (#1132275)
+  (see http://rpm.org/wiki/PackagerDocs/DependencyGenerator)
+
 * Wed Aug 20 2014 Jens Petersen <petersen@redhat.com> - 1.2.14-1
 - fix warning in macros.ghc-extra about unused pkgnamever
 

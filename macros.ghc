@@ -21,7 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} --ghc-option=-O2 %{?with_tests:--enable-tests} %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
@@ -113,8 +113,6 @@ fi
 
 # install bin package
 %ghc_bin_install()\
-%global _use_internal_dependency_generator 0\
-%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
 %{!?1:%ghc_clear_execstack}\
@@ -122,9 +120,6 @@ fi
 
 # ghc_lib_install [name] [version]
 %ghc_lib_install()\
-%global _use_internal_dependency_generator 0\
-%global __find_provides %{_rpmconfigdir}/ghc-deps.sh --provides %{buildroot}%{ghclibdir}\
-%global __find_requires %{_rpmconfigdir}/ghc-deps.sh --requires %{buildroot}%{ghclibdir}\
 %cabal_install\
 %cabal_pkg_conf\
 %ghc_gen_filelists\
@@ -133,18 +128,17 @@ fi
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
-# (assumes cwd = pkg_name!)
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
 if ! type chrpath > /dev/null; then exit 1; fi\
-PDIR=$(cd ..; pwd)\
+PDIR=$(pwd)\
 for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
   if [ -x "$PROG" ]; then\
     RPATH=$(chrpath $PROG | sed -e "s@^$PROG: RPATH=@@")\
     case $RPATH in\
          *$PDIR*)\
-         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
          chrpath -r $NEWRPATH $PROG\
          ;;\
     esac\

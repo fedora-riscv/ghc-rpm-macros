@@ -80,5 +80,3 @@ for i in $files; do
 	fi
     fi
 done
-
-echo $files | tr [:blank:] '\n' | /usr/lib/rpm/rpmdeps $MODE
