@@ -118,18 +118,17 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
-# (assumes cwd = pkg_name !)
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
 if ! type chrpath > /dev/null; then exit 1; fi\
-PDIR=$(cd ..; pwd)\
+PDIR=$(pwd)\
 for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
   if [ -x "$PROG" ]; then\
     RPATH=$(chrpath $PROG | sed -e "s@^$PROG: RPATH=@@")\
     case $RPATH in\
          *$PDIR*)\
-         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
          chrpath -r $NEWRPATH $PROG\
          ;;\
     esac\
