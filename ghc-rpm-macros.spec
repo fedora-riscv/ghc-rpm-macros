@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.6
+Version:        1.3.7
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -93,6 +93,9 @@ EOF
 
 
 %changelog
+* Mon Sep 29 2014 Jens Petersen <petersen@redhat.com> - 1.3.7-1
+- ghc.attr needs to handle requires for /usr/bin files too
+
 * Wed Sep 10 2014 Jens Petersen <petersen@redhat.com> - 1.3.6-1
 - improve ghc_fix_dynamic_rpath not to assume cwd = pkg_name
 
