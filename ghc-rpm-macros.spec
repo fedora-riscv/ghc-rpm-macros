@@ -93,7 +93,7 @@ EOF
 
 
 %changelog
-* Mon Sep 29 2014 Jens Petersen <petersen@redhat.com> - 1.3.7-1
+* Thu Oct 16 2014 Jens Petersen <petersen@redhat.com> - 1.3.7-1
 - ghc.attr needs to handle requires for /usr/bin files too
 
 * Wed Sep 10 2014 Jens Petersen <petersen@redhat.com> - 1.3.6-1
