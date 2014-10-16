@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.15
+Version:        1.2.16
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -72,7 +72,6 @@ install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.a
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# this is why this package is arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
@@ -98,6 +97,9 @@ EOF
 
 
 %changelog
+* Thu Oct 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.16-1
+- ghc.attr needs to handle requires for /usr/bin files too
+
 * Wed Sep 10 2014 Jens Petersen <petersen@redhat.com> - 1.2.15-1
 - improve ghc_fix_dynamic_rpath not to assume cwd = pkg_name
 - drop -O2: it often uses too much build mem
