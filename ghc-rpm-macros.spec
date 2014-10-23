@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.7
+Version:        1.3.8
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -93,6 +93,9 @@ EOF
 
 
 %changelog
+* Thu Oct 23 2014 Jens Petersen <petersen@redhat.com> - 1.3.8-1
+- ghc-deps.sh: support ghc-pkg for ghc build <= 7.4.2 as well
+
 * Thu Oct 16 2014 Jens Petersen <petersen@redhat.com> - 1.3.7-1
 - ghc.attr needs to handle requires for /usr/bin files too
 
