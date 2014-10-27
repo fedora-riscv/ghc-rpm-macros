@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.8
+Version:        1.3.9
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -93,6 +93,10 @@ EOF
 
 
 %changelog
+* Mon Oct 27 2014 Jens Petersen <petersen@redhat.com> - 1.3.9-1
+- macros.ghc: cabal_configure now passes CFLAGS and LDFLAGS to ghc (#1138982)
+  (thanks to Sergei Trofimovich and Ville Skyttä)
+
 * Thu Oct 23 2014 Jens Petersen <petersen@redhat.com> - 1.3.8-1
 - ghc-deps.sh: support ghc-pkg for ghc build <= 7.4.2 as well
 
