@@ -23,7 +23,7 @@ fi
 %ghc_check_bootstrap\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
 LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-opts="$(echo \ $CFLAGS | sed -e 's/ / -optc/g') $(echo \ $LDFLAGS | sed -e 's/ / -optc/g')" %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
