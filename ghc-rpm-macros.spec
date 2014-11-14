@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.9
+Version:        1.3.10
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -24,10 +24,13 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
-Source7:        ghc.attr
+Source7:        ghc_bin.attr
+Source8:        ghc_lib.attr
 Requires:       ghc-srpm-macros
 # macros.ghc-srpm moved out from redhat-rpm-config-21
 Requires:       redhat-rpm-config > 20-1.fc21
+# for ghc_version
+Requires:       ghc-compiler
 %if %{undefined without_hscolour}
 %ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
@@ -63,7 +66,8 @@ install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
-install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.attr
+install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
+install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
@@ -82,7 +86,8 @@ EOF
 %files
 %doc COPYING AUTHORS
 %{macros_dir}/macros.ghc
-%{_prefix}/lib/rpm/fileattrs/ghc.attr
+%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
+%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
@@ -93,6 +98,10 @@ EOF
 
 
 %changelog
+* Fri Nov 14 2014 Jens Petersen <petersen@redhat.com> - 1.3.10-1
+- split ghc.attr into ghc_lib.attr and ghc_bin.attr for finer grained handling
+- require ghc-compiler for ghc_version
+
 * Mon Oct 27 2014 Jens Petersen <petersen@redhat.com> - 1.3.9-1
 - macros.ghc: cabal_configure now passes CFLAGS and LDFLAGS to ghc (#1138982)
   (thanks to Sergei Trofimovich and Ville Skyttä)
