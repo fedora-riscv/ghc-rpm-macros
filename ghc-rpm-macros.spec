@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.0
+Version:        1.4.1
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -88,6 +88,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Jan 17 2015 Jens Petersen <petersen@redhat.com> - 1.4.1-1
+- revert to versioned doc htmldirs
+
 * Sat Jan 17 2015 Jens Petersen <petersen@redhat.com> - 1.4.0-1
 - enable shared libraries and dynamic linking on all arch's
   since ghc-7.8 now supports that
@@ -103,7 +106,7 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
   (thanks to Sergei Trofimovich and Ville Skyttä)
 
 * Thu Oct 23 2014 Jens Petersen <petersen@redhat.com> - 1.3.8-1
-- ghc-deps.sh: support ghc-pkg for ghc build <= 7.4.2 as well
+- ghc-deps.sh: support ghc-pkg for ghc builds <= 7.4.2 as well
 
 * Thu Oct 16 2014 Jens Petersen <petersen@redhat.com> - 1.3.7-1
 - ghc.attr needs to handle requires for /usr/bin files too

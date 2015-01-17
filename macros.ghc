@@ -44,7 +44,7 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg ghc-%{pkgname}\
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
-%define docdir %{ghclibdocdir}/%{pkgname}\
+%define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 echo "%dir %{pkgdir}" >> %{basepkg}.files\
@@ -89,7 +89,7 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build\
 %{nil}
 
