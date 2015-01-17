@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.3.10
+Version:        1.4.0
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -72,16 +72,6 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# turn off shared libs and dynamic linking on secondary archs
-%ifnarch %{ix86} x86_64
-cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
-
-# shared libraries are only supported on primary intel archs
-%%ghc_without_dynamic 1
-%%ghc_without_shared 1
-EOF
-%endif
-
 
 %files
 %doc COPYING AUTHORS
@@ -98,6 +88,12 @@ EOF
 
 
 %changelog
+* Sat Jan 17 2015 Jens Petersen <petersen@redhat.com> - 1.4.0-1
+- enable shared libraries and dynamic linking on all arch's
+  since ghc-7.8 now supports that
+- disable debuginfo until ghc-7.10 which will support dwarf debugging output
+  (#1138982)
+
 * Fri Nov 14 2014 Jens Petersen <petersen@redhat.com> - 1.3.10-1
 - split ghc.attr into ghc_lib.attr and ghc_bin.attr for finer grained handling
 - require ghc-compiler for ghc_version
