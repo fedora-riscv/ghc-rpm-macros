@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.17
+Version:        1.2.18
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -102,6 +102,10 @@ EOF
 
 
 %changelog
+* Mon Jan 19 2015 Jens Petersen <petersen@redhat.com> - 1.2.18-1
+- exclude -Wall from CFLAGS to prevent Cabal configure warning with ghc-7.6
+  (#1175667)
+
 * Fri Nov 14 2014 Jens Petersen <petersen@redhat.com> - 1.2.17-1
 - split ghc.attr into ghc_lib.attr and ghc_bin.attr for finer grained handling
 - require ghc-compiler for ghc_version
