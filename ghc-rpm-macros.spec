@@ -67,7 +67,6 @@ install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
@@ -92,6 +91,13 @@ EOF
 
 
 %changelog
+* Thu Jan 22 2015 Jens Petersen <petersen@redhat.com>
+- add new names ghc_html_dir, ghc_html_libraries_dir, and ghc_html_pkg_dir
+- correct cabal-tweak-flag error message for missing flag (#1184508)
+- ghc-deps.sh: support ghc-pkg for ghc builds <= 7.4.2 as well
+- improve ghc_fix_dynamic_rpath not to assume cwd = pkg_name
+- fix warning in macros.ghc-extra about unused pkgnamever
+
 * Sat May 17 2014 Jens Petersen <petersen@redhat.com> - 1.0.7.4-1
 - do bcond cabal configure --enable-tests also for Bin packages
 - enable configure bcond check for tests

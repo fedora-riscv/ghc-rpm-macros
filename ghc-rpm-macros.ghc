@@ -26,12 +26,21 @@ fi
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
-# root dir for ghc docs
+# root dir for ghc docs (used by ghc.spec)
+%ghc_html_dir %{_docdir}/ghc/html
+# deprecates
 %ghcdocbasedir %{_docdir}/ghc/html
-# libraries doc dir
+
+# libraries doc dir (internal)
+%ghc_html_libraries_dir %{ghc_html_dir}/libraries
+# deprecates
 %ghclibdocdir %{ghcdocbasedir}/libraries
+
 # pkg doc dir
-%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}-%{version}
+%ghc_html_pkg_dir %{ghc_html_libraries_dir}/%{pkg_name}-%{version}
+# deprecates
+%ghcpkgdocdir %{ghclibdocdir}/%{pkg_name}-%{version}
+
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
@@ -107,8 +116,8 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 
 # ghc_clear_execstack
 %ghc_clear_execstack\
-if [ -d "%{buildroot}%{_bindir}" ]; then\
-find %{buildroot}%{_bindir} -type f -exec sh -c "file {} | grep -q ' ELF '" \\; -exec execstack -c "{}" \\;\
+if [ -d "%{buildroot}%{_bindir}" -a -x "%{_bindir}/execstack" ]; then\
+find %{buildroot}%{_bindir} -type f -exec sh -c "file {} | grep -q ' ELF '" \\; -exec %{_bindir}/execstack -c "{}" \\;\
 fi
 
 # install bin package
@@ -133,18 +142,17 @@ fi
 %{nil}
 
 # ghc_fix_dynamic_rpath prog ...
-# (assumes cwd = pkg_name!)
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
 if ! type chrpath > /dev/null; then exit 1; fi\
-PDIR=$(cd ..; pwd)\
+PDIR=$(pwd)\
 for i in %*; do\
   PROG=%{buildroot}%{_bindir}/$i\
   if [ -x "$PROG" ]; then\
     RPATH=$(chrpath $PROG | sed -e "s@^$PROG: RPATH=@@")\
     case $RPATH in\
          *$PDIR*)\
-         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR@%{ghclibdir}@g" -e "s@/dist/build@@g")\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
          chrpath -r $NEWRPATH $PROG\
          ;;\
     esac\
