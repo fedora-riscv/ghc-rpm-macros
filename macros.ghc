@@ -28,12 +28,21 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
-# root dir for ghc docs
+# root dir for ghc docs (used by ghc.spec)
+%ghc_html_dir %{_docdir}/ghc/html
+# deprecates
 %ghcdocbasedir %{_docdir}/ghc/html
-# libraries doc dir
+
+# libraries doc dir (internal)
+%ghc_html_libraries_dir %{ghc_html_dir}/libraries
+# deprecates
 %ghclibdocdir %{ghcdocbasedir}/libraries
+
 # pkg doc dir
-%ghcpkgdocdir %{ghcdocbasedir}/libraries/%{pkg_name}
+%ghc_html_pkg_dir %{ghc_html_libraries_dir}/%{pkg_name}-%{version}
+# deprecates
+%ghcpkgdocdir %{ghclibdocdir}/%{pkg_name}-%{version}
+
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
