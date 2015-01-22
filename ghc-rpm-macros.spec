@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.18
+Version:        1.2.19
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -102,6 +102,12 @@ EOF
 
 
 %changelog
+* Thu Jan 22 2015 Jens Petersen <petersen@redhat.com> - 1.2.19-1
+- version ghcpkgdocdir
+- add new names ghc_html_dir, ghc_html_libraries_dir, and ghc_html_pkg_dir
+- correct cabal-tweak-flag error message for missing flag (#1184508)
+- revert to versioned doc htmldirs
+
 * Mon Jan 19 2015 Jens Petersen <petersen@redhat.com> - 1.2.18-1
 - exclude -Wall from CFLAGS to prevent Cabal configure warning with ghc-7.6
   (#1175667)
@@ -111,7 +117,7 @@ EOF
 - require ghc-compiler for ghc_version
 - macros.ghc: cabal_configure now passes CFLAGS and LDFLAGS to ghc (#1138982)
   (thanks to Sergei Trofimovich and Ville Skyttä)
-- ghc-deps.sh: support ghc-pkg for ghc build <= 7.4.2 as well
+- ghc-deps.sh: support ghc-pkg for ghc builds <= 7.4.2 as well
 
 * Thu Oct 16 2014 Jens Petersen <petersen@redhat.com> - 1.2.16-1
 - ghc.attr needs to handle requires for /usr/bin files too
