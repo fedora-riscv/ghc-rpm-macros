@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.1
+Version:        1.4.2
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -88,6 +88,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Thu Jan 22 2015 Jens Petersen <petersen@redhat.com> - 1.4.2-1
+- correct cabal-tweak-flag error message for missing flag (#1184508)
+
 * Sat Jan 17 2015 Jens Petersen <petersen@redhat.com> - 1.4.1-1
 - revert to versioned doc htmldirs
 
