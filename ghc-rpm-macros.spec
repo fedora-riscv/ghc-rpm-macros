@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.5
+Version:        1.4.6
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -72,6 +72,16 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
+# turn off shared libs and dynamic linking on secondary archs
+%ifarch archv7hl
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
+
+# tests failing on arm
+# https://ghc.haskell.org/trac/ghc/ticket/10029
+%%cabal_tests_not_working 1
+EOF
+%endif
+
 
 %files
 %doc COPYING AUTHORS
@@ -88,6 +98,10 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.6-1
+- disable Cabal tests on armv7 since they give an internal error
+  https://ghc.haskell.org/trac/ghc/ticket/10029
+
 * Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.5-1
 - fix the R*PATH regexp
 
