@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.4
+Version:        1.4.5
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -88,6 +88,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.5-1
+- fix the R*PATH regexp
+
 * Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.4-1
 - ghc_fix_dynamic_rpath: on ARMv7 RPATH is RUNPATH
 
