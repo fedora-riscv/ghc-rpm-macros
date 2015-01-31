@@ -28,6 +28,14 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
+tests
+%cabal_test\
+%if %{undefined cabal_tests_not_working}\
+%if %{with tests}\
+%cabal test\
+%endif\
+%endif
+
 # root dir for ghc docs (used by ghc.spec)
 %ghc_html_dir %{_docdir}/ghc/html
 # deprecates
