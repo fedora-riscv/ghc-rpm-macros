@@ -55,6 +55,7 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
+touch %{basepkg}.files %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 echo "%dir %{pkgdir}" >> %{basepkg}.files\
 %if %{undefined ghc_without_shared}\

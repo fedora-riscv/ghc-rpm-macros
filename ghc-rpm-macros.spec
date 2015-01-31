@@ -101,7 +101,9 @@ EOF
 * Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.6-1
 - disable Cabal tests on armv7 since they give an internal error
   https://ghc.haskell.org/trac/ghc/ticket/10029
+- fix building of meta packages:
 - only run cabal haddock for real libraries with modules
+- make sure basepkg.files is also created for meta packages
 
 * Sat Jan 31 2015 Jens Petersen <petersen@redhat.com> - 1.4.5-1
 - fix the R*PATH regexp
