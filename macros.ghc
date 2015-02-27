@@ -21,6 +21,7 @@ fi
 # configure
 %cabal_configure\
 %ghc_check_bootstrap\
+%global _hardened_ldflags %{nil}\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
 LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 %cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
@@ -105,7 +106,6 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%global _hardened_build 0\
 %cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build\
 %{nil}

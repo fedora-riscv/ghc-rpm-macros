@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.9
+Version:        1.4.10
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -88,6 +88,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Feb 27 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.10-1
+- have to turn off hardening in cabal_configure: set _hardened_ldflags to nil
+
 * Fri Feb 27 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.9-1
 - turn off _hardened_build for libraries since it breaks linking
   <https://fedoraproject.org/wiki/Changes/Harden_all_packages_with_position-independent_code>
