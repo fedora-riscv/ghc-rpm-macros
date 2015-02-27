@@ -88,6 +88,10 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Feb 27 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.2-1
+- turn off _hardened_build for libraries since it breaks linking
+  <https://fedoraproject.org/wiki/Changes/Harden_all_packages_with_position-independent_code>
+
 * Sun Feb  1 2015 Jens Petersen <petersen@redhat.com> - 1.4.8-1
 - drop cabal_tests_not_working since not all tests failing on ARMv7
 
