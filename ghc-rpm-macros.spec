@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.10
+Version:        1.4.11
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -32,6 +32,7 @@ Requires:       redhat-rpm-config > 20-1.fc21
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
+# could use ghc_arches here
 %ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
 %endif
@@ -88,6 +89,10 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Mon Mar  2 2015 Jens Petersen <petersen@redhat.com> - 1.4.11-1
+- fix ghc-deps.sh to handle meta-packages
+- configure --disable-shared if ghc_without_shared
+
 * Fri Feb 27 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.10-1
 - have to turn off hardening in cabal_configure: set _hardened_ldflags to nil
 

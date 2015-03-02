@@ -35,42 +35,38 @@ case $MODE in
     *) echo "`basename $0`: Need --provides or --requires" ; exit 1
 esac
 
-if [ -d "$PKGBASEDIR" ]; then
-  SHARED=$(find $PKGBASEDIR -type f -name '*.so')
-fi
-
 files=$(cat)
 
 for i in $files; do
-    LIB_FILE=$(echo $i | grep /libHS | egrep -v "/libHSrts")
-    if [ "$LIB_FILE" ]; then
-	if [ -d "$PKGCONFDIR" ]; then
-	    META=""
-	    SELF=""
-	    case $LIB_FILE in
-		*.so) META=ghc ;;
-		*.a) META=ghc-devel
-		    if [ "$SHARED" ]; then
-			SELF=ghc
-		    fi
-		    ;;
-	    esac
-	    if [ "$META" ]; then
-		PKGVER=$(echo $LIB_FILE | sed -e "s%$PKGBASEDIR/\([^/]\+\)/libHS.*%\1%")
-		HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
-		for i in $HASHS; do
-		    case $i in
-			*-*) echo "$META($i)" ;;
-			*) ;;
-		    esac
-		done
-		if [ "$MODE" = "--requires" -a "$SELF" ]; then
-		    HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER id | sed -e "s/^id: \+//")
-		    for i in $HASHS; do
-			echo "$SELF($i)"
-		    done
-		fi
+    META=""
+    SELF=""
+    case $i in
+        */libHSrts.*) ;;
+        */libHS*.so)
+            META=ghc
+	    PKGVER=$(echo $i | sed -e "s%$PKGBASEDIR/\([^/]\+\)/libHS.*%\1%")
+            ;;
+        */package.conf.d/*.conf)
+            META=ghc-devel
+	    PKGVER=$(echo $i | sed -e "s%$PKGCONFDIR/\(.\+\).conf%\1%")
+	    if [ -f $PKGBASEDIR/$PKGVER/libHS$PKGVER-*.so ]; then
+		SELF=ghc
 	    fi
+            ;;
+    esac
+    if [ "$META" -a -d "$PKGCONFDIR" ]; then
+	HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
+	for i in $HASHS; do
+	    case $i in
+		*-*) echo "$META($i)" ;;
+		*) ;;
+	    esac
+	done
+	if [ "$MODE" = "--requires" -a "$SELF" ]; then
+	    HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER id | sed -e "s/^id: \+//")
+	    for i in $HASHS; do
+		echo "$SELF($i)"
+	    done
 	fi
     elif [ "$MODE" = "--requires" ]; then
 	if file $i | grep -q 'executable, .* dynamically linked'; then
