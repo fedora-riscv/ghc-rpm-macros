@@ -49,7 +49,7 @@ for i in $files; do
         */package.conf.d/*.conf)
             META=ghc-devel
 	    PKGVER=$(echo $i | sed -e "s%$PKGCONFDIR/\(.\+\).conf%\1%")
-	    if [ -f $PKGBASEDIR/$PKGVER/libHS$PKGVER-*.so ]; then
+	    if [ -f $PKGBASEDIR/$PKGVER/libHS$PKGVER-ghc${GHC_VER}.so ]; then
 		SELF=ghc
 	    fi
             ;;
