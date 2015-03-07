@@ -58,7 +58,7 @@ tests
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
-%define basepkg ghc-%{pkgname}\
+%define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\

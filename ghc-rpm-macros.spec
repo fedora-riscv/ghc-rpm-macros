@@ -6,8 +6,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.11
-Release:        2%{?dist}
+Version:        1.4.12
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -57,7 +57,7 @@ for example in ghc and haskell-platform.
 # this is a last resort when there is no such appropriate package
 %package -n ghc-obsoletes
 Summary:        Dummy package to obsolete deprecated Haskell packages
-# 3 no longer build with ghc-7.8 (F22)
+# these 3 no longer build with ghc-7.8 (F22)
 Obsoletes:      ghc-ForSyDe < 3.1.2, ghc-ForSyDe-devel < 3.1.2
 Obsoletes:      ghc-parameterized-data < 0.1.6
 Obsoletes:      ghc-parameterized-data-devel < 0.1.6
@@ -112,6 +112,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Sat Mar  7 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.12-1
+- allow overriding ghc- prefix with ghc_name (for ghc784 etc)
+
 * Fri Mar  6 2015 Jens Petersen <petersen@redhat.com> - 1.4.11-2
 - add ghc-obsoletes dummy subpackage for obsoleting deprecated packages
 - initially: ForSyDe, parameterized-data, type-level, and cgi for F22
