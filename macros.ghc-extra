@@ -5,7 +5,7 @@
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
-%define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}
+%define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        Haskell %{pkgname} library\
