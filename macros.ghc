@@ -168,7 +168,7 @@ done\
 %endif\
 %{nil}
 
-%ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-db || :
+%ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
 # - without_hscolour, without_testsuite, and ghc_bootstrapping
 #   need to be set locally in the spec file
