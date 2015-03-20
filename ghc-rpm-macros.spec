@@ -112,6 +112,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Mar 20 2015 Jens Petersen <petersen@redhat.com>
+- introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
+
 * Sat Mar  7 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.12-1
 - allow overriding ghc- prefix with ghc_name (for ghc784 etc)
 
