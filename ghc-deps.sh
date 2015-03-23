@@ -42,13 +42,14 @@ for i in $files; do
     SELF=""
     case $i in
         */libHSrts.*) ;;
+        */libHS*_p.a) ;;
         */libHS*.so)
             META=ghc
-	    PKGVER=$(echo $i | sed -e "s%$PKGBASEDIR/\([^/]\+\)/libHS.*%\1%")
+	    PKGVER=$(echo $i | sed -e "s%$PKGBASEDIR/[^/]\+/libHS\(.\+-[0-9.]\+\)\(-.\+\)\?-ghc${GHC_VER}\.so%\1%")
             ;;
-        */package.conf.d/*.conf)
+        */libHS*.a)
             META=ghc-devel
-	    PKGVER=$(echo $i | sed -e "s%$PKGCONFDIR/\(.\+\).conf%\1%")
+	    PKGVER=$(echo $i | sed -e "s%$PKGBASEDIR/[^/]\+/libHS\(.\+-[0-9.]\+\)\(-.\+\)\?\.a%\1%")
 	    if [ -f $PKGBASEDIR/$PKGVER/libHS$PKGVER-ghc${GHC_VER}.so ]; then
 		SELF=ghc
 	    fi
@@ -70,7 +71,7 @@ for i in $files; do
 	fi
     elif [ "$MODE" = "--requires" ]; then
 	if file $i | grep -q 'executable, .* dynamically linked'; then
-	    BIN_DEPS=$(objdump -p $i | grep NEEDED | grep libHS | grep -v libHSrts | sed -e "s%^ *NEEDED *libHS\(.*\)-ghc${GHC_VER}.so%\1%")
+	    BIN_DEPS=$(objdump -p $i | grep NEEDED | grep libHS | grep -v libHSrts | sed -e "s%^ *NEEDED *libHS\(.*\)-ghc${GHC_VER}\.so%\1%")
 	    if [ -d "$PKGCONFDIR" ]; then
 		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
 	    fi

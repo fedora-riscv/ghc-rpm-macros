@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.12
+Version:        1.4.13
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -112,7 +112,11 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
-* Fri Mar 20 2015 Jens Petersen <petersen@redhat.com>
+* Mon Mar 23 2015 Jens Petersen <petersen@redhat.com> - 1.4.13-1
+- fix ghc-deps.sh for ghc builds:
+- use .a files again instead of .conf for devel deps
+- extract pkg-ver from library filename rather than directory
+  (should also work for 7.10)
 - introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
 
 * Sat Mar  7 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.12-1
