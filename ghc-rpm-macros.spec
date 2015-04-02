@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.13
+Version:        1.4.14
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -112,6 +112,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Thu Apr  2 2015 Jens Petersen <petersen@redhat.com> - 1.4.14-1
+- add explicit --enable-shared again for arm64
+
 * Mon Mar 23 2015 Jens Petersen <petersen@redhat.com> - 1.4.13-1
 - fix ghc-deps.sh for ghc builds:
 - use .a files again instead of .conf for devel deps
