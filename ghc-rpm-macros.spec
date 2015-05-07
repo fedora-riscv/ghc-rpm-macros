@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.14
+Version:        1.4.15
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -91,6 +91,15 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
+# turn off dynamic linking on arm64
+%ifarch aarch64
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
+
+# dynlinking creates broken executables on aarch64 (#1195231)
+%%ghc_without_dynamic 1
+EOF
+%endif
+
 
 %files
 %doc COPYING AUTHORS
@@ -112,6 +121,10 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Thu May  7 2015 Jens Petersen <petersen@redhat.com> - 1.4.15-1
+- cabal macro now sets utf8 locale
+- disable dynamic linking on aarch64 as a workaround (#1195231)
+
 * Thu Apr  2 2015 Jens Petersen <petersen@redhat.com> - 1.4.14-1
 - add explicit --enable-shared again for arm64
 
