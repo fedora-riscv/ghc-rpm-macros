@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.4.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -62,6 +62,7 @@ Obsoletes:      ghc-ForSyDe < 3.1.2, ghc-ForSyDe-devel < 3.1.2
 Obsoletes:      ghc-parameterized-data < 0.1.6
 Obsoletes:      ghc-parameterized-data-devel < 0.1.6
 Obsoletes:      ghc-type-level < 0.2.5, ghc-type-level-devel < 0.2.5
+Obsoletes:      leksah < 0.14, ghc-leksah < 0.14, ghc-leksah-devel < 0.14
 # dropped from HP 2014.2 (F22)
 Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
 
@@ -121,6 +122,9 @@ EOF
 
 
 %changelog
+* Mon May 25 2015 Jens Petersen <petersen@redhat.com> - 1.4.15-2
+- add leksah to ghc-obsoletes
+
 * Thu May  7 2015 Jens Petersen <petersen@redhat.com> - 1.4.15-1
 - cabal macro now sets utf8 locale
 - disable dynamic linking on aarch64 as a workaround (#1195231)
