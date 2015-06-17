@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.4.15
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -92,15 +92,6 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# turn off dynamic linking on arm64
-%ifarch aarch64
-cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
-
-# dynlinking creates broken executables on aarch64 (#1195231)
-%%ghc_without_dynamic 1
-EOF
-%endif
-
 
 %files
 %doc COPYING AUTHORS
@@ -122,6 +113,9 @@ EOF
 
 
 %changelog
+* Wed Jun 17 2015 Jens Petersen <petersen@redhat.com> - 1.4.15-3
+- reenable dynamic linking for aarch64 (#1195231)
+
 * Mon May 25 2015 Jens Petersen <petersen@redhat.com> - 1.4.15-2
 - add leksah to ghc-obsoletes
 
