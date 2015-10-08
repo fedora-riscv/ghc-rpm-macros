@@ -53,7 +53,7 @@ Extra macros used for subpackaging of Haskell libraries,
 for example in ghc and haskell-platform.
 
 
-# ideally packages should be obsoletes by some relevant package
+# ideally packages should be obsoleted by some relevant package
 # this is a last resort when there is no such appropriate package
 %package -n ghc-obsoletes
 Summary:        Dummy package to obsolete deprecated Haskell packages

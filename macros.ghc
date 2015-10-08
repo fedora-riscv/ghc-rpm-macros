@@ -30,7 +30,7 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
 
-tests
+# tests
 %cabal_test\
 %if %{with tests}\
 %cabal test\
