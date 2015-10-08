@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.2.19
+Version:        1.2.20
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -102,6 +102,14 @@ EOF
 
 
 %changelog
+* Thu Oct  8 2015 Jens Petersen <petersen@redhat.com> - 1.2.20-1
+- cabal macro now sets utf8 locale
+- introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
+- add cabal_test macro which uses it
+- only run cabal haddock for real libraries with modules
+- make sure basepkg.files is also created for meta packages
+- ghc_fix_dynamic_rpath: on ARMv7 RPATH is RUNPATH
+
 * Thu Jan 22 2015 Jens Petersen <petersen@redhat.com> - 1.2.19-1
 - version ghcpkgdocdir
 - add new names ghc_html_dir, ghc_html_libraries_dir, and ghc_html_pkg_dir

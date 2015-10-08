@@ -3,6 +3,7 @@
 
 # "cabal"
 %cabal [ -x Setup ] || ghc --make %{!?ghc_user_conf:-no-user-package-db} %{!?ghc_without_dynamic:-dynamic} Setup\
+LANG=en_US.utf8\
 ./Setup
 
 # check ghc version was rebuilt against self
@@ -23,10 +24,19 @@ fi
 %ghc_check_bootstrap\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
 LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/-Wall -Werror=format-security //' -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{ghc_pkgdocdir} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/-Wall -Werror=format-security //' -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} -v
+
+tests
+%cabal_test\
+%if %{with tests}\
+%cabal test\
+%endif
+
+# no _pkgdocdir in EPEL <= 7
+%ghc_pkgdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
 # root dir for ghc docs (used by ghc.spec)
 %ghc_html_dir %{_docdir}/ghc/html
@@ -55,6 +65,7 @@ LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
+touch %{basepkg}.files %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 echo "%dir %{pkgdir}" >> %{basepkg}.files\
 %if %{undefined ghc_without_shared}\
@@ -106,7 +117,11 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 %ghc_lib_build()\
 %ghc_lib_build_without_haddock\
 %if %{undefined without_haddock}\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define pkgver %{?2}%{!?2:%{version}}\
+if [ -f dist/build/libHS%{pkgname}-%{pkgver}.a ]; then\
 %cabal haddock --html %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)} --hoogle\
+fi\
 %endif\
 %{nil}
 
@@ -144,9 +159,12 @@ fi
 if ! type chrpath > /dev/null; then exit 1; fi\
 PDIR=$(pwd)\
 for i in %*; do\
-  PROG=%{buildroot}%{_bindir}/$i\
+  case $i in\
+    /*) PROG=%{buildroot}$i ;;\
+    *) PROG=%{buildroot}%{_bindir}/$i ;;\
+  esac\
   if [ -x "$PROG" ]; then\
-    RPATH=$(chrpath $PROG | sed -e "s@^$PROG: RPATH=@@")\
+    RPATH=$(chrpath $PROG | sed -e "s@^$PROG: R.*PATH=@@")\
     case $RPATH in\
          *$PDIR*)\
          NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
@@ -161,7 +179,7 @@ done\
 %endif\
 %{nil}
 
-%ghc_pkg_recache %{_bindir}/ghc-pkg recache --no-user-package-db || :
+%ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
 # - without_hscolour, without_testsuite, and ghc_bootstrapping
 #   need to be set locally in the spec file
