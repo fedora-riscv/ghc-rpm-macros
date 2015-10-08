@@ -1,11 +1,6 @@
 #!/bin/sh
 # find rpm provides and requires for Haskell GHC libraries
 
-# To use add the following lines to spec file:
-#   %define _use_internal_dependency_generator 0
-#   %define __find_requires /usr/lib/rpm/ghc-deps.sh --requires %{buildroot}%{ghclibdir}
-#   %define __find_provides /usr/lib/rpm/ghc-deps.sh --provides %{buildroot}%{ghclibdir}
-
 [ $# -ne 2 ] && echo "Usage: `basename $0` [--provides|--requires] %{buildroot}%{ghclibdir}" && exit 1
 
 set +x
@@ -15,11 +10,21 @@ PKGBASEDIR=$2
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
 
-if [ -x "$PKGBASEDIR/bin/ghc-pkg" ]; then
-    # ghc-7.8
-    GHC_PKG="$PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
-elif [ -x "$PKGBASEDIR/ghc-pkg" ]; then
-    GHC_PKG="$PKGBASEDIR/ghc-pkg --global-package-db=$PKGCONFDIR"
+# for a ghc build use the new ghc-pkg
+INPLACE_GHCPKG=$PKGBASEDIR/../../bin/ghc-pkg-$GHC_VER
+
+if [ -x "$INPLACE_GHCPKG" ]; then
+    case $GHC_VER in
+        7.8.*)
+            GHC_PKG="$PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
+            ;;
+        7.6.*)
+            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-package-db=$PKGCONFDIR"
+            ;;
+        *)
+            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
+            ;;
+    esac
 else
     GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER}"
 fi
@@ -69,7 +74,7 @@ for i in $files; do
 	fi
     elif [ "$MODE" = "--requires" ]; then
 	if file $i | grep -q 'executable, .* dynamically linked'; then
-	    BIN_DEPS=$(objdump -p $i | grep NEEDED | grep libHS | grep -v libHSrts | sed -e "s%^ *NEEDED *libHS\(.*\)-ghc${GHC_VER}.so%\1%")
+	    BIN_DEPS=$(objdump -p $i | grep NEEDED | grep libHS | grep -v libHSrts | sed -e "s%^ *NEEDED *libHS\(.*\)-ghc${GHC_VER}\.so%\1%")
 	    if [ -d "$PKGCONFDIR" ]; then
 		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
 	    fi
@@ -80,5 +85,3 @@ for i in $files; do
 	fi
     fi
 done
-
-echo $files | tr [:blank:] '\n' | /usr/lib/rpm/rpmdeps $MODE

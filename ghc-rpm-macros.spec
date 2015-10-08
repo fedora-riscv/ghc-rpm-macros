@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.7.4
+Version:        1.0.7.5
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -17,21 +17,27 @@ URL:            https://fedoraproject.org/wiki/Packaging:Haskell
 # the distribution.  Hence the source is currently only available
 # from this package.  But it could be hosted on fedorahosted.org
 # for example if other rpm distros would prefer that.
-Source0:        ghc-rpm-macros.ghc
+Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
 Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
-Source6:        ghc-rpm-macros.ghc-extra
+Source6:        macros.ghc-extra
+Source7:        ghc_bin.attr
+Source8:        ghc_lib.attr
 Requires:       redhat-rpm-config
+# for ghc_version
+Requires:       ghc-compiler
 %if %{undefined without_hscolour}
 BuildRequires:  redhat-rpm-config
 ExclusiveArch:  %{ghc_arches}
 Requires:       hscolour
 %endif
-# for execstack
+# for execstack (not needed for ghc-7.8)
+%ifnarch ppc64le aarch64
 Requires:       prelink
+%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -62,11 +68,12 @@ install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
+install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
+install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
-# this is why this package is now arch-dependent:
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
@@ -81,6 +88,8 @@ EOF
 %files
 %doc COPYING AUTHORS
 %{macros_dir}/macros.ghc
+%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
+%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
@@ -91,6 +100,24 @@ EOF
 
 
 %changelog
+* Thu Oct  8 2015 Jens Petersen <petersen@redhat.com> - 1.0.7.5-1
+- cabal macro now sets utf8 locale
+- introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
+- add cabal_test macro
+- ghc_fix_dynamic_rpath: on ARMv7 RPATH is RUNPATH
+- add new names ghc_html_dir, ghc_html_libraries_dir, and ghc_html_pkg_dir
+- correct cabal-tweak-flag error message for missing flag (#1184508)
+- split ghc.attr into ghc_lib.attr and ghc_bin.attr for finer grained handling
+- require ghc-compiler for ghc_version
+- ghc-deps.sh: support ghc-pkg for ghc builds <= 7.4.2 as well
+- ghc.attr needs to handle requires for /usr/bin files too
+- improve ghc_fix_dynamic_rpath not to assume cwd = pkg_name
+- drop -O2: it often uses too much build mem
+- add an rpm .attr file for ghc-deps.sh rather than running it
+  as an external dep generator (#1132275)
+  (see http://rpm.org/wiki/PackagerDocs/DependencyGenerator)
+- condition use of execstack since no prelink on ppc64le or arm64
+
 * Sat May 17 2014 Jens Petersen <petersen@redhat.com> - 1.0.7.4-1
 - do bcond cabal configure --enable-tests also for Bin packages
 - enable configure bcond check for tests
