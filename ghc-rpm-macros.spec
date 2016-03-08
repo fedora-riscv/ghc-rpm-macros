@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.4.15
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -65,6 +65,8 @@ Obsoletes:      ghc-type-level < 0.2.5, ghc-type-level-devel < 0.2.5
 Obsoletes:      leksah < 0.14, ghc-leksah < 0.14, ghc-leksah-devel < 0.14
 # dropped from HP 2014.2 (F22)
 Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
+# for f24
+Obsoletes:      ghc-citeproc-hs < 0.3.10-3, ghc-citeproc-hs-devel < 0.3.10-3
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -113,6 +115,9 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Tue Mar  8 2016 Jens Petersen <petersen@redhat.com> - 1.4.15-5
+- add ghc-citeproc-hs to obsoletes
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.15-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
