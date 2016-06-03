@@ -9,6 +9,9 @@
 %define basepkg %{ghc_prefix}-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        Haskell %{pkgname} library\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+Group:          System/Libraries\
+%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Url:            http://hackage.haskell.org/package/%{pkgname}\
@@ -19,6 +22,9 @@ This package provides the Haskell %{pkgname} library.\
 \
 %package -n %{basepkg}-devel\
 Summary:        Haskell %{pkgname} library development files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+Group:          Development/Languages/Other\
+%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Requires(post): %{ghc_prefix}-compiler = %{ghc_version}\
@@ -38,8 +44,14 @@ This package provides the Haskell %{pkgname} library development files.\
 %ghc_pkg_recache\
 \
 %files -n %{basepkg} -f %{basepkg}.files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+%defattr(-,root,root,-)\
+%endif\
 %{?base_doc_files:%doc %base_doc_files}\
 \
 %files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+%defattr(-,root,root,-)\
+%endif\
 %{?devel_doc_files:%doc %devel_doc_files}\
 %{nil}

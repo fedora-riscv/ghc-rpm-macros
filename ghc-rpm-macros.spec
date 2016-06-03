@@ -1,22 +1,22 @@
 %global debug_package %{nil}
 
+%if 0%{?fedora} || 0%{?rhel} >= 7
 %global macros_dir %{_rpmconfigdir}/macros.d
+%else
+%global macros_dir %{_sysconfdir}/rpm
+%endif
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.15
-Release:        5%{?dist}
+Version:        1.6.0
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
-URL:            https://fedoraproject.org/wiki/Packaging:Haskell
-
-# This is a Fedora maintained package, originally made for
-# the distribution.  Hence the source is currently only available
-# from this package.  But it could be hosted on fedorahosted.org
-# for example if other rpm distros would prefer that.
+URL:            https://github.com/fedora-haskell/ghc-rpm-macros
+# Currently source is only in git but tarballs could be made if it helps
 Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
@@ -24,15 +24,12 @@ Source3:        ghc-deps.sh
 Source4:        cabal-tweak-dep-ver
 Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
-Source7:        ghc_bin.attr
-Source8:        ghc_lib.attr
-Requires:       ghc-srpm-macros
-# macros.ghc-srpm moved out from redhat-rpm-config-21
-Requires:       redhat-rpm-config > 20-1.fc21
+Source7:        ghc.attr
+Source8:        ghc-pkg-wrapper
+Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
-# could use ghc_arches here
 %ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
 %endif
@@ -88,19 +85,31 @@ install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
-install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
-install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
+
+%if 0%{?fedora} || 0%{?rhel} >= 7
+install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.attr
+%endif
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
+install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
+
+%if 0%{?rhel} && 0%{?rhel} < 7
+cat >> %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh <<EOF
+
+echo \$files | tr [:blank:] '\n' | %{_rpmconfigdir}/rpmdeps --requires
+EOF
+%endif
 
 
 %files
 %doc COPYING AUTHORS
 %{macros_dir}/macros.ghc
-%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
-%{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%{_prefix}/lib/rpm/fileattrs/ghc.attr
+%endif
 %{_prefix}/lib/rpm/ghc-deps.sh
+%{_prefix}/lib/rpm/ghc-pkg-wrapper
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
 
@@ -115,6 +124,25 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Fri Jun  3 2016 Jens Petersen <petersen@redhat.com> - 1.6.0-1
+- enable debuginfo package
+- ghc-7.10 support from copr http://github.com/fedora-haskell/ghc-rpm-macros:
+- ghc_gen_filelists: determine keyname with pkgnamever not just pkgname
+  (fixes building newer version of installed package)
+- use _rpmconfigdir macro
+- support el6 (no fileattrs or /usr/lib/rpm/macros.d)
+- change url to github
+- add and use ghc-pkg-wrapper script
+- use ghc-pkg key field (for ghc-7.10)
+- configure libsubdir using pkgkey like ghc-cabal
+- handle no ghc-srpm-macros for fedora < 21
+- fix ghc-pkg path in ghc-deps.sh for ghc-7.10
+- version ghc-pkg in ghc_pkg_recache
+- update ghc_gen_filelists to use new keyed library filepaths
+  and specify libHS*.so more loosely
+- ghc-dep.sh now just makes versioned devel reqs
+- rename ghc_lib.attr to ghc.attr and drop ghc_bin.attr
+
 * Tue Mar  8 2016 Jens Petersen <petersen@redhat.com> - 1.4.15-5
 - add ghc-citeproc-hs to obsoletes
 
