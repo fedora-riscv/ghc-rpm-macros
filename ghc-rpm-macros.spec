@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.1
+Version:        1.6.2
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -124,6 +124,9 @@ EOF
 
 
 %changelog
+* Mon Jun 13 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-1
+- ghc_gen_filelists: uniq keyname to prevent build failure for installed version
+
 * Mon Jun  6 2016 Jens Petersen <petersen@redhat.com> - 1.6.1-1
 - disable debuginfo again until working
 

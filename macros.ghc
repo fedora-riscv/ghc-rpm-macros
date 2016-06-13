@@ -64,7 +64,7 @@ LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
-keyname=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} field %{pkgnamever} key | sed -e "s/key: //")\
+keyname=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} field %{pkgnamever} key | sed -e "s/key: //" | uniq)\
 pkgdir="%{ghclibdir}/${keyname}"\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
 touch %{basepkg}.files %{basepkg}-devel.files\
