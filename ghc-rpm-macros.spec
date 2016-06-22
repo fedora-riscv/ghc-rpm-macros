@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -64,6 +64,8 @@ Obsoletes:      leksah < 0.14, ghc-leksah < 0.14, ghc-leksah-devel < 0.14
 Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
 # for f24
 Obsoletes:      ghc-citeproc-hs < 0.3.10-3, ghc-citeproc-hs-devel < 0.3.10-3
+Obsoletes:      ghc-hakyll < 4.5.4.0-6, ghc-hakyll-devel < 4.5.4.0-6
+Obsoletes:      ghc-leksah-server < 0.14.3.1-4, ghc-leksah-server-devel < 0.14.3.1-4
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -124,6 +126,9 @@ EOF
 
 
 %changelog
+* Wed Jun 22 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-2
+- obsoletes for hakyll and leksah-server
+
 * Mon Jun 13 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-1
 - ghc_gen_filelists: uniq keyname to prevent build failure for installed version
 
