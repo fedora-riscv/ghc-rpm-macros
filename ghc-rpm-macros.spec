@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -66,6 +66,14 @@ Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
 Obsoletes:      ghc-citeproc-hs < 0.3.10-3, ghc-citeproc-hs-devel < 0.3.10-3
 Obsoletes:      ghc-hakyll < 4.5.4.0-6, ghc-hakyll-devel < 4.5.4.0-6
 Obsoletes:      ghc-leksah-server < 0.14.3.1-4, ghc-leksah-server-devel < 0.14.3.1-4
+# for f25
+Obsoletes:      ghc-cmdtheline <= 0.2.3, ghc-cmdtheline-devel <= 0.2.3
+Obsoletes:      ghc-concrete-typerep <= 0.1.0.2, ghc-concrete-typerep-devel <= 0.1.0.2
+Obsoletes:      ghc-glade <= 0.12.5.0, ghc-glade-devel <= 0.12.5.0
+Obsoletes:      bluetile <= 0.6, bluetile-core <= 0.6
+Obsoletes:      ghc-lambdabot-utils <= 4.2.2, ghc-lambdabot-utils-devel <= 4.2.2
+Obsoletes:      haddock <= 2.14.3, ghc-haddock <= 2.14.3, ghc-haddock-devel <= 2.14.3
+Obsoletes:      ghc-monad-unify <= 0.2.2, ghc-monad-unify-devel <= 0.2.2
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -126,6 +134,10 @@ EOF
 
 
 %changelog
+* Wed Jul 20 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-3
+- obsolete cmdtheline, concrete-typerep, glade, bluetile, lambdabot-utils,
+  haddock, monad-unify
+
 * Wed Jun 22 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-2
 - obsoletes for hakyll and leksah-server
 
