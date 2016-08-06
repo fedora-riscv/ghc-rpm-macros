@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.2
-Release:        4%{?dist}
+Version:        1.6.3
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -135,6 +135,9 @@ EOF
 
 
 %changelog
+* Sat Aug  6 2016 Jens Petersen <petersen@redhat.com> - 1.6.3-1
+- cabal_verbose from github fedora-haskell/ghc-rpm-macros
+
 * Fri Jul 22 2016 Jens Petersen <petersen@redhat.com> - 1.6.2-4
 - try obsoleting Agda
 
