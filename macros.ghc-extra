@@ -55,3 +55,39 @@ This package provides the Haskell %{pkgname} library development files.\
 %endif\
 %{?devel_doc_files:%doc %devel_doc_files}\
 %{nil}
+
+# ghc_sublib_build [name-version] ...
+%ghc_sublib_build()\
+HOME=$PWD\
+%define cabal_configure_options --user\
+for i in %*; do\
+name=$(echo $i | sed -e "s/\(.*\)-.*/\1/")\
+ver=$(echo $i | sed -e "s/.*-\(.*\)/\1/")\
+cd $name-$ver\
+case $name in\
+haskell-platform)\
+%ghc_lib_build_without_haddock $name $ver\
+;;\
+*)\
+%ghc_lib_build $name $ver\
+./Setup register --inplace\
+;;\
+esac\
+cd ..\
+done\
+%{nil}
+
+# ghc_sublib_install [name-version] ...
+%ghc_sublib_install()\
+HOME=$PWD\
+for i in %*; do\
+name=$(echo $i | sed -e "s/\(.*\)-.*/\1/")\
+ver=$(echo $i | sed -e "s/.*-\(.*\)/\1/")\
+cd $name-$ver\
+%ghc_lib_install $name $ver\
+echo "%%license $name-$ver/LICENSE" >> ghc-$name.files\
+rm %{buildroot}%{_docdir}/ghc-$name/LICENSE\
+mv *.files ..\
+cd ..\
+done\
+%{nil}
