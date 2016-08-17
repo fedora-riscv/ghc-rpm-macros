@@ -61,8 +61,8 @@ This package provides the Haskell %{pkgname} library development files.\
 HOME=$PWD\
 %define cabal_configure_options --user\
 for i in %*; do\
-name=$(echo $i | sed -e "s/\(.*\)-.*/\1/")\
-ver=$(echo $i | sed -e "s/.*-\(.*\)/\1/")\
+name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
+ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
 cd $name-$ver\
 case $name in\
 haskell-platform)\
@@ -81,8 +81,8 @@ done\
 %ghc_sublib_install()\
 HOME=$PWD\
 for i in %*; do\
-name=$(echo $i | sed -e "s/\(.*\)-.*/\1/")\
-ver=$(echo $i | sed -e "s/.*-\(.*\)/\1/")\
+name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
+ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
 cd $name-$ver\
 %ghc_lib_install $name $ver\
 echo "%%license $name-$ver/LICENSE" >> ghc-$name.files\
