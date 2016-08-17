@@ -137,6 +137,7 @@ EOF
 %changelog
 * Wed Aug 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.4-1
 - add ghc_sublib_build and ghc_sublib_install to ease bundling libraries
+- drop _smp_mflags for now since it can overwhelm armv7hl
 
 * Sat Aug  6 2016 Jens Petersen <petersen@redhat.com> - 1.6.3-1
 - cabal_verbose from github fedora-haskell/ghc-rpm-macros
