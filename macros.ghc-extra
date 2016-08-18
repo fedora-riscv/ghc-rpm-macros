@@ -57,7 +57,7 @@ This package provides the Haskell %{pkgname} library development files.\
 %{nil}
 
 # ghc_sublib_build [name-version] ...
-%ghc_sublib_build()\
+%ghc_libs_build()\
 HOME=$PWD\
 %define cabal_configure_options --user\
 for i in %*; do\
@@ -78,7 +78,7 @@ done\
 %{nil}
 
 # ghc_sublib_install [name-version] ...
-%ghc_sublib_install()\
+%ghc_libs_install()\
 HOME=$PWD\
 for i in %*; do\
 name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
