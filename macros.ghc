@@ -80,6 +80,9 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
+license_file=$(ls %{buildroot}%{_docdir}/%{basepkg}/)\
+echo "%%license %{pkgnamever}/$license_file" >> %{basepkg}.files\
+rm %{buildroot}%{_docdir}/ghc-$name/$license_file\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\

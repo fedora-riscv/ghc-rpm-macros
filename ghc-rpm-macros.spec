@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.4
+Version:        1.6.5
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -135,6 +135,9 @@ EOF
 
 
 %changelog
+* Thu Aug 25 2016 Jens Petersen <petersen@redhat.com> - 1.6.5-1
+- ghc_gen_filelists now handles license files automatically
+
 * Wed Aug 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.4-1
 - add ghc_libs_build and ghc_libs_install to ease bundling libraries
 - drop _smp_mflags for now since it can overwhelm armv7hl

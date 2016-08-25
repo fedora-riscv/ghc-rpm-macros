@@ -85,9 +85,6 @@ name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
 ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
 cd $name-$ver\
 %ghc_lib_install $name $ver\
-LICENSE_FILE=$(ls %{buildroot}%{_docdir}/ghc-$name/)\
-echo "%%license $name-$ver/$LICENSE_FILE" >> ghc-$name.files\
-rm %{buildroot}%{_docdir}/ghc-$name/$LICENSE_FILE\
 mv *.files ..\
 cd ..\
 done\
