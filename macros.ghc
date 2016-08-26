@@ -80,9 +80,11 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
-license_file=$(ls %{buildroot}%{_docdir}/%{basepkg}/)\
-echo "%%license %{pkgnamever}/$license_file" >> %{basepkg}.files\
-rm %{buildroot}%{_docdir}/ghc-$name/$license_file\
+for i in $(ls %{buildroot}%{_docdir}/%{basepkg}/); do\
+echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
+mkdir -p %{buildroot}%{_licensedir}/%{basepkg}\
+mv %{buildroot}%{_docdir}/%{basepkg}/$i %{buildroot}%{_licensedir}/%{basepkg}/\
+done\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
@@ -139,6 +141,8 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?_fileattrsdir:%global _use_internal_dependency_generator 0}\
 %{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
+mkdir -p %{buildroot}%{_licensedir}/%{name}\
+mv %{buildroot}%ghc_pkgdocdir/* %{buildroot}%{_licensedir}/%{name}/\
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 

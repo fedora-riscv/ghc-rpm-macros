@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.5
+Version:        1.6.6
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -135,6 +135,10 @@ EOF
 
 
 %changelog
+* Fri Aug 26 2016 Jens Petersen <petersen@redhat.com> - 1.6.6-1
+- ghc_gen_filelists: support packages with more than one license file
+- move licenses out of docdir instead of removing, also for ghc_bin_install
+
 * Thu Aug 25 2016 Jens Petersen <petersen@redhat.com> - 1.6.5-1
 - ghc_gen_filelists now handles license files automatically
 
