@@ -81,7 +81,7 @@ if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
 for i in $(ls %{buildroot}%{_docdir}/%{basepkg}/); do\
-echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
+echo "%%license %{?1:%{pkgnamever}/}$i" >> %{basepkg}.files\
 mkdir -p %{buildroot}%{_defaultlicensedir}/%{basepkg}\
 mv %{buildroot}%{_docdir}/%{basepkg}/$i %{buildroot}%{_defaultlicensedir}/%{basepkg}/\
 done\
@@ -142,7 +142,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
 mkdir -p %{buildroot}%{_defaultlicensedir}/%{name}\
-mv %{buildroot}%ghc_pkgdocdir/* %{buildroot}%{_defaultlicensedir}/%{name}/\
+mv %{buildroot}%{ghc_pkgdocdir}/* %{buildroot}%{_defaultlicensedir}/%{name}/\
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
