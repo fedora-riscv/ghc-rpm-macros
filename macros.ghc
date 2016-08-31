@@ -80,10 +80,10 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
-for i in $(ls %{buildroot}%{_docdir}/%{!?1:*}%{?1:%{basepkg})/); do\
+for i in $(ls %{buildroot}%{_docdir}/%{!?1:*}%{?1:%{basepkg}}/); do\
 echo "%%license %{?1:%{pkgnamever}/}$i" >> %{basepkg}.files\
 mkdir -p %{buildroot}%{_defaultlicensedir}/%{basepkg}\
-mv %{buildroot}%{_docdir}/%{basepkg}/$i %{buildroot}%{_defaultlicensedir}/%{basepkg}/\
+mv %{buildroot}%{_docdir}/%{!?1:*}%{?1:%{basepkg}}/$i %{buildroot}%{_defaultlicensedir}/%{basepkg}/\
 done\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
