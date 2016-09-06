@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.7
+Version:        1.6.8
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -135,6 +135,9 @@ EOF
 
 
 %changelog
+* Tue Sep  6 2016 Jens Petersen <petersen@redhat.com> - 1.6.8-1
+- set Cabal docdir to licensedir so licenses end up in right place
+
 * Thu Sep  1 2016 Jens Petersen <petersen@redhat.com> - 1.6.7-1
 - ghc_lib_subpackage now takes name-version processed with lua
 
