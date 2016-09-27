@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -44,6 +44,7 @@ these macros.
 %package extra
 Summary:        Extra RPM macros for building Haskell library subpackages
 Requires:       %{name} = %{version}-%{release}
+Requires:       chrpath
 
 %description extra
 Extra macros used for subpackaging of Haskell libraries,
@@ -135,6 +136,9 @@ EOF
 
 
 %changelog
+* Tue Sep 27 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-2
+- macros.ghc-extra requires chrpath
+
 * Tue Sep 27 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-1
 - new ghc_fix_rpath macro deprecates ghc_fix_dynamic_rpath
 - ghc-pkg-wrapper: quieter and simple output
