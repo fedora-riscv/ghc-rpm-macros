@@ -87,12 +87,14 @@ done\
 # ghc_sublib_install [name-version] ...
 %ghc_libs_install()\
 HOME=$PWD\
-for i in %*; do\
+args="%*"\
+for i in $args; do\
+cd $i\
 name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
 ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
-cd $name-$ver\
 %ghc_lib_install $name $ver\
 mv *.files ..\
 cd ..\
 done\
+%ghc_fix_rpath $args\
 %{nil}

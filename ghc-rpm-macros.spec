@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.8
+Version:        1.6.9
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -135,6 +135,11 @@ EOF
 
 
 %changelog
+* Tue Sep 27 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-1
+- new ghc_fix_rpath macro deprecates ghc_fix_dynamic_rpath
+- ghc-pkg-wrapper: quieter and simple output
+- ghc_libs_install now runs ghc_fix_rpath to fix subpackage rpaths
+
 * Tue Sep  6 2016 Jens Petersen <petersen@redhat.com> - 1.6.8-1
 - set Cabal docdir to licensedir so licenses end up in right place
 

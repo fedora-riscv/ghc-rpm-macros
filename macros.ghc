@@ -153,6 +153,32 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
+# ghc_fix_rpath lib-ver ...
+%ghc_fix_rpath()\
+%if %{undefined ghc_without_dynamic}\
+if ! type chrpath > /dev/null; then exit 1; fi\
+PDIR=$(pwd)\
+for lib in %*; do\
+for i in $(find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print); do\
+  if [ -x "$i" ]; then\
+    RPATH=$(chrpath $i | sed -e "s@^$i: R.*PATH=@@")\
+    case $RPATH in\
+         *$PDIR/$lib/*)\
+         SYSPATH=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | uniq)\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/$lib/dist/build@${SYSPATH}@g")\
+         chrpath -r $NEWRPATH $i\
+         ;;\
+    esac\
+  else\
+    echo "%%ghc_fix_rpath: no $i executable"\
+    exit 1\
+  fi\
+done\
+done\
+%endif\
+%{nil}
+
+# Deprecated by ghc_fix_rpath:
 # ghc_fix_dynamic_rpath prog ...
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\
