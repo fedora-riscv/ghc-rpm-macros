@@ -115,7 +115,8 @@ EOF
 
 
 %files
-%doc COPYING AUTHORS
+%license COPYING
+%doc AUTHORS
 %{macros_dir}/macros.ghc
 %if 0%{?fedora} || 0%{?rhel} >= 7
 %{_prefix}/lib/rpm/fileattrs/ghc.attr
