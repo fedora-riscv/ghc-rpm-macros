@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -76,6 +76,7 @@ Obsoletes:      ghc-lambdabot-utils <= 4.2.2, ghc-lambdabot-utils-devel <= 4.2.2
 Obsoletes:      haddock <= 2.14.3, ghc-haddock <= 2.14.3, ghc-haddock-devel <= 2.14.3
 Obsoletes:      ghc-monad-unify <= 0.2.2, ghc-monad-unify-devel <= 0.2.2
 Obsoletes:      Agda <= 2.4.2.2, ghc-Agda <= 2.4.2.2, ghc-Agda-devel <= 2.4.2.2
+Obsoletes:      idris <= 0.9.9.1
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -137,6 +138,9 @@ EOF
 
 
 %changelog
+* Tue Oct  4 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-3
+- obsolete idris
+
 * Tue Sep 27 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-2
 - macros.ghc-extra requires chrpath
 
