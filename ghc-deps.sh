@@ -9,6 +9,8 @@ MODE=$1
 PKGBASEDIR=$2
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 
+GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
+
 case $MODE in
     --provides) FIELD=id ;;
     --requires) FIELD=depends ;;
@@ -22,7 +24,7 @@ for i in $files; do
         # exclude builtin_rts.conf
 	$PKGCONFDIR/*-*.conf)
 	    PKGVER=$(echo $i | sed -e "s%$PKGCONFDIR/\(.\+\)-.\+.conf%\1%")
-	    OUT=$(/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR field $PKGVER $FIELD | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
+	    OUT=$($GHC_PKG field $PKGVER $FIELD | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
 	    for d in $OUT; do
 		case $d in
 		    *-*) echo "ghc-devel($d)" ;;
