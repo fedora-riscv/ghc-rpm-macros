@@ -33,7 +33,9 @@ else
     BRANCH=el6
 fi
 
-fedpkg switch-branch $BRANCH
+if [ "* $BRANCH" != "$(git branch | grep '^*')" ]; then
+  fedpkg switch-branch $BRANCH
+fi
 
 if [ "* $BRANCH" != "$(git branch | grep '^*')" ]; then
   echo "Git branch does not match Fedora installation!"
@@ -42,7 +44,8 @@ fi
 
 git pull
 
-sudo yum-builddep $PKG.spec
+echo Running dnf builddep:
+sudo dnf builddep $PKG.spec
 
 fedpkg local
 
