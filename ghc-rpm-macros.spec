@@ -1,22 +1,22 @@
 %global debug_package %{nil}
 
+%if 0%{?fedora} || 0%{?rhel} >= 7
 %global macros_dir %{_rpmconfigdir}/macros.d
+%else
+%global macros_dir %{_sysconfdir}/rpm
+%endif
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.15
-Release:        6%{?dist}
+Version:        1.4.16
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
-URL:            https://fedoraproject.org/wiki/Packaging:Haskell
-
-# This is a Fedora maintained package, originally made for
-# the distribution.  Hence the source is currently only available
-# from this package.  But it could be hosted on fedorahosted.org
-# for example if other rpm distros would prefer that.
+URL:            https://github.com/fedora-haskell/ghc-rpm-macros
+# Currently source is only in git but tarballs could be made if it helps
 Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
@@ -26,9 +26,8 @@ Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
 Source7:        ghc_bin.attr
 Source8:        ghc_lib.attr
-Requires:       ghc-srpm-macros
-# macros.ghc-srpm moved out from redhat-rpm-config-21
-Requires:       redhat-rpm-config > 20-1.fc21
+Source9:        ghc-pkg-wrapper
+Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
@@ -47,6 +46,7 @@ these macros.
 %package extra
 Summary:        Extra RPM macros for building Haskell library subpackages
 Requires:       %{name} = %{version}-%{release}
+Requires:       chrpath
 
 %description extra
 Extra macros used for subpackaging of Haskell libraries,
@@ -95,14 +95,17 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
+install -p -D -m 0755 %{SOURCE9} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 
 %files
-%doc COPYING AUTHORS
+%license COPYING
+%doc AUTHORS
 %{macros_dir}/macros.ghc
 %{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
 %{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 %{_prefix}/lib/rpm/ghc-deps.sh
+%{_prefix}/lib/rpm/ghc-pkg-wrapper
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-flag
 
@@ -117,6 +120,23 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 
 
 %changelog
+* Wed Oct 12 2016 Jens Petersen <petersen@redhat.com> - 1.4.16-1
+- some backports from f25 beta:
+- macros.ghc-extra requires chrpath
+- new ghc_fix_rpath macro deprecates ghc_fix_dynamic_rpath
+- ghc-pkg-wrapper: quieter and simple output
+- ghc_libs_install now runs ghc_fix_rpath to fix subpackage rpaths
+- set Cabal docdir to licensedir so licenses end up in right place
+- ghc_lib_subpackage now takes name-version processed with lua
+- ghc_gen_filelists: support packages with more than one license file
+- ghc_gen_filelists now handles license files automatically
+- add ghc_libs_build and ghc_libs_install to ease bundling libraries
+- cabal_verbose from github fedora-haskell/ghc-rpm-macros
+- support el6 (no fileattrs or /usr/lib/rpm/macros.d)
+- change url to github
+- add and use ghc-pkg-wrapper script
+- handle no ghc-srpm-macros for fedora < 21
+
 * Wed Jun 22 2016 Jens Petersen <petersen@redhat.com> - 1.4.15-6
 - obsoletes for hakyll and leksah-server
 

@@ -25,22 +25,22 @@ fi
 %global _hardened_ldflags %{nil}\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
 LDFLAGS="${LDFLAGS:-%__global_ldflags}"; export LDFLAGS\
-%cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{ghc_pkgdocdir} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure %{?cabal_verbose} --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_defaultlicensedir}/%{name} --libsubdir='$compiler/$pkgid' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} --ghc-options="$(echo ' '$CFLAGS | sed -e 's/ / -optc/g') $(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')" %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
-%cabal_install %cabal copy --destdir=%{buildroot} -v
+%cabal_install %cabal copy %{?cabal_verbose} %{!?cabal_verbose:-v} --destdir=%{buildroot}
 
 # tests
 %cabal_test\
 %if %{with tests}\
-%cabal test\
+%cabal test %{?cabal_verbose}\
 %endif
 
 # no _pkgdocdir in EPEL <= 7
 %ghc_pkgdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
 # root dir for ghc docs (used by ghc.spec)
-%ghc_html_dir %{_docdir}/%{?ghc_name}%{!?ghc_name:ghc}/html
+%ghc_html_dir %{_docdir}/ghc/html
 # deprecates
 %ghcdocbasedir %ghc_html_dir
 
@@ -81,6 +81,9 @@ fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
+for i in $(ls %{buildroot}%{_defaultlicensedir}/%{!?1:%{name}}%{?1:%{basepkg}}); do\
+echo "%%license %{?1:%{pkgnamever}/}$i" >> %{basepkg}.files\
+done\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
@@ -105,13 +108,13 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 %ghc_bin_build\
 %global debug_package %{nil}\
 %cabal_configure\
-%cabal build
+%cabal build %{?cabal_verbose}
 
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
-%cabal build\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_defaultlicensedir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{!?1:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal build %{?cabal_verbose}\
 %{nil}
 
 # ghc_lib_build [name] [version]
@@ -146,6 +149,32 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?1:%ghc_strip_dynlinked}\
 %{nil}
 
+# ghc_fix_rpath lib-ver ...
+%ghc_fix_rpath()\
+%if %{undefined ghc_without_dynamic}\
+if ! type chrpath > /dev/null; then exit 1; fi\
+PDIR=$(pwd)\
+for lib in %*; do\
+for i in $(find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print); do\
+  if [ -x "$i" ]; then\
+    RPATH=$(chrpath $i | sed -e "s@^$i: R.*PATH=@@")\
+    case $RPATH in\
+         *$PDIR/$lib/*)\
+         SYSPATH=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | uniq)\
+         NEWRPATH=$(echo $RPATH | sed -e "s@$PDIR/$lib/dist/build@${SYSPATH}@g")\
+         chrpath -r $NEWRPATH $i\
+         ;;\
+    esac\
+  else\
+    echo "%%ghc_fix_rpath: no $i executable"\
+    exit 1\
+  fi\
+done\
+done\
+%endif\
+%{nil}
+
+# Deprecated by ghc_fix_rpath:
 # ghc_fix_dynamic_rpath prog ...
 %ghc_fix_dynamic_rpath()\
 %if %{undefined ghc_without_dynamic}\

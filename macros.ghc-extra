@@ -1,14 +1,24 @@
 # RPM Macros for packaging Haskell packages with multiple libs  -*-rpm-spec-*-
 
-# ghc_lib_subpackage [-c cdepslist] [-l licensetag] [-x] [name] [version]
+# ghc_lib_subpackage [-c cdepslist] [-l licensetag] [-x] [name-version]
 %ghc_lib_subpackage(c:l:x)\
-%define pkgname %{?1}%{!?1:%{pkg_name}}\
-%define pkgver %{?2}%{!?2:%{version}}\
+%define pkgname %{lua:\
+local pv = rpm.expand("%1")\
+local _, _, name = string.find(pv, "^([%a-]+)-")\
+print(name)\
+}\
+%define pkgver %{lua:\
+local pv = rpm.expand("%1")\
+print(string.sub(pv, string.find(pv, "[%d.]+$")))\
+}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        Haskell %{pkgname} library\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+Group:          System/Libraries\
+%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Url:            http://hackage.haskell.org/package/%{pkgname}\
@@ -19,6 +29,9 @@ This package provides the Haskell %{pkgname} library.\
 \
 %package -n %{basepkg}-devel\
 Summary:        Haskell %{pkgname} library development files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+Group:          Development/Languages/Other\
+%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Requires(post): %{ghc_prefix}-compiler = %{ghc_version}\
@@ -38,8 +51,50 @@ This package provides the Haskell %{pkgname} library development files.\
 %ghc_pkg_recache\
 \
 %files -n %{basepkg} -f %{basepkg}.files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+%defattr(-,root,root,-)\
+%endif\
 %{?base_doc_files:%doc %base_doc_files}\
 \
 %files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%if 0%{?rhel} && 0%{?rhel} < 7\
+%defattr(-,root,root,-)\
+%endif\
 %{?devel_doc_files:%doc %devel_doc_files}\
+%{nil}
+
+# ghc_libs_build [name-version] ...
+%ghc_libs_build()\
+HOME=$PWD\
+%define cabal_configure_options --user\
+for i in %*; do\
+name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
+ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
+cd $name-$ver\
+case $name in\
+haskell-platform)\
+%ghc_lib_build_without_haddock $name $ver\
+;;\
+*)\
+%ghc_lib_build $name $ver\
+./Setup register --inplace\
+;;\
+esac\
+cd ..\
+done\
+%{nil}
+
+# ghc_libs_install [name-version] ...
+%ghc_libs_install()\
+HOME=$PWD\
+args="%*"\
+for i in $args; do\
+cd $i\
+name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
+ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
+%ghc_lib_install $name $ver\
+mv *.files ..\
+cd ..\
+done\
+%ghc_fix_rpath $args\
 %{nil}

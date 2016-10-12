@@ -10,24 +10,7 @@ PKGBASEDIR=$2
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
 
-# for a ghc build use the new ghc-pkg
-INPLACE_GHCPKG=$PKGBASEDIR/../../bin/ghc-pkg-$GHC_VER
-
-if [ -x "$INPLACE_GHCPKG" ]; then
-    case $GHC_VER in
-        7.8.*)
-            GHC_PKG="$PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
-            ;;
-        7.6.*)
-            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-package-db=$PKGCONFDIR"
-            ;;
-        *)
-            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
-            ;;
-    esac
-else
-    GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER}"
-fi
+GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
 
 case $MODE in
     --provides) FIELD=id ;;
@@ -56,7 +39,7 @@ for i in $files; do
             ;;
     esac
     if [ "$META" -a -d "$PKGCONFDIR" ]; then
-	HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER $FIELD | sed -e "s/^$FIELD: \+//")
+	HASHS=$(${GHC_PKG} field $PKGVER $FIELD)
 	for i in $HASHS; do
 	    case $i in
 		*-*) echo "$META($i)" ;;
@@ -64,7 +47,7 @@ for i in $files; do
 	    esac
 	done
 	if [ "$MODE" = "--requires" -a "$SELF" ]; then
-	    HASHS=$(${GHC_PKG} -f $PKGCONFDIR field $PKGVER id | sed -e "s/^id: \+//")
+	    HASHS=$(${GHC_PKG} field $PKGVER id | sed -e "s/^id: \+//")
 	    for i in $HASHS; do
 		echo "$SELF($i)"
 	    done
@@ -72,11 +55,8 @@ for i in $files; do
     elif [ "$MODE" = "--requires" ]; then
 	if file $i | grep -q 'executable, .* dynamically linked'; then
 	    BIN_DEPS=$(objdump -p $i | grep NEEDED | grep libHS | grep -v libHSrts | sed -e "s%^ *NEEDED *libHS\(.*\)-ghc${GHC_VER}\.so%\1%")
-	    if [ -d "$PKGCONFDIR" ]; then
-		PACKAGE_CONF_OPT="--package-conf=$PKGCONFDIR"
-	    fi
 	    for p in ${BIN_DEPS}; do
-		HASH=$(${GHC_PKG} --global $PACKAGE_CONF_OPT field $p id | sed -e "s/^id: \+//" | uniq)
+		HASH=$(${GHC_PKG} field $p id | uniq)
 		echo "ghc($HASH)"
 	    done
 	fi
