@@ -11,8 +11,8 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.9
-Release:        3%{?dist}
-Summary:        RPM macros for building packages for GHC
+Release:        4%{?dist}
+Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
 URL:            https://github.com/fedora-haskell/ghc-rpm-macros
@@ -75,7 +75,6 @@ Obsoletes:      bluetile <= 0.6, bluetile-core <= 0.6
 Obsoletes:      ghc-lambdabot-utils <= 4.2.2, ghc-lambdabot-utils-devel <= 4.2.2
 Obsoletes:      haddock <= 2.14.3, ghc-haddock <= 2.14.3, ghc-haddock-devel <= 2.14.3
 Obsoletes:      ghc-monad-unify <= 0.2.2, ghc-monad-unify-devel <= 0.2.2
-Obsoletes:      Agda <= 2.4.2.2, ghc-Agda <= 2.4.2.2, ghc-Agda-devel <= 2.4.2.2
 Obsoletes:      idris <= 0.9.9.1
 
 %description -n ghc-obsoletes
@@ -138,6 +137,9 @@ EOF
 
 
 %changelog
+* Wed Oct 12 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-4
+- remove Agda obsoletes
+
 * Tue Oct  4 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-3
 - obsolete idris
 
