@@ -63,7 +63,7 @@ This package provides the Haskell %{pkgname} library development files.\
 %{?devel_doc_files:%doc %devel_doc_files}\
 %{nil}
 
-# ghc_sublib_build [name-version] ...
+# ghc_libs_build [name-version] ...
 %ghc_libs_build()\
 HOME=$PWD\
 %define cabal_configure_options --user\
@@ -84,7 +84,7 @@ cd ..\
 done\
 %{nil}
 
-# ghc_sublib_install [name-version] ...
+# ghc_libs_install [name-version] ...
 %ghc_libs_install()\
 HOME=$PWD\
 args="%*"\
