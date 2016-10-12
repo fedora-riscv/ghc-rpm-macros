@@ -199,7 +199,6 @@ EOF
 - configure libsubdir using pkgkey like ghc-cabal
 - handle no ghc-srpm-macros for fedora < 21
 - fix ghc-pkg path in ghc-deps.sh for ghc-7.10
-- version ghc-pkg in ghc_pkg_recache
 - update ghc_gen_filelists to use new keyed library filepaths
   and specify libHS*.so more loosely
 - ghc-dep.sh now just makes versioned devel reqs
@@ -232,6 +231,7 @@ EOF
 - introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
 
 * Sat Mar  7 2015 Jens Petersen <petersen@fedoraproject.org> - 1.4.12-1
+- version ghc-pkg in ghc_pkg_recache
 - allow overriding ghc- prefix with ghc_name (for ghc784 etc)
 
 * Fri Mar  6 2015 Jens Petersen <petersen@redhat.com> - 1.4.11-2
