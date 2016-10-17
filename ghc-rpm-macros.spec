@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -137,6 +137,9 @@ EOF
 
 
 %changelog
+* Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-6
+- only pass CFLAGS and LDFLAGS to ghc if set
+
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-5
 - for aarch64 do not set CFLAGS and LDFLAGS
 
