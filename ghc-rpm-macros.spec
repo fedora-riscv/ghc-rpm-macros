@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -106,6 +106,15 @@ install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
+# remove for ghc-8.0.1
+%ifarch aarch64
+# dynlinking failing with ghc-7.10.3
+cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
+
+%%ghc_without_dynamic 1
+EOF
+%endif
+
 %if 0%{?rhel} && 0%{?rhel} < 7
 cat >> %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh <<EOF
 
@@ -137,6 +146,10 @@ EOF
 
 
 %changelog
+* Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-7
+- set LDFLAGS for aarch64 again
+- disable dynamic linking for aarch64 since it fails
+
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-6
 - only pass CFLAGS and LDFLAGS to ghc if set
 
