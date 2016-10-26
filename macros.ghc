@@ -23,6 +23,7 @@ fi
 %cabal_configure\
 %ghc_check_bootstrap\
 %global _hardened_ldflags %{nil}\
+# -Wunused-label is extremely noisy: remove for ghc-8.0\
 %ifnarch aarch64\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
 %endif\
