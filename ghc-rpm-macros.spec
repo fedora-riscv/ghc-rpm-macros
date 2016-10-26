@@ -7,7 +7,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.0.7.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -100,6 +100,9 @@ EOF
 
 
 %changelog
+* Wed Oct 26 2016 Jens Petersen <petersen@redhat.com> - 1.0.7.5-2
+- rebuild
+
 * Thu Oct  8 2015 Jens Petersen <petersen@redhat.com> - 1.0.7.5-1
 - cabal macro now sets utf8 locale
 - introduce ghc_pkgdocdir since no _pkgdocdir in RHEL 7 and earlier
