@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.9
-Release:        8%{?dist}
+Version:        1.6.10
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -146,6 +146,9 @@ EOF
 
 
 %changelog
+* Wed Oct 26 2016 Jens Petersen <petersen@redhat.com> - 1.6.10-1
+- make ghc_lib_subpackage backward compatible with older 2 args form
+
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-8
 - disable dynlinking on armv7hl too
 

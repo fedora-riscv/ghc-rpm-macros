@@ -1,16 +1,17 @@
 # RPM Macros for packaging Haskell packages with multiple libs  -*-rpm-spec-*-
 
 # ghc_lib_subpackage [-c cdepslist] [-l licensetag] [-x] [name-version]
+# for backward compat also support: ghc_lib_subpackage name version
 %ghc_lib_subpackage(c:l:x)\
-%define pkgname %{lua:\
+%define pkgname %{?2:%{1}}%{!?2:%{lua:\
 local pv = rpm.expand("%1")\
 local _, _, name = string.find(pv, "^([%a-]+)-")\
 print(name)\
-}\
-%define pkgver %{lua:\
+}}\
+%define pkgver %{?2}%{!?2:%{lua:\
 local pv = rpm.expand("%1")\
 print(string.sub(pv, string.find(pv, "[%d.]+$")))\
-}\
+}}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
