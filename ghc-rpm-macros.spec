@@ -6,8 +6,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.7.5
-Release:        2%{?dist}
+Version:        1.0.9
+Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
 License:        GPLv3+
@@ -30,11 +30,11 @@ Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
-BuildRequires:  redhat-rpm-config
-ExclusiveArch:  %{ghc_arches}
+%ifarch %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
 %endif
-# for execstack (not needed for ghc-7.8)
+%endif
+# for execstack (hack not needed for ghc-7.8)
 %ifnarch ppc64le aarch64
 Requires:       prelink
 %endif
@@ -100,6 +100,10 @@ EOF
 
 
 %changelog
+* Thu Oct 27 2016 Jens Petersen <petersen@redhat.com> - 1.0.7.5-3
+- sync with 1.2.20.fc21 
+- add aarch64 and ppc64le until RHEL 7.3 redhat-rpm-config
+
 * Wed Oct 26 2016 Jens Petersen <petersen@redhat.com> - 1.0.7.5-2
 - rebuild
 

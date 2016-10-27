@@ -63,6 +63,7 @@ fi
 %define pkgdir %{ghclibdir}/%{pkgnamever}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
+touch %{basepkg}.files %{basepkg}-devel.files\
 if [ -d "%{buildroot}%{pkgdir}" ]; then\
 echo "%dir %{pkgdir}" >> %{basepkg}.files\
 %if %{undefined ghc_without_shared}\
@@ -114,7 +115,11 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 %ghc_lib_build()\
 %ghc_lib_build_without_haddock\
 %if %{undefined without_haddock}\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define pkgver %{?2}%{!?2:%{version}}\
+if [ -f dist/build/libHS%{pkgname}-%{pkgver}.a ]; then\
 %cabal haddock --html %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)} --hoogle\
+fi\
 %endif\
 %{nil}
 
