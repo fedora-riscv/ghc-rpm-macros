@@ -10,9 +10,9 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.16
+Version:        1.4.17
 Release:        1%{?dist}
-Summary:        RPM macros for building packages for GHC
+Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
 URL:            https://github.com/fedora-haskell/ghc-rpm-macros
@@ -31,8 +31,7 @@ Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
-# could use ghc_arches here
-%ifarch %{ix86} %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
+%ifarch %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
 %endif
 %endif
@@ -120,6 +119,10 @@ install -p -D -m 0755 %{SOURCE9} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 
 %changelog
+* Mon Oct 31 2016 Jens Petersen <petersen@redhat.com> - 1.4.17-1
+- make ghc_lib_subpackage backward compatible with older 2 args form
+- for aarch64 do not set CFLAGS
+
 * Wed Oct 12 2016 Jens Petersen <petersen@redhat.com> - 1.4.16-1
 - some backports from f25 beta:
 - macros.ghc-extra requires chrpath
