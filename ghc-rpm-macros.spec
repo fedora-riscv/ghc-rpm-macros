@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -107,12 +107,16 @@ install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 # remove for ghc-8.0.1
+# binutils-2.27-7.fc26 and later break Haskell dynamic linking on aarch64 and armv7hl
+# https://bugzilla.redhat.com/show_bug.cgi?id=1386126
+%if 0%{?fedora} == 26
 %ifarch aarch64 armv7hl
 # dynlinking failing with ghc-7.10.3
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
 
 %%ghc_without_dynamic 1
 EOF
+%endif
 %endif
 
 %if 0%{?rhel} && 0%{?rhel} < 7
@@ -146,15 +150,18 @@ EOF
 
 
 %changelog
+* Mon Oct 31 2016 Jens Petersen <petersen@redhat.com> - 1.6.10-2
+- only disable arm dynlinking for f26 (#1386126)
+
 * Wed Oct 26 2016 Jens Petersen <petersen@redhat.com> - 1.6.10-1
 - make ghc_lib_subpackage backward compatible with older 2 args form
 
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-8
-- disable dynlinking on armv7hl too
+- disable dynlinking on armv7hl too (#1386126)
 
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-7
 - set LDFLAGS for aarch64 again
-- disable dynamic linking for aarch64 since it fails
+- disable dynamic linking for aarch64 since it fails (#1386126)
 
 * Mon Oct 17 2016 Jens Petersen <petersen@redhat.com> - 1.6.9-6
 - only pass CFLAGS and LDFLAGS to ghc if set
