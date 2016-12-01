@@ -33,8 +33,8 @@ fi
 %cabal test\
 %endif
 
-# no _pkgdocdir in EPEL <= 7
-%ghc_pkgdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
+# _pkgdocdir misdefined unversioned in RHEL 7.3
+%ghc_pkgdocdir %{_docdir}/%{name}-%{version}
 
 # root dir for ghc docs (used by ghc.spec)
 %ghc_html_dir %{_docdir}/ghc/html

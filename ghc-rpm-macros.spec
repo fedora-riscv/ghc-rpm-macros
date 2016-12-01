@@ -6,7 +6,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.9
+Version:        1.0.10
 Release:        1%{?dist}
 Summary:        RPM macros for building packages for GHC
 
@@ -100,8 +100,11 @@ EOF
 
 
 %changelog
+* Thu Dec  1 2016 Jens Petersen <petersen@redhat.com> - 1.0.10-1
+- workaround unversioned _pkgdocdir in RHEL 7.3 (see #1392354)
+
 * Thu Oct 27 2016 Jens Petersen <petersen@redhat.com> - 1.0.7.5-3
-- sync with 1.2.20.fc21 
+- sync with 1.2.20.fc21
 - add aarch64 and ppc64le until RHEL 7.3 redhat-rpm-config
 
 * Wed Oct 26 2016 Jens Petersen <petersen@redhat.com> - 1.0.7.5-2
