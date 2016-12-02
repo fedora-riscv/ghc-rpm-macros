@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -76,6 +76,10 @@ Obsoletes:      ghc-lambdabot-utils <= 4.2.2, ghc-lambdabot-utils-devel <= 4.2.2
 Obsoletes:      haddock <= 2.14.3, ghc-haddock <= 2.14.3, ghc-haddock-devel <= 2.14.3
 Obsoletes:      ghc-monad-unify <= 0.2.2, ghc-monad-unify-devel <= 0.2.2
 Obsoletes:      idris <= 0.9.9.1
+Obsoletes:      ghc-editline < 0.2.1.1-13, ghc-editline-devel < 0.2.1.1-13
+Obsoletes:      ghc-hashed-storage < 0.5.11-4, ghc-hashed-storage-devel < 0.5.11-4
+Obsoletes:      ghc-nats <= 0.2, ghc-nats-devel <= 0.2
+Obsoletes:      ghc-primes <= 0.2.1.0-11, ghc-primes-devel <= 0.2.1.0-11
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -137,6 +141,9 @@ EOF
 
 
 %changelog
+* Fri Dec  2 2016 Jens Petersen <petersen@redhat.com> - 1.6.11-2
+- add more F25 obsoletes for: editline, hashed-storage, nats, primes
+
 * Fri Nov 25 2016 Jens Petersen <petersen@redhat.com> - 1.6.11-1
 - re-enable dynlink on armv7hl and aarch64 since binutils was fixed (#1386126)
 - condition use of _defaultlicensedir
