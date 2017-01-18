@@ -26,7 +26,10 @@ if [ -x "$INPLACE_GHCPKG" ]; then
             ;;
     esac
 else
-    GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER} -f $PKGCONFDIR"
+    if [ -d "$PKGCONFDIR" ]; then
+	PACKAGE_CONF_OPT="-f $PKGCONFDIR"
+    fi
+    GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER} $PACKAGE_CONF_OPT"
 fi
 
 $GHC_PKG -v0 --simple-output --global $*

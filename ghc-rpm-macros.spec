@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.4.17
+Version:        1.4.18
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -119,6 +119,9 @@ install -p -D -m 0755 %{SOURCE9} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 
 %changelog
+* Wed Jan 18 2017 Jens Petersen <petersen@redhat.com> - 1.4.18-1
+- fix ghc-pkg-wrapper to only use "ghc-pkg -f" if PKGCONFDIR exists
+
 * Mon Oct 31 2016 Jens Petersen <petersen@redhat.com> - 1.4.17-1
 - make ghc_lib_subpackage backward compatible with older 2 args form
 - for aarch64 do not set CFLAGS
