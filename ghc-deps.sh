@@ -5,15 +5,15 @@
 
 set +x
 
-MODE=$1
-PKGBASEDIR=$2
-PKGCONFDIR=$PKGBASEDIR/package.conf.d
+mode=$1
+pkgbasedir=$2
+pkgconfdir=$pkgbasedir/package.conf.d
 
-GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
+ghc_pkg="/usr/lib/rpm/ghc-pkg-wrapper $pkgbasedir"
 
-case $MODE in
-    --provides) FIELD=id ;;
-    --requires) FIELD=depends ;;
+case $mode in
+    --provides) field=id ;;
+    --requires) field=depends ;;
     *) echo "`basename $0`: Need --provides or --requires" ; exit 1
 esac
 
@@ -22,10 +22,11 @@ files=$(cat)
 for i in $files; do
     case $i in
         # exclude builtin_rts.conf
-	$PKGCONFDIR/*-*.conf)
-	    PKGVER=$(echo $i | sed -e "s%$PKGCONFDIR/\(.\+\)-.\+.conf%\1%")
-	    OUT=$($GHC_PKG field $PKGVER $FIELD | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
-	    for d in $OUT; do
+	$pkgconfdir/*-*.conf)
+	    pkgver=$(echo $i | sed -e "s%$pkgconfdir/\(.\+\)-.\+.conf%\1%")
+	    ids=$($ghc_pkg field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
+
+	    for d in $ids; do
 		case $d in
 		    *-*) echo "ghc-devel($d)" ;;
 		    *) ;;

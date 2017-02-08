@@ -51,13 +51,13 @@ This package provides the Haskell %{pkgname} library development files.\
 %postun -n %{basepkg}-devel\
 %ghc_pkg_recache\
 \
-%files -n %{basepkg} -f %{basepkg}.files\
+%files -n %{basepkg} -f ../%{pkgname}-%{pkgver}/%{basepkg}.files\
 %if 0%{?rhel} && 0%{?rhel} < 7\
 %defattr(-,root,root,-)\
 %endif\
 %{?base_doc_files:%doc %base_doc_files}\
 \
-%files -n %{basepkg}-devel -f %{basepkg}-devel.files\
+%files -n %{basepkg}-devel -f ../%{pkgname}-%{pkgver}/%{basepkg}-devel.files\
 %if 0%{?rhel} && 0%{?rhel} < 7\
 %defattr(-,root,root,-)\
 %endif\
@@ -94,7 +94,6 @@ cd $i\
 name=$(echo $i | sed -e "s/\\(.*\\)-.*/\\1/")\
 ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
 %ghc_lib_install $name $ver\
-mv *.files ..\
 cd ..\
 done\
 %ghc_fix_rpath $args\

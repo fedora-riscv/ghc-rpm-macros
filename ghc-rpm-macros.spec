@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.11
-Release:        2%{?dist}
+Version:        1.6.12
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -26,6 +26,8 @@ Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
 Source7:        ghc.attr
 Source8:        ghc-pkg-wrapper
+Source9:        macros.ghc-fedora
+Source11:       cabal-tweak-drop-dep
 Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
@@ -99,6 +101,7 @@ echo no build stage needed
 %install
 install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
+install -p -D -m 0644 %{SOURCE9} %{buildroot}/%{macros_dir}/macros.ghc-fedora
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -108,6 +111,7 @@ install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.a
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
+install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
 install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 %if 0%{?rhel} && 0%{?rhel} < 7
@@ -122,12 +126,14 @@ EOF
 %license COPYING
 %doc AUTHORS
 %{macros_dir}/macros.ghc
+%{macros_dir}/macros.ghc-fedora
 %if 0%{?fedora} || 0%{?rhel} >= 7
 %{_prefix}/lib/rpm/fileattrs/ghc.attr
 %endif
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_prefix}/lib/rpm/ghc-pkg-wrapper
 %{_bindir}/cabal-tweak-dep-ver
+%{_bindir}/cabal-tweak-drop-dep
 %{_bindir}/cabal-tweak-flag
 
 
@@ -141,6 +147,16 @@ EOF
 
 
 %changelog
+* Wed Feb  8 2017 Jens Petersen <petersen@redhat.com> - 1.6.12-1
+- no longer use a topdir for subpackage building
+- only autopackage license if subpackaging
+- add new cabal-tweak-drop-dep script for excluding trivial deps
+- move uniq to ghc-pkg-wrapper
+- add macros.ghc-fedora for Fedora specific config
+- replace cabal_verbose with cabal_configure_verbose, cabal_build_verbose,
+  cabal_install_verbose, cabal_haddock_verbose, and cabal_test_verbose
+- new _ghcdocdir
+
 * Fri Dec  2 2016 Jens Petersen <petersen@redhat.com> - 1.6.11-2
 - add more F25 obsoletes for: editline, hashed-storage, nats, primes
 

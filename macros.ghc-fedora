@@ -1,0 +1,5 @@
+# Fedora specific settings
+
+%_ghcdocdir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}/%{name}
+
+%cabal_install_options -v
