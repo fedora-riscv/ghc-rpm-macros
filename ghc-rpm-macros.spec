@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.12
+Version:        1.6.13
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -147,6 +147,9 @@ EOF
 
 
 %changelog
+* Thu Feb  9 2017 Jens Petersen <petersen@redhat.com> - 1.6.13-1
+- build subpackages inside main package directory
+
 * Wed Feb  8 2017 Jens Petersen <petersen@redhat.com> - 1.6.12-1
 - no longer use a topdir for subpackage building
 - only autopackage license if subpackaging

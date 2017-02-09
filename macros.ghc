@@ -88,7 +88,7 @@ echo "%{docdir}" >> %{basepkg}-devel.files\
 fi\
 %if 0%{?1:1}\
 for i in $(ls %{buildroot}%{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}/%{!?1:%{name}}%{?1:%{basepkg}}); do\
-echo "%%license %{?1:../%{pkgnamever}/}$i" >> %{basepkg}.files\
+echo "%%license %{?1:%{pkgnamever}/}$i" >> %{basepkg}.files\
 done\
 %endif\
 for i in %{basepkg}.files %{basepkg}-devel.files; do\
