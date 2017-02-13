@@ -117,7 +117,7 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %global debug_package %{nil}\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user} %{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}/ghc-%1%{!?fedora:-%2} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build  %{?cabal_build_options}\
 %{nil}
 
