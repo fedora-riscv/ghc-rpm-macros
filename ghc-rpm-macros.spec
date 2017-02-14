@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -147,6 +147,9 @@ EOF
 
 
 %changelog
+* Tue Feb 14 2017 Jens Petersen <petersen@redhat.com> - 1.6.15-2
+- do not set CFLAGS on ppc64 or ppc64le due to -Wunused-label noise
+
 * Mon Feb 13 2017 Jens Petersen <petersen@redhat.com> - 1.6.15-1
 - fix handling of ghc's .files with new ghc_lib_subpackage -d option
 
