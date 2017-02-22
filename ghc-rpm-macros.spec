@@ -149,6 +149,7 @@ EOF
 %changelog
 * Wed Feb 22 2017 Jens Petersen <petersen@redhat.com> - 1.6.16-1
 - fix generation of haddock's
+- fix fixing of rpaths for subpackages
 
 * Tue Feb 14 2017 Jens Petersen <petersen@redhat.com> - 1.6.15-2
 - do not set CFLAGS on ppc64 or ppc64le due to -Wunused-label noise
