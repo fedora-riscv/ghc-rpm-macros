@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.16
+Version:        1.6.17
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -147,6 +147,10 @@ EOF
 
 
 %changelog
+* Wed Feb 22 2017 Jens Petersen <petersen@redhat.com> - 1.6.17-1
+- setup --global/--user in cabal_configure
+- allow subpackage names to contain digits
+
 * Wed Feb 22 2017 Jens Petersen <petersen@redhat.com> - 1.6.16-1
 - fix generation of haddock's
 - fix fixing of rpaths for subpackages
