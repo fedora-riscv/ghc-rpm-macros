@@ -150,6 +150,7 @@ EOF
 * Thu Mar  2 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-1
 - fix ghc_fix_rpath, ghc_gen_filelists, and ghc-deps.sh when pkg-ver already
   installed
+- ghc_bin_install and ghc_lib_install now run ghc_fix_rpath on subpkgs
 
 * Wed Feb 22 2017 Jens Petersen <petersen@redhat.com> - 1.6.17-1
 - setup --global/--user in cabal_configure

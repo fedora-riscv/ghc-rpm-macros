@@ -146,6 +146,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
 %{!?1:%ghc_strip_dynlinked}\
+%{?ghc_subpackaging:%ghc_fix_rpath %{subpkgs}}\
 %{nil}
 
 # ghc_lib_install [name] [version]
@@ -157,6 +158,7 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %cabal_pkg_conf\
 %ghc_gen_filelists\
 %{!?1:%ghc_strip_dynlinked}\
+%{?ghc_subpackaging:%ghc_fix_rpath %{subpkgs}}\
 %{nil}
 
 # ghc_fix_rpath lib-ver ...
