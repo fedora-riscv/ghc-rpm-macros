@@ -70,11 +70,12 @@ LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
-keyname=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} field %{pkgnamever} key)\
-pkgdir="%{ghclibdir}/${keyname}"\
+pkgconf=$(echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf")\
+key=$(grep "key: " %{buildroot}${pkgconf} | sed -e "s/key: //")\
+pkgdir="%{ghclibdir}/${key}"\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
 touch %{basepkg}.files %{basepkg}-devel.files\
-echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" >> %{basepkg}-devel.files\
+echo ${pkgconf} >> %{basepkg}-devel.files\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
 echo "%%dir ${pkgdir}" >> %{basepkg}.files\
 %if %{undefined ghc_without_shared}\
@@ -168,7 +169,8 @@ for lib in %*; do\
     rpath=$(chrpath $i | sed -e "s@^$i: R.*PATH=@@")\
     case $rpath in\
          *$PWD/$lib/dist/build*)\
-         syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs)\
+         pkgid=$(cd %{buildroot}%{ghclibdir}; echo ${lib}*)\
+         syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid)\
          newrpath=$(echo $rpath | sed -e "s@$PWD/$lib/dist/build@${syspath}@g")\
          chrpath -r $newrpath $i\
          ;;\

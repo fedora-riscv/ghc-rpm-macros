@@ -23,8 +23,8 @@ for i in $files; do
     case $i in
         # exclude builtin_rts.conf
 	$pkgconfdir/*-*.conf)
-	    pkgver=$(echo $i | sed -e "s%$pkgconfdir/\(.\+\)-.\+.conf%\1%")
-	    ids=$($ghc_pkg field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
+	    id=$(grep "id: " $i | sed -e "s/id: //")
+	    ids=$($ghc_pkg field $id $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
 
 	    for d in $ids; do
 		case $d in
