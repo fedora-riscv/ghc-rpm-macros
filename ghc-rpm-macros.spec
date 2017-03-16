@@ -85,6 +85,8 @@ Obsoletes:      ghc-primes <= 0.2.1.0-11, ghc-primes-devel <= 0.2.1.0-11
 # f26
 Obsoletes:      ghc-geniplate <= 0.6.0.5, ghc-geniplate-devel <= 0.6.0.5
 Obsoletes:      ghc-sized-types <= 0.3.4.0, ghc-sized-types-devel <= 0.3.4.0
+Obsoletes:      ghc-cgi < 3001.2.2.2-5, ghc-cgi-devel < 3001.2.2.2-5
+Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
