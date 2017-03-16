@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.18
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -57,19 +57,22 @@ for example in ghc and haskell-platform.
 # this is a last resort when there is no such appropriate package
 %package -n ghc-obsoletes
 Summary:        Dummy package to obsolete deprecated Haskell packages
-# these 3 no longer build with ghc-7.8 (F22)
+%if 0%{?fedora} >= 22
+# these 3 no longer build with ghc-7.8
 Obsoletes:      ghc-ForSyDe < 3.1.2, ghc-ForSyDe-devel < 3.1.2
 Obsoletes:      ghc-parameterized-data < 0.1.6
 Obsoletes:      ghc-parameterized-data-devel < 0.1.6
 Obsoletes:      ghc-type-level < 0.2.5, ghc-type-level-devel < 0.2.5
 Obsoletes:      leksah < 0.14, ghc-leksah < 0.14, ghc-leksah-devel < 0.14
-# dropped from HP 2014.2 (F22)
+# dropped from HP 2014.2
 Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
-# f24
+%endif
+%if 0%{?fedora} >= 24
 Obsoletes:      ghc-citeproc-hs < 0.3.10-3, ghc-citeproc-hs-devel < 0.3.10-3
 Obsoletes:      ghc-hakyll < 4.5.4.0-6, ghc-hakyll-devel < 4.5.4.0-6
 Obsoletes:      ghc-leksah-server < 0.14.3.1-4, ghc-leksah-server-devel < 0.14.3.1-4
-# f25
+%endif
+%if 0%{?fedora} >= 25
 Obsoletes:      ghc-cmdtheline <= 0.2.3, ghc-cmdtheline-devel <= 0.2.3
 Obsoletes:      ghc-concrete-typerep <= 0.1.0.2, ghc-concrete-typerep-devel <= 0.1.0.2
 Obsoletes:      ghc-glade <= 0.12.5.0, ghc-glade-devel <= 0.12.5.0
@@ -82,11 +85,14 @@ Obsoletes:      ghc-editline < 0.2.1.1-13, ghc-editline-devel < 0.2.1.1-13
 Obsoletes:      ghc-hashed-storage < 0.5.11-4, ghc-hashed-storage-devel < 0.5.11-4
 Obsoletes:      ghc-nats <= 0.2, ghc-nats-devel <= 0.2
 Obsoletes:      ghc-primes <= 0.2.1.0-11, ghc-primes-devel <= 0.2.1.0-11
-# f26
+%endif
+%if 0%{?fedora} >= 26
 Obsoletes:      ghc-geniplate <= 0.6.0.5, ghc-geniplate-devel <= 0.6.0.5
 Obsoletes:      ghc-sized-types <= 0.3.4.0, ghc-sized-types-devel <= 0.3.4.0
+# dropped from HP 8.0.2
 Obsoletes:      ghc-cgi < 3001.2.2.2-5, ghc-cgi-devel < 3001.2.2.2-5
 Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -152,8 +158,12 @@ EOF
 
 
 %changelog
+* Thu Mar 16 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-3
+- condition obsoletes on fedora version
+- add f26 obsoletes for cgi and multipart
+
 * Sun Mar 12 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-2
-- obsolete geniplate and sized-types
+- obsolete geniplate and sized-types for F26
 
 * Thu Mar  2 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-1
 - fix ghc_fix_rpath, ghc_gen_filelists, and ghc-deps.sh when pkg-ver already
