@@ -198,7 +198,7 @@ for i in %*; do\
     *) prog=%{buildroot}%{_bindir}/$i ;;\
   esac\
   if [ -x "$prog" ]; then\
-    RPATH=$(chrpath $prog | sed -e "s@^$prog: R.*PATH=@@")\
+    rpath=$(chrpath $prog | sed -e "s@^$prog: R.*PATH=@@")\
     case $rpath in\
          *$pdir*)\
          newrpath=$(echo $rpath | sed -e "s@$pdir/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
