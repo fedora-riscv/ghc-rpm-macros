@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.18
-Release:        3%{?dist}
+Version:        1.6.19
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -158,6 +158,9 @@ EOF
 
 
 %changelog
+* Fri Mar 24 2017 Jens Petersen <petersen@redhat.com> - 1.6.19-1
+- fix haddock generation
+
 * Thu Mar 16 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-3
 - condition obsoletes on fedora version
 - add f26 obsoletes for cgi and multipart
