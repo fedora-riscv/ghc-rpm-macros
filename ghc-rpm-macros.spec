@@ -160,6 +160,7 @@ EOF
 %changelog
 * Fri Mar 24 2017 Jens Petersen <petersen@redhat.com> - 1.6.19-1
 - fix haddock generation
+- cabal_configure now outputs Cabal version
 
 * Thu Mar 16 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-3
 - condition obsoletes on fedora version
