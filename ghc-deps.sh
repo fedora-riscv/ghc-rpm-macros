@@ -17,13 +17,18 @@ case $mode in
     *) echo "`basename $0`: Need --provides or --requires" ; exit 1
 esac
 
+ghc_ver=$(basename $pkgbasedir | sed -e s/ghc-//)
+
 files=$(cat)
 
 for i in $files; do
     case $i in
         # exclude builtin_rts.conf
 	$pkgconfdir/*-*.conf)
-	    id=$(grep "id: " $i | sed -e "s/id: //")
+            case $ghc_ver in
+                8.*) id=$(grep "id: " $i | sed -e "s/id: //") ;;
+                *) id=$(echo $i | sed -e "s%$pkgconfdir/%%" -e "s%.conf%%") ;;
+            esac
 	    ids=$($ghc_pkg field $id $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
 
 	    for d in $ids; do
