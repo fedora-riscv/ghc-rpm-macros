@@ -36,6 +36,8 @@ Requires:       ghc-compiler
 Requires:       hscolour
 %endif
 %endif
+# this package could now be noarch again
+#BuildArch:	noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines

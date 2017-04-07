@@ -172,8 +172,14 @@ for lib in %*; do\
     rpath=$(chrpath $i | sed -e "s@^$i: R.*PATH=@@")\
     case $rpath in\
          *$PWD/$lib/dist/build*)\
-         pkgid=$(cd %{buildroot}%{ghclibdir}; echo ${lib}*)\
-         syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid)\
+         case %{ghc_version} in\
+              7.10.*)\
+                pkgid=$(cd %{buildroot}%{ghclibdir}/package.conf.d; ls ${lib}* | sed -e "s/.conf$//")\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $pkgid library-dirs) ;;\
+              *)\
+                pkgid=$(cd %{buildroot}%{ghclibdir}; echo ${lib}*)\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid) ;;\
+         esac\
          newrpath=$(echo $rpath | sed -e "s@$PWD/$lib/dist/build@${syspath}@g")\
          chrpath -r $newrpath $i\
          ;;\
