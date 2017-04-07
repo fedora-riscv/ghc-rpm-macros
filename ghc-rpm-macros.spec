@@ -164,6 +164,8 @@ EOF
 - fix haddock generation
 - cabal_configure now outputs Cabal version
 - fix ghc-deps.sh for ghc-pkg < 8 which does not accept pkg id
+- fix ghc_fix_rpath for ghc-7.10
+- Group and defattr are only needed for rhel5
 
 * Thu Mar 16 2017 Jens Petersen <petersen@redhat.com> - 1.6.18-3
 - condition obsoletes on fedora version
