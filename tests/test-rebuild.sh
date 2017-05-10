@@ -23,11 +23,14 @@ ARCH=$(arch)
 
 if [ -f /etc/os-release ]; then
     eval $(grep VERSION_ID /etc/os-release)
-    case $VERSION_ID in
-        26) BRANCH=master ;;
-        7.*) BRANCH=epel7 ;;
-        *) BRANCH="f$VERSION_ID" ;;
-    esac
+    if git branch -a | grep -q f$VERSION_ID; then
+        BRANCH=f$VERSION_ID
+    else
+        case $VERSION_ID in
+            7.*) BRANCH=epel7 ;;
+            *) BRANCH=master ;;
+        esac
+    fi
 else
 # assume RHEL6
     BRANCH=el6
