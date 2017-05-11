@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.19
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -94,6 +94,7 @@ Obsoletes:      ghc-sized-types <= 0.3.4.0, ghc-sized-types-devel <= 0.3.4.0
 # dropped from HP 8.0.2
 Obsoletes:      ghc-cgi < 3001.2.2.2-5, ghc-cgi-devel < 3001.2.2.2-5
 Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
+Obsoletes:      git-annex <= 5.20140717
 %endif
 
 %description -n ghc-obsoletes
@@ -160,6 +161,9 @@ EOF
 
 
 %changelog
+* Thu May 11 2017 Jens Petersen <petersen@redhat.com> - 1.6.19-2
+- obsolete git-annex
+
 * Fri Mar 24 2017 Jens Petersen <petersen@redhat.com> - 1.6.19-1
 - fix haddock generation
 - cabal_configure now outputs Cabal version
