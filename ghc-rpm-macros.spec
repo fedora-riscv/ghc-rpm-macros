@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.20
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -36,8 +36,9 @@ Requires:       ghc-compiler
 Requires:       hscolour
 %endif
 %endif
-# this package could now be noarch again
-#BuildArch:	noarch
+%if 0%{?fedora} >= 27
+BuildArch:	noarch
+%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -161,6 +162,9 @@ EOF
 
 
 %changelog
+* Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-2
+- make package noarch again
+
 * Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-1
 - add _ghclicensedir macro
 - add ghc_smp_mflags macro, since -j4 breaks reproducible-builds.org completely
