@@ -163,7 +163,7 @@ EOF
 
 %changelog
 * Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-2
-- make package noarch again
+- make package noarch again for f27
 
 * Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-1
 - add _ghclicensedir macro
