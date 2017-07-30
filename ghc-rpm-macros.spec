@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.19
-Release:        3%{?dist}
+Version:        1.6.20
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -161,6 +161,11 @@ EOF
 
 
 %changelog
+* Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-1
+- add _ghclicensedir macro
+- add ghc_smp_mflags macro, since -j4 breaks reproducible-builds.org completely
+  (report by Bernhard Wiedemann)
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.6.19-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
