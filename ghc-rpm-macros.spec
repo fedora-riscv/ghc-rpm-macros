@@ -162,6 +162,9 @@ EOF
 
 
 %changelog
+* Wed Aug  2 2017 Jens Petersen <petersen@redhat.com>
+- ghc_gen_filelists: check package.conf exists
+
 * Sun Jul 30 2017 Jens Petersen <petersen@redhat.com> - 1.6.20-2
 - make package noarch again for f27
 
