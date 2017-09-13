@@ -131,7 +131,7 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 
 # ghc_lib_build [name] [version]
 %ghc_lib_build()\
-%ghc_lib_build_without_haddock\
+%ghc_lib_build_without_haddock %{?1} %{?2}\
 %if %{undefined without_haddock}\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
@@ -162,8 +162,8 @@ find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \
 %{!?_fileattrsdir:%global __find_provides %{_rpmconfigdir}/rpmdeps --provides}\
 %{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
-%cabal_pkg_conf\
-%ghc_gen_filelists\
+%cabal_pkg_conf %{?1} %{?2}\
+%ghc_gen_filelists %{?1} %{?2}\
 %{!?1:%ghc_strip_dynlinked}\
 %{?ghc_subpackaging:%ghc_fix_rpath %{subpkgs}}\
 %{nil}
