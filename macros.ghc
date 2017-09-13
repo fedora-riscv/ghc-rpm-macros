@@ -73,8 +73,8 @@ LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
-if [ ! -f "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf" ]; then\
-echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found"\
+if [ ! -f %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf ]; then\
+echo "%{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found"\
 exit 1\
 fi\
 pkgconf=$(echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf")\

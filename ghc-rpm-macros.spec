@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.7.0
+Version:        1.6.50
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -162,8 +162,10 @@ EOF
 
 
 %changelog
-* Wed Sep 13 2017 Jens Petersen <petersen@redhat.com> - 1.7.0-1
+* Wed Sep 13 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-1
 - make some macro call args explicit for rpm-4.14 scope change
+  (this breaks builds with earlier versions of rpm)
+- fix the package.conf existence check
 
 * Wed Aug  2 2017 Jens Petersen <petersen@redhat.com>
 - ghc_gen_filelists: check package.conf exists
