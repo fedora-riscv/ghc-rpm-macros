@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -161,6 +161,9 @@ EOF
 
 
 %changelog
+* Fri Nov 10 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-3
+- temporarily set Wall for all archs to see which are noisy
+
 * Tue Oct 10 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-2
 - drop the git-annex obsoletes
 

@@ -27,9 +27,9 @@ fi
 %ghc_check_bootstrap\
 %global _hardened_ldflags %{nil}\
 # -Wunused-label is extremely noisy: remove for ghc-8.0\
-%ifnarch aarch64 ppc64 ppc64le\
+#%%ifnarch aarch64 ppc64 ppc64le s390x\
 CFLAGS="${CFLAGS:-%optflags}"; export CFLAGS\
-%endif\
+#%%endif\
 LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 %cabal --version\
 %cabal configure --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_ghcdocdir} --libsubdir='$compiler/$pkgkey' --datasubdir='$pkgid' --ghc %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} --ghc-options="${CFLAGS:+$(echo ' '$CFLAGS | sed -e 's/ / -optc/g')} ${LDFLAGS:+$(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')}" %{?cabal_configure_options} $cabal_configure_extra_options
