@@ -28,7 +28,7 @@ fi
 %global _hardened_ldflags %{nil}\
 # -Wunused-label is extremely noisy\
 %ifarch aarch64 s390x\
-CFLAGS="${CFLAGS:-$(echo %optflags | sed -e s/-Wall//)}"\
+CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall -Werror=format-security //')}"\
 %else\
 CFLAGS="${CFLAGS:-%optflags}"\
 %endif\

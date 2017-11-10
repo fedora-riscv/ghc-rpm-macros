@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -161,6 +161,9 @@ EOF
 
 
 %changelog
+* Fri Nov 10 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-5
+- -Werror=format-security fails without -Wall
+
 * Fri Nov 10 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-4
 - do not set -Wall on aarch64 and s390x since -Wunused-label is extremely noisy
 
