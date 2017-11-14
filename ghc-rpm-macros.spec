@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -36,7 +36,7 @@ Requires:       ghc-compiler
 Requires:       hscolour
 %endif
 %endif
-%if 0%{?fedora} >= 27
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
 BuildArch:	noarch
 %endif
 
@@ -161,6 +161,10 @@ EOF
 
 
 %changelog
+* Tue Nov 14 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-6
+- make package noarch RHEL > 7
+- only version license dir for RHEL <= 7
+
 * Fri Nov 10 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-5
 - -Werror=format-security fails without -Wall
 
