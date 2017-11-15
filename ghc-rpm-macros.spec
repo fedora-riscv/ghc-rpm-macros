@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -26,7 +26,7 @@ Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
 Source7:        ghc.attr
 Source8:        ghc-pkg-wrapper
-Source9:        macros.ghc-fedora
+Source9:        macros.ghc-os
 Source11:       cabal-tweak-drop-dep
 Requires:       redhat-rpm-config
 # for ghc_version
@@ -115,7 +115,7 @@ echo no build stage needed
 %install
 install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
-install -p -D -m 0644 %{SOURCE9} %{buildroot}/%{macros_dir}/macros.ghc-fedora
+install -p -D -m 0644 %{SOURCE9} %{buildroot}/%{macros_dir}/macros.ghc-os
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 
@@ -140,7 +140,7 @@ EOF
 %license COPYING
 %doc AUTHORS
 %{macros_dir}/macros.ghc
-%{macros_dir}/macros.ghc-fedora
+%{macros_dir}/macros.ghc-os
 %if 0%{?fedora} || 0%{?rhel} >= 7
 %{_prefix}/lib/rpm/fileattrs/ghc.attr
 %endif
@@ -161,6 +161,9 @@ EOF
 
 
 %changelog
+* Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-8
+- rename macros.ghc-fedora to macros.ghc-os
+
 * Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-7
 - use shell variable instead of macro to carry licensedir version
 
