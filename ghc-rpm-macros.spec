@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -161,6 +161,9 @@ EOF
 
 
 %changelog
+* Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-7
+- use shell variable instead of macro to carry licensedir version
+
 * Tue Nov 14 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-6
 - make package noarch RHEL > 7
 - only version license dir for RHEL <= 7
