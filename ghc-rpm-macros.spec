@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.6.50
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -96,6 +96,9 @@ Obsoletes:      ghc-sized-types <= 0.3.4.0, ghc-sized-types-devel <= 0.3.4.0
 Obsoletes:      ghc-cgi < 3001.2.2.2-5, ghc-cgi-devel < 3001.2.2.2-5
 Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
 %endif
+%if 0%{?fedora} >= 27
+Obsoletes:      ghc-webkit <= 0.14.2.1, ghc-webkit-devel <= 0.14.2.1
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -161,6 +164,9 @@ EOF
 
 
 %changelog
+* Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-9
+- obsolete ghc-webkit (#1375825)
+
 * Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-8
 - rename macros.ghc-fedora to macros.ghc-os
 
