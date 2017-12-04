@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.50
-Release:        9%{?dist}
+Version:        1.6.51
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -164,6 +164,9 @@ EOF
 
 
 %changelog
+* Mon Dec  4 2017 Jens Petersen <petersen@fedoraproject.org> - 1.6.51-1
+- add ghc_set_cflags macro
+
 * Wed Nov 15 2017 Jens Petersen <petersen@redhat.com> - 1.6.50-9
 - obsolete ghc-webkit (#1375825)
 
