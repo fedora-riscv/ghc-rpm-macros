@@ -32,9 +32,7 @@ Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 %if %{undefined without_hscolour}
-%ifarch %{ix86} x86_64 ppc ppc64 alpha sparcv9 armv7hl armv5tel s390 s390x ppc64le aarch64
 Requires:       hscolour
-%endif
 %endif
 %if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
 BuildArch:	noarch
