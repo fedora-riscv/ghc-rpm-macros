@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.51
+Version:        1.8.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -162,6 +162,12 @@ EOF
 
 
 %changelog
+* Mon Jan 22 2018 Jens Petersen <petersen@redhat.com> - 1.8.0-1
+- add _ghcdynlibdir for Cabal --dynlibdir
+- dynlibs in _libdir except ghc's libs
+- drop ghc_without_shared
+- ghc_fix_rpath removes RPATHs for 8.2+
+
 * Mon Dec  4 2017 Jens Petersen <petersen@fedoraproject.org> - 1.6.51-1
 - add ghc_set_cflags macro
 

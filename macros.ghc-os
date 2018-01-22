@@ -2,4 +2,6 @@
 
 %_ghcdocdir %{_ghclicensedir}/%{name}
 
+%_ghcdynlibdir %{_libdir}
+
 %cabal_install_options -v
