@@ -91,15 +91,8 @@ rm -f %{basepkg}.files %{basepkg}-devel.files\
 touch %{basepkg}.files %{basepkg}-devel.files\
 echo ${pkgconf} >> %{basepkg}-devel.files\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
-%if %{defined ghc_version_override}\
-echo "%%dir ${pkgdir}" >> %{basepkg}.files\
-echo "%%attr(755,root,root) ${pkgdir}/libHS*-ghc%{ghc_version}.so" >> %{basepkg}.files\
-find %{buildroot}${pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
-find %{buildroot}${pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
-%else\
 echo "%%attr(755,root,root) %{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so" >> %{basepkg}.files\
 echo "${pkgdir}" >> %{basepkg}-devel.files\
-%endif\
 fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\

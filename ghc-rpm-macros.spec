@@ -164,7 +164,7 @@ EOF
 %changelog
 * Mon Jan 22 2018 Jens Petersen <petersen@redhat.com> - 1.8.0-1
 - add _ghcdynlibdir for Cabal --dynlibdir
-- dynlibs in _libdir except ghc's libs
+- dynlibs in _libdir
 - drop ghc_without_shared
 - ghc_fix_rpath removes RPATHs for 8.2+
 
