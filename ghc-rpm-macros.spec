@@ -167,6 +167,7 @@ EOF
 - dynlibs in _libdir
 - drop ghc_without_shared
 - ghc_fix_rpath removes RPATHs for 8.2+
+- add ldconfig install scripts to ghc_lib_subpackage
 
 * Mon Dec  4 2017 Jens Petersen <petersen@fedoraproject.org> - 1.6.51-1
 - add ghc_set_cflags macro
