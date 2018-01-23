@@ -194,7 +194,7 @@ for lib in %*; do\
               *)\
                 syspath="" ;;\
          esac\
-         newrpath=$(echo $rpath | sed -e "s@$PWD/$lib/dist/build@${syspath}@g" -e "s/::/:/")\
+         newrpath=$(echo $rpath | sed -e "s@$PWD/$lib/dist/build@${syspath}@g" -e "s/::/:/" -e "s/^://" -e "s/:$//")\
          chrpath -r $newrpath $i\
          ;;\
     esac\
