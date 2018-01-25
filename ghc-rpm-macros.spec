@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.8.1
+Version:        1.8.2
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -162,6 +162,9 @@ EOF
 
 
 %changelog
+* Thu Jan 25 2018 Jens Petersen <petersen@redhat.com> - 1.8.2-1
+- remove "-z defs" from LDFLAGS since it breaks linking with ghc
+
 * Tue Jan 23 2018 Jens Petersen <petersen@redhat.com> - 1.8.1-1
 - ghc_fix_rpath: remove leading or trailing ':'
 
