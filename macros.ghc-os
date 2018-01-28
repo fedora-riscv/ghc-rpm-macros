@@ -2,7 +2,6 @@
 
 %_ghcdocdir %{_ghclicensedir}/%{name}
 
-# disable for ghc-8.0 for now
-#%%_ghcdynlibdir %{_libdir}
+%_ghcdynlibdir %{_libdir}
 
 %cabal_install_options -v

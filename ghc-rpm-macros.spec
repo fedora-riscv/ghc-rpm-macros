@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.8.4
+Version:        1.8.5
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -162,6 +162,9 @@ EOF
 
 
 %changelog
+* Sun Jan 28 2018 Jens Petersen <petersen@redhat.com> - 1.8.5-1
+- re-enable _ghcdynlibdir (for ghc-8.2)
+
 * Sun Jan 28 2018 Jens Petersen <petersen@redhat.com> - 1.8.4-1
 - make the recent dynlib packaging changes conditional on _ghcdynlibdir
 - temporarily disable _ghcdynlibdir for Rawhide
