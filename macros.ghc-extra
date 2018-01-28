@@ -45,10 +45,12 @@ Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %description -n %{basepkg}-devel\
 This package provides the Haskell %{pkgname} library development files.\
 \
+%if %{defined _ghcdynlibdir}\
 %post -n %{basepkg} -p /sbin/ldconfig\
 \
 %postun -n %{basepkg} -p /sbin/ldconfig\
 \
+%endif\
 %post -n %{basepkg}-devel\
 %ghc_pkg_recache\
 \
