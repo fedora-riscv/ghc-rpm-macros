@@ -22,7 +22,7 @@ if [ ! -f $CABALFILE.orig ]; then
     BACKUP=.orig
 fi
 
-if grep $DEP $CABALFILE | sed -e "s/$DEP//" | grep -q -e "[A-Za-z]"; then
+if grep "$DEP" $CABALFILE | sed -e "s/$DEP//" | grep -q -e "[A-Za-z]"; then
     echo "$0: deleting whole $DEP lines not safe - try more precise pattern"
     exit 1
 fi
