@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.8.6
+Version:        1.8.7
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -162,6 +162,9 @@ EOF
 
 
 %changelog
+* Sat Feb  3 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-1
+- no longer need to prune -z defs from LDFLAGS
+
 * Mon Jan 29 2018 Jens Petersen <petersen@redhat.com> - 1.8.6-1
 - cabal-tweak-drop-dep: quote grep pattern to allow whitespace
 
