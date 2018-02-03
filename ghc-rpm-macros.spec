@@ -164,6 +164,7 @@ EOF
 %changelog
 * Sat Feb  3 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-1
 - no longer need to prune -z defs from LDFLAGS
+- drop the ldconfig scripts since they are not needed for F28
 
 * Mon Jan 29 2018 Jens Petersen <petersen@redhat.com> - 1.8.6-1
 - cabal-tweak-drop-dep: quote grep pattern to allow whitespace
