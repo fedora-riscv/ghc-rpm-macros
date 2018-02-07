@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.8.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -162,6 +162,9 @@ EOF
 
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Sat Feb  3 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-1
 - no longer need to prune -z defs from LDFLAGS
 - drop the ldconfig scripts since they are not needed for F28
