@@ -243,8 +243,7 @@ done\
 
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
-# - without_hscolour, without_testsuite, and ghc_bootstrapping
-#   need to be set locally in the spec file
+# without_hscolour and without_testsuite need to be set locally in the spec file
 
 # skip prof libs and documentation
 %ghc_bootstrap\
