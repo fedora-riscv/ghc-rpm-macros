@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.8.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -97,6 +97,9 @@ Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
 %if 0%{?fedora} >= 27
 Obsoletes:      ghc-webkit <= 0.14.2.1, ghc-webkit-devel <= 0.14.2.1
 %endif
+%if 0%{?fedora} >= 28
+Obsoletes:      ghc-ltk < 0.16, ghc-ltk-devel < 0.16
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -162,6 +165,9 @@ EOF
 
 
 %changelog
+* Tue Mar  6 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-3
+- obsolete ghc-ltk
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
