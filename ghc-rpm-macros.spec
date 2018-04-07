@@ -170,7 +170,7 @@ EOF
 
 * Thu Apr  5 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-4
 - configure libexecsubdir (Cabal-2 only) (#1563863)
-- change drop hash from libsubdir
+- drop hash from libsubdir
 
 * Tue Mar  6 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-3
 - obsolete ghc-ltk
