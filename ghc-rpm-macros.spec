@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.8.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -165,6 +165,9 @@ EOF
 
 
 %changelog
+* Sat Apr  7 2018 Robert-Andr« Mauchin <zebob.m@gmail.com> - 1.8.7-5
+- Define pkgdir as %%{ghclibdir}/%%{pkgnamever} instead of %%{ghclibdir}/${key}
+
 * Thu Apr  5 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-4
 - configure libexecsubdir (Cabal-2 only) (#1563863)
 - change drop hash from libsubdir

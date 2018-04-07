@@ -85,8 +85,7 @@ echo "%{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found"\
 exit 1\
 fi\
 pkgconf=$(echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf")\
-key=$(grep "key: " %{buildroot}${pkgconf} | sed -e "s/key: //")\
-pkgdir="%{ghclibdir}/${key}"\
+pkgdir="%{ghclibdir}/%{pkgnamever}"\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
 touch %{basepkg}.files %{basepkg}-devel.files\
 echo ${pkgconf} >> %{basepkg}-devel.files\
