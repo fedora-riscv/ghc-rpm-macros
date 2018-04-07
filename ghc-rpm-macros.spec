@@ -165,8 +165,8 @@ EOF
 
 
 %changelog
-* Sat Apr  7 2018 Robert-Andr« Mauchin <zebob.m@gmail.com> - 1.8.7-5
-- Define pkgdir as %%{ghclibdir}/%%{pkgnamever} instead of %%{ghclibdir}/${key}
+* Sat Apr  7 2018 Robert-André Mauchin <zebob.m@gmail.com> - 1.8.7-5
+- drop hash from pkgdir in ghc_gen_filelists too
 
 * Thu Apr  5 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-4
 - configure libexecsubdir (Cabal-2 only) (#1563863)
