@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.8.7
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -98,6 +98,7 @@ Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
 Obsoletes:      ghc-webkit <= 0.14.2.1, ghc-webkit-devel <= 0.14.2.1
 %endif
 %if 0%{?fedora} >= 28
+Obsoletes:      ghc-fail < 4.9.0.0-2, ghc-fail-devel < 4.9.0.0-2
 Obsoletes:      ghc-ltk < 0.16, ghc-ltk-devel < 0.16
 %endif
 
@@ -165,6 +166,9 @@ EOF
 
 
 %changelog
+* Mon Apr 30 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-6
+- obsolete ghc-fail
+
 * Sat Apr  7 2018 Robert-André Mauchin <zebob.m@gmail.com> - 1.8.7-5
 - drop hash from pkgdir in ghc_gen_filelists too
 
