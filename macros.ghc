@@ -9,19 +9,6 @@ LANG=en_US.utf8\
 # compiler version
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
 
-# check ghc version was rebuilt against self
-%ghc_check_bootstrap\
-if [ ! "$(ghc --info | grep \\"Booter\\ version\\",\\"%{ghc_version}\\")" ]; then\
-  echo "Warning: this ghc build is not self-bootstrapped."\
-%if %{undefined ghc_bootstrapping}\
-  echo "The ghc package should be rebuilt against its current version before\
-proceeding, to avoid dependency ABI breakage from a future ghc rebuild."\
-  echo "To override set ghc_bootstrapping."\
-  echo "Aborting."\
-  exit 1\
-%endif\
-fi
-
 %ghc_set_cflags\
 # -Wunused-label is extremely noisy\
 %ifarch aarch64 s390x\
@@ -34,7 +21,6 @@ export CFLAGS\
 
 # configure
 %cabal_configure\
-%ghc_check_bootstrap\
 %ghc_set_cflags\
 %global _hardened_ldflags %{nil}\
 LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
@@ -242,10 +228,13 @@ done\
 
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
-# without_hscolour and without_testsuite need to be set locally in the spec file
-
-# skip prof libs and documentation
+# deprecated
 %ghc_bootstrap\
 %global without_prof 1\
 %global without_haddock 1\
 %global without_manual 1
+
+# skip prof libs and documentation
+%ghc_quick_build\
+%global without_prof 1\
+%global without_haddock 1
