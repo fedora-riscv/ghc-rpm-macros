@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.8.8
+Version:        1.9.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -166,9 +166,10 @@ EOF
 
 
 %changelog
-* Wed May 23 2018 Jens Petersen <petersen@redhat.com> - 1.8.8-1
-- rename ghc_bootstrap to ghc_quick_build (disables prof and haddock)
+* Thu May 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.0-1
+- support Cabal bundled internal libraries (yuck)
 - ghc_check_bootstrap should be redundant now according to upstream
+- rename ghc_bootstrap to ghc_quick_build (disables prof and haddock)
 
 * Mon Apr 30 2018 Jens Petersen <petersen@redhat.com> - 1.8.7-6
 - obsolete ghc-fail

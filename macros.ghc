@@ -66,25 +66,23 @@ LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define docdir %{ghclibdocdir}/%{pkgnamever}\
-if [ ! -f %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf ]; then\
-echo "%{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found"\
+if [ -z "$(ls %{buildroot}%{ghclibdir}/package.conf.d/)" ]; then\
+echo "%{buildroot}%{ghclibdir}/package.conf.d/*.conf not found"\
 exit 1\
 fi\
-pkgconf=$(echo "%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf")\
-pkgdir="%{ghclibdir}/%{pkgnamever}"\
 rm -f %{basepkg}.files %{basepkg}-devel.files\
 touch %{basepkg}.files %{basepkg}-devel.files\
-echo ${pkgconf} >> %{basepkg}-devel.files\
+ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
+pkgdir="%{ghclibdir}/%{pkgnamever}"\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
 %if %{defined _ghcdynlibdir}\
-echo "%%attr(755,root,root) %{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so" >> %{basepkg}.files\
 echo "${pkgdir}" >> %{basepkg}-devel.files\
 %else\
 echo "%%dir ${pkgdir}" >> %{basepkg}.files\
-echo "%%attr(755,root,root) ${pkgdir}/libHS*-ghc%{ghc_version}.so" >> %{basepkg}.files\
 find %{buildroot}${pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
 find %{buildroot}${pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
 %endif\
+echo "%%attr(755,root,root) %{?_ghcdynlibdir}%{!?_ghcdynlibdir:${pkgdir}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so" >> %{basepkg}.files\
 fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
@@ -108,7 +106,14 @@ done\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %cabal register --gen-pkg-config\
+if [ -d %{pkgnamever}.conf ]; then\
+for i in $(ls "%{pkgnamever}.conf/"); do\
+sub=$(echo $i | sed -e "s/^[0-9]\\+-//")\
+install -D --mode=0644 %{pkgnamever}.conf/${i} %{buildroot}%{ghclibdir}/package.conf.d/${sub}.conf\
+done\
+else\
 install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}.conf\
+fi\
 %{nil}
 
 # ghc_bin_build
@@ -179,10 +184,10 @@ for lib in %*; do\
          case %{ghc_version} in\
               7.10.*)\
                 pkgid=$(cd %{buildroot}%{ghclibdir}/package.conf.d; ls ${lib}* | sed -e "s/.conf$//")\
-                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $pkgid library-dirs) ;;\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --global --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $pkgid library-dirs) ;;\
               8.0)\
                 pkgid=$(cd %{buildroot}%{ghclibdir}; echo ${lib}*)\
-                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid) ;;\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --global --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid) ;;\
               *)\
                 syspath="" ;;\
          esac\
