@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -166,6 +166,9 @@ EOF
 
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Thu May 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.0-1
 - support Cabal bundled internal libraries (yuck)
 - ghc_check_bootstrap should be redundant now according to upstream
