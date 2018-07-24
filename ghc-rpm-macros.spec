@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.0
-Release:        2%{?dist}
+Version:        1.9.1
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -166,6 +166,9 @@ EOF
 
 
 %changelog
+* Tue Jul 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.1-1
+- remove -Wall and -Werror=format-security separately (on aarch64 and s390x)
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
