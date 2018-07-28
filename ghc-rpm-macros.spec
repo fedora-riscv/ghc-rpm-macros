@@ -1,22 +1,22 @@
 %global debug_package %{nil}
 
+%if 0%{?fedora} || 0%{?rhel} >= 7
 %global macros_dir %{_rpmconfigdir}/macros.d
+%else
+%global macros_dir %{_sysconfdir}/rpm
+%endif
 
 # uncomment to bootstrap without hscolour
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.10
+Version:        1.0.11
 Release:        1%{?dist}
-Summary:        RPM macros for building packages for GHC
+Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
-URL:            https://fedoraproject.org/wiki/Packaging:Haskell
-
-# This is a Fedora maintained package, originally made for
-# the distribution.  Hence the source is currently only available
-# from this package.  But it could be hosted on fedorahosted.org
-# for example if other rpm distros would prefer that.
+URL:            https://github.com/fedora-haskell/ghc-rpm-macros
+# Currently source is only in git but tarballs could be made if it helps
 Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
@@ -26,6 +26,8 @@ Source5:        cabal-tweak-flag
 Source6:        macros.ghc-extra
 Source7:        ghc_bin.attr
 Source8:        ghc_lib.attr
+Source9:        macros.ghc-os
+Source11:       cabal-tweak-drop-dep
 Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
@@ -66,6 +68,7 @@ echo no build stage needed
 %install
 install -p -D -m 0644 %{SOURCE0} %{buildroot}/%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}/%{macros_dir}/macros.ghc-extra
+install -p -D -m 0644 %{SOURCE9} %{buildroot}/%{macros_dir}/macros.ghc-os
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
@@ -73,6 +76,7 @@ install -p -D -m 0644 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc_l
 
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
+install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
 
 # turn off shared libs and dynamic linking on secondary archs
 %ifnarch %{ix86} x86_64
@@ -86,12 +90,15 @@ EOF
 
 
 %files
-%doc COPYING AUTHORS
+%license COPYING
+%doc AUTHORS
 %{macros_dir}/macros.ghc
+%{macros_dir}/macros.ghc-os
 %{_prefix}/lib/rpm/fileattrs/ghc_bin.attr
 %{_prefix}/lib/rpm/fileattrs/ghc_lib.attr
 %{_prefix}/lib/rpm/ghc-deps.sh
 %{_bindir}/cabal-tweak-dep-ver
+%{_bindir}/cabal-tweak-drop-dep
 %{_bindir}/cabal-tweak-flag
 
 
@@ -100,6 +107,11 @@ EOF
 
 
 %changelog
+* Sat Jul 28 2018 Jens Petersen <petersen@redhat.com> - 1.0.11-1
+- update url
+- add macros.ghc-os and cabal-tweak-drop-dep
+- install licenses (Cabal docdir) in licenses dir
+
 * Thu Dec  1 2016 Jens Petersen <petersen@redhat.com> - 1.0.10-1
 - workaround unversioned _pkgdocdir in RHEL 7.3 (see #1392354)
 

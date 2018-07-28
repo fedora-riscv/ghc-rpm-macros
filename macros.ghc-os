@@ -1,0 +1,3 @@
+# OS specific settings
+
+%_ghcdocdir %{_ghclicensedir}/%{name}-%{version}
