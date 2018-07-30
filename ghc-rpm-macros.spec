@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.1
+Version:        1.9.2
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -27,6 +27,7 @@ Source6:        macros.ghc-extra
 Source7:        ghc.attr
 Source8:        ghc-pkg-wrapper
 Source9:        macros.ghc-os
+Source10:       Setup.hs
 Source11:       cabal-tweak-drop-dep
 Requires:       redhat-rpm-config
 # for ghc_version
@@ -128,6 +129,8 @@ install -p -D -m 0755 %{SOURCE3} %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh
 install -p -D -m 0644 %{SOURCE7} %{buildroot}/%{_prefix}/lib/rpm/fileattrs/ghc.attr
 %endif
 
+install -p -D -m 0644 %{SOURCE10} %{buildroot}/%{_datadir}/%{name}/Setup.hs
+
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
@@ -154,6 +157,7 @@ EOF
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-drop-dep
 %{_bindir}/cabal-tweak-flag
+%{_datadir}/%{name}/Setup.hs
 
 
 %files extra
@@ -166,6 +170,9 @@ EOF
 
 
 %changelog
+* Tue Jul 31 2018 Jens Petersen <petersen@redhat.com> - 1.9.2-1
+- inject a Setup.hs if none shipped
+
 * Tue Jul 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.1-1
 - remove -Wall and -Werror=format-security separately (on aarch64 and s390x)
 
