@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.6.52
+Version:        1.6.53
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -164,6 +164,9 @@ EOF
 
 
 %changelog
+* Thu Aug 30 2018 Jens Petersen <petersen@redhat.com> - 1.6.53-1
+- bring the hash to libsubdir
+
 * Tue May  8 2018 Jens Petersen <petersen@redhat.com> - 1.6.52-1
 - drop hash from libsubdir
 - cabal-tweak-drop-dep: quote grep pattern to allow whitespace
