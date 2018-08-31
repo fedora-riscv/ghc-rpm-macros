@@ -62,10 +62,10 @@ PKGS=$(cd $ARCH; rpm -qp $(ls *-$VERREL*.rpm))
 
 for i in $PKGS; do
   # FIXME: should check NVR is same before building
-  rpm -q --quiet $i || sudo yum install -q $i
+  rpm -q --quiet $i || sudo dnf install -q $i
   for k in list requires provides scripts; do
     rpm -qp --$k $ARCH/$i.rpm | grep -v rpmlib > $TMP/$i.$k.test || :
     rpm -q --$k $i | grep -v rpmlib > $TMP/$i.$k.installed || :
-    diff -u $TMP/$i.$k.installed $TMP/$i.$k.test || :
+    diff -u $TMP/$i.$k.installed $TMP/$i.$k.test -I /usr/lib/.build-id || :
   done
 done
