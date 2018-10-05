@@ -10,16 +10,15 @@ LANG=en_US.utf8\
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
 
 
-%ghc_set_gcc_flags\
+%ghc_set_cflags\
 export CFLAGS="${CFLAGS:-%optflags}"\
+%global _hardened_ldflags %{nil}\
 export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\
 %{nil}
 
 # configure
 %cabal_configure\
 %ghc_set_gcc_flags\
-%global _hardened_ldflags %{nil}\
-LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"; export LDFLAGS\
 if ! [ -f Setup.hs -o -f Setup.lhs ]; then\
 cp %{_datadir}/ghc-rpm-macros/Setup.hs .\
 fi\

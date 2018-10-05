@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.4
+Version:        1.9.5
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -170,6 +170,9 @@ EOF
 
 
 %changelog
+* Sat Oct  6 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-1
+- disable hardened ldflags again
+
 * Fri Oct  5 2018 Jens Petersen <petersen@redhat.com> - 1.9.4-1
 - cabal_configure now uses ghc_set_gcc_flags
 
