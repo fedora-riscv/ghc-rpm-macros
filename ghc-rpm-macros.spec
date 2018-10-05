@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.2
+Version:        1.9.3
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -170,6 +170,9 @@ EOF
 
 
 %changelog
+* Fri Oct  5 2018 Jens Petersen <petersen@redhat.com> - 1.9.3-1
+- replace ghc_set_cflags with simplified ghc_set_gcc_flags
+
 * Tue Jul 31 2018 Jens Petersen <petersen@redhat.com> - 1.9.2-1
 - inject a Setup.hs if none shipped
 

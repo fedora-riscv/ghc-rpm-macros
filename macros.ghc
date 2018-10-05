@@ -9,14 +9,10 @@ LANG=en_US.utf8\
 # compiler version
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
 
-%ghc_set_cflags\
-# -Wunused-label is extremely noisy\
-%ifarch aarch64 s390x\
-CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall //' -e 's/-Werror=format-security //')}"\
-%else\
-CFLAGS="${CFLAGS:-%optflags}"\
-%endif\
-export CFLAGS\
+
+%ghc_set_gcc_flags\
+export CFLAGS="${CFLAGS:-%optflags}"\
+export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\
 %{nil}
 
 # configure
