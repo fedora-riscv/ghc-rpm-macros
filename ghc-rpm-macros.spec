@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.3
-Release:        2%{?dist}
+Version:        1.9.4
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -170,6 +170,9 @@ EOF
 
 
 %changelog
+* Fri Oct  5 2018 Jens Petersen <petersen@redhat.com> - 1.9.4-1
+- cabal_configure now uses ghc_set_gcc_flags
+
 * Fri Oct  5 2018 Jens Petersen <petersen@redhat.com> - 1.9.3-1
 - disable dynamic linking of executables for better portability
 - replace ghc_set_cflags with simplified ghc_set_gcc_flags
