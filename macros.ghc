@@ -10,7 +10,7 @@ LANG=en_US.utf8\
 %ghc_version %{!?ghc_version_override:%(ghc --numeric-version)}%{?ghc_version_override}
 
 
-%ghc_set_cflags\
+%ghc_set_gcc_flags\
 export CFLAGS="${CFLAGS:-%optflags}"\
 %global _hardened_ldflags %{nil}\
 export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\

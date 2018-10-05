@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -170,6 +170,9 @@ EOF
 
 
 %changelog
+* Sat Oct  6 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-2
+- fix ghc_set_gcc_flags name
+
 * Sat Oct  6 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-1
 - disable hardened ldflags again
 
