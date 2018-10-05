@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
