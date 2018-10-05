@@ -171,6 +171,7 @@ EOF
 
 %changelog
 * Fri Oct  5 2018 Jens Petersen <petersen@redhat.com> - 1.9.3-1
+- disable dynamic linking of executables for better portability
 - replace ghc_set_cflags with simplified ghc_set_gcc_flags
 
 * Tue Jul 31 2018 Jens Petersen <petersen@redhat.com> - 1.9.2-1
