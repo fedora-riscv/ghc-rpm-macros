@@ -47,8 +47,14 @@ fi
 
 git pull
 
+if [ "$UID" != "0" ]; then
+    SUDO="sudo"
+else
+    SUDO=""
+fi
+
 echo Running dnf builddep:
-sudo dnf builddep $PKG.spec
+$SUDO dnf builddep $PKG.spec
 
 fedpkg local
 
@@ -62,7 +68,7 @@ PKGS=$(cd $ARCH; rpm -qp $(ls *-$VERREL*.rpm))
 
 for i in $PKGS; do
   # FIXME: should check NVR is same before building
-  rpm -q --quiet $i || sudo dnf install -q $i
+  rpm -q --quiet $i || $SUDO dnf install -q $i
   for k in list requires provides scripts; do
     rpm -qp --$k $ARCH/$i.rpm | grep -v rpmlib > $TMP/$i.$k.test || :
     rpm -q --$k $i | grep -v rpmlib > $TMP/$i.$k.installed || :
