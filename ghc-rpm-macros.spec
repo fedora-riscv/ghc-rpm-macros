@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -102,6 +102,11 @@ Obsoletes:      ghc-webkit <= 0.14.2.1, ghc-webkit-devel <= 0.14.2.1
 Obsoletes:      ghc-fail < 4.9.0.0-2, ghc-fail-devel < 4.9.0.0-2
 Obsoletes:      ghc-ltk < 0.16, ghc-ltk-devel < 0.16
 %endif
+%if 0%{?fedora} >= 29
+Obsoletes:      ghc-content-store < 0.2.1-3, ghc-content-store-devel < 0.2.1-3
+Obsoletes:      ghc-bdcs < 0.6.1-3, ghc-bdcs-devel < 0.6.1-3
+Obsoletes:      ghc-bdcs-api < 0.1.3-3, ghc-bdcs-api-devel < 0.1.3-3
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -170,6 +175,9 @@ EOF
 
 
 %changelog
+* Tue Oct 23 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-3
+- f29: obsolete content-store, bdcs, and bdcs-api
+
 * Sat Oct  6 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-2
 - fix ghc_set_gcc_flags name
 
