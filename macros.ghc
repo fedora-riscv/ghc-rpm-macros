@@ -11,7 +11,13 @@ LANG=en_US.utf8\
 
 
 %ghc_set_gcc_flags\
-export CFLAGS="${CFLAGS:-%optflags}"\
+# -Wunused-label is extremely noisy\
+%ifarch s390x\
+CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall //')}"\
+%else\
+CFLAGS="${CFLAGS:-%optflags}"\
+%endif\
+export CFLAGS\
 %global _hardened_ldflags %{nil}\
 export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\
 %{nil}

@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -175,6 +175,9 @@ EOF
 
 
 %changelog
+* Wed Oct 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-4
+- silence C compiler Wunused-label warnings flood on s390x again
+
 * Tue Oct 23 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-3
 - f29: obsolete content-store, bdcs, and bdcs-api
 
