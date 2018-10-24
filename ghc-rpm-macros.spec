@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.5
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -175,6 +175,9 @@ EOF
 
 
 %changelog
+* Thu Oct 25 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-5
+- need to disable -Werror=format-security too on s390x
+
 * Wed Oct 24 2018 Jens Petersen <petersen@redhat.com> - 1.9.5-4
 - silence C compiler Wunused-label warnings flood on s390x again
 

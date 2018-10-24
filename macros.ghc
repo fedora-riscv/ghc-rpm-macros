@@ -13,7 +13,7 @@ LANG=en_US.utf8\
 %ghc_set_gcc_flags\
 # -Wunused-label is extremely noisy\
 %ifarch s390x\
-CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall //')}"\
+CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall //' -e 's/-Werror=format-security //')}"\
 %else\
 CFLAGS="${CFLAGS:-%optflags}"\
 %endif\
