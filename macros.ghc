@@ -143,7 +143,7 @@ licensedirversion=%{?2:-%2}\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 if [ -n dist/build/libHS%{pkgname}-%{pkgver}*.so ]; then\
-%cabal haddock --html %{!?without_hscolour:%(if [ -x %{_bindir}/HsColour ]; then echo --hyperlink-source; fi)} --hoogle %{?cabal_haddock_options}\
+%cabal haddock --html --hyperlink-source --hoogle %{?cabal_haddock_options}\
 fi\
 %endif\
 %{nil}
