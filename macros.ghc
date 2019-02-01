@@ -122,13 +122,13 @@ fi\
 
 # ghc_bin_build
 %ghc_bin_build\
-%global debug_package %{nil}\
+%undefine _enable_debug_packages\
 %cabal_configure\
 %cabal build %{?ghc_smp_mflags} %{?cabal_build_options}
 
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
-%global debug_package %{nil}\
+%undefine _enable_debug_packages\
 %if 0%{?rhel} && 0%{?rhel} < 8\
 licensedirversion=%{?2:-%2}\
 %endif\

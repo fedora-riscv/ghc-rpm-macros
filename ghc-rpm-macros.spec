@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.5
-Release:        6%{?dist}
+Version:        1.9.6
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -175,6 +175,9 @@ EOF
 
 
 %changelog
+* Fri Feb  1 2019 Jens Petersen <petersen@redhat.com> - 1.9.6-1
+- disable debuginfo by undefining _enable_debug_packages
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.5-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
