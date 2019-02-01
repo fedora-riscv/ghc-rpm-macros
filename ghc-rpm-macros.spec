@@ -178,6 +178,7 @@ EOF
 * Fri Feb  1 2019 Jens Petersen <petersen@redhat.com> - 1.9.6-1
 - disable debuginfo by undefining _enable_debug_packages
 - leave stripping to generic rpm macros
+- use C.utf8 locale for building instead of en_US.utf8
 
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.5-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild

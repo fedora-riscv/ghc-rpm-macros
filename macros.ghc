@@ -3,7 +3,7 @@
 
 # "cabal"
 %cabal [ -x Setup ] || ghc --make %{!?ghc_user_conf:-no-user-package-db} %{!?ghc_static_setup:-dynamic} Setup\
-LANG=en_US.utf8\
+LANG=C.utf8\
 ./Setup
 
 # compiler version
