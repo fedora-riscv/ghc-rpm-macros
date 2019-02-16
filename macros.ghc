@@ -2,7 +2,7 @@
 # see https://fedoraproject.org/wiki/Packaging:Haskell for more details
 
 # "cabal"
-%cabal [ -x Setup ] || ghc --make %{!?ghc_user_conf:-no-user-package-db} %{!?ghc_static_setup:-dynamic} Setup\
+%cabal [ -x Setup ] || ghc --make -no-user-package-db %{!?ghc_static_setup:-dynamic} Setup\
 LANG=C.utf8\
 ./Setup
 
