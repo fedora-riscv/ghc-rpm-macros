@@ -169,7 +169,6 @@ fi\
 
 # ghc_fix_rpath lib-ver ...
 %ghc_fix_rpath()\
-%if %{undefined ghc_without_dynamic}\
 if ! type chrpath > /dev/null; then exit 1; fi\
 for i in $(find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print); do\
 for lib in %*; do\
@@ -197,7 +196,6 @@ for lib in %*; do\
   fi\
 done\
 done\
-%endif\
 %{nil}
 
 # Deprecated by ghc_fix_rpath:

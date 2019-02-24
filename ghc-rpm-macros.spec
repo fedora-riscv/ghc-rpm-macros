@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.6
+Version:        1.9.7
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -175,6 +175,9 @@ EOF
 
 
 %changelog
+* Sun Feb 24 2019 Jens Petersen <petersen@redhat.com> - 1.9.7-1
+- ghc_fix_rpath was a noop when ghc_without_dynamic
+
 * Fri Feb  1 2019 Jens Petersen <petersen@redhat.com> - 1.9.6-1
 - disable debuginfo by undefining _enable_debug_packages
 - leave stripping to generic rpm macros
