@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.7
+Version:        1.9.8
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -175,6 +175,9 @@ EOF
 
 
 %changelog
+* Tue Apr  9 2019 Jens Petersen <petersen@redhat.com> - 1.9.8-1
+- re-instate ghc_without_shared since useful for standalone builds
+
 * Sun Feb 24 2019 Jens Petersen <petersen@redhat.com> - 1.9.7-1
 - ghc_fix_rpath was a noop when ghc_without_dynamic
 

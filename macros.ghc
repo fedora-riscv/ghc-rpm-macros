@@ -86,7 +86,9 @@ echo "%%dir ${pkgdir}" >> %{basepkg}.files\
 find %{buildroot}${pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
 find %{buildroot}${pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
 %endif\
+%if %{undefined ghc_without_shared}\
 echo "%%attr(755,root,root) %{?_ghcdynlibdir}%{!?_ghcdynlibdir:${pkgdir}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so" >> %{basepkg}.files\
+%endif\
 fi\
 if [ -d "%{buildroot}%{docdir}" ]; then\
 echo "%{docdir}" >> %{basepkg}-devel.files\
@@ -132,7 +134,7 @@ fi\
 %if 0%{?rhel} && 0%{?rhel} < 8\
 licensedirversion=%{?2:-%2}\
 %endif\
-%cabal_configure %{!?without_prof:-p} --enable-shared %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build %{?ghc_smp_mflags} %{?cabal_build_options}\
 %{nil}
 
