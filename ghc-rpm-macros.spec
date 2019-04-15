@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.8
+Version:        1.9.9
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -107,6 +107,9 @@ Obsoletes:      ghc-content-store < 0.2.1-3, ghc-content-store-devel < 0.2.1-3
 Obsoletes:      ghc-bdcs < 0.6.1-3, ghc-bdcs-devel < 0.6.1-3
 Obsoletes:      ghc-bdcs-api < 0.1.3-3, ghc-bdcs-api-devel < 0.1.3-3
 %endif
+%if 0%{?fedora} >= 30
+Obsoletes:      ghc-hoopl < 74, ghc-hoopl-devel < 74
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -175,6 +178,11 @@ EOF
 
 
 %changelog
+* Mon Apr 15 2019 Jens Petersen <petersen@redhat.com> - 1.9.9-1
+- cabal_configure: re-enable stripping by Cabal
+  (remove --disable-executable-stripping --disable-library-stripping)
+- obsolete hoopl
+
 * Tue Apr  9 2019 Jens Petersen <petersen@redhat.com> - 1.9.8-1
 - re-instate ghc_without_shared since useful for standalone builds
 
