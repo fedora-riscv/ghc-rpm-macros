@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -108,7 +108,30 @@ Obsoletes:      ghc-bdcs < 0.6.1-3, ghc-bdcs-devel < 0.6.1-3
 Obsoletes:      ghc-bdcs-api < 0.1.3-3, ghc-bdcs-api-devel < 0.1.3-3
 %endif
 %if 0%{?fedora} >= 30
-Obsoletes:      ghc-hoopl < 74, ghc-hoopl-devel < 74
+# ghc
+Obsoletes:      ghc-hoopl < 3.10.2.2-74, ghc-hoopl-devel < 3.10.2.2-74
+# language-ecmascript
+Obsoletes:      ghc-tagshare < 0.0-10, ghc-tagshare-devel < 0.0-10
+Obsoletes:      ghc-testing-feat < 0.4.0.3-10, ghc-testing-feat-devel < 0.4.0.3-10
+# haskell-platform
+Obsoletes :     ghc-fixed < 0.2.1.1-16, ghc-fixed-devel < 0.2.1.1-16
+Obsoletes :     ghc-GLURaw < 2.0.0.4, ghc-GLURaw-devel < 2.0.0.4
+Obsoletes :     ghc-GLUT < 2.7.0.13, ghc-GLUT-devel < 2.7.0.13
+Obsoletes :     ghc-half < 0.3, ghc-half-devel < 0.3
+Obsoletes :     ghc-haskell-src < 1.0.3.0, ghc-haskell-src-devel < 1.0.3.0
+Obsoletes :     ghc-ObjectName < 1.1.0.1-16, ghc-ObjectName-devel < 1.1.0.1-16
+Obsoletes :     ghc-OpenGL < 3.0.2.1, ghc-OpenGL-devel < 3.0.2.1
+Obsoletes :     ghc-OpenGLRaw < 3.2.6.0, ghc-OpenGLRaw-devel < 3.2.6.0
+# enumerator
+Obsoletes:      ghc-enumerator < 0.4.20-12, ghc-enumerator-devel < 0.4.20-12
+Obsoletes:      ghc-attoparsec-enumerator < 0.3.4-10, ghc-attoparsec-enumerator-devel < 0.3.4-10
+Obsoletes:      ghc-blaze-builder-enumerator < 0.2.1.0-8, ghc-blaze-builder-enumerator-devel < 0.2.1.0-8
+Obsoletes:      ghc-zlib-enum < 0.2.3.1-12, ghc-zlib-enum-devel < 0.2.3.1-12
+# Agda
+Obsoletes:      ghc-monadplus < 1.4.2-17, ghc-monadplus-devel < 1.4.2-17
+%endif
+%if 0%{?fedora} >= 31
+Obsoletes:      ghc-conduit-combinators < 1.3.1, ghc-conduit-combinators-devel < 1.3.1
 %endif
 
 %description -n ghc-obsoletes
@@ -178,6 +201,10 @@ EOF
 
 
 %changelog
+* Fri May 10 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-2
+- obsoletes for f30 deprecated packages
+  (including haskell-platform subpackaged libraries and enumerator)
+
 * Mon Apr 15 2019 Jens Petersen <petersen@redhat.com> - 1.9.9-1
 - cabal_configure: re-enable stripping by Cabal
   (remove --disable-executable-stripping --disable-library-stripping)
