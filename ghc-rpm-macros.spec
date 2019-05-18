@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -129,9 +129,12 @@ Obsoletes:      ghc-blaze-builder-enumerator < 0.2.1.0-8, ghc-blaze-builder-enum
 Obsoletes:      ghc-zlib-enum < 0.2.3.1-12, ghc-zlib-enum-devel < 0.2.3.1-12
 # Agda
 Obsoletes:      ghc-monadplus < 1.4.2-17, ghc-monadplus-devel < 1.4.2-17
+# conduit-combinators
+Obsoletes:      ghc-conduit-combinators < 1.3.1
 %endif
 %if 0%{?fedora} >= 31
-Obsoletes:      ghc-conduit-combinators < 1.3.1, ghc-conduit-combinators-devel < 1.3.1
+# base package obsoleted above in f30
+Obsoletes:      ghc-conduit-combinators-devel < 1.3.1
 %endif
 
 %description -n ghc-obsoletes
@@ -201,6 +204,9 @@ EOF
 
 
 %changelog
+* Sat May 18 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-3
+- ghc-conduit-combinators base package obsoleted in f30
+
 * Fri May 10 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-2
 - obsoletes for f30 deprecated packages
   (including haskell-platform subpackaged libraries and enumerator)
