@@ -35,8 +35,7 @@ Group:          Development/Languages/Other\
 %endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
-Requires(post): %{ghc_prefix}-compiler = %{ghc_version}\
-Requires(postun): %{ghc_prefix}-compiler = %{ghc_version}\
+Requires: %{ghc_prefix}-compiler = %{ghc_version}%{?ghc_version_override:-%{release}}\
 Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %{?ghc_pkg_c_deps:Requires:       %{ghc_pkg_c_deps}}\
 %{-c:Requires:       %{-c*}}\
@@ -44,12 +43,6 @@ Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 \
 %description -n %{basepkg}-devel\
 This package provides the Haskell %{pkgname} library development files.\
-\
-%post -n %{basepkg}-devel\
-%ghc_pkg_recache\
-\
-%postun -n %{basepkg}-devel\
-%ghc_pkg_recache\
 \
 %files -n %{basepkg} -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}.files\
 %if 0%{?rhel} && 0%{?rhel} < 6\
