@@ -200,33 +200,6 @@ done\
 done\
 %{nil}
 
-# Deprecated by ghc_fix_rpath:
-# ghc_fix_dynamic_rpath prog ...
-%ghc_fix_dynamic_rpath()\
-%if %{undefined ghc_without_dynamic}\
-if ! type chrpath > /dev/null; then exit 1; fi\
-pdir=$(pwd)\
-for i in %*; do\
-  case $i in\
-    /*) prog=%{buildroot}$i ;;\
-    *) prog=%{buildroot}%{_bindir}/$i ;;\
-  esac\
-  if [ -x "$prog" ]; then\
-    rpath=$(chrpath $prog | sed -e "s@^$prog: R.*PATH=@@")\
-    case $rpath in\
-         *$pdir*)\
-         newrpath=$(echo $rpath | sed -e "s@$pdir/dist/build@%{ghclibdir}/%{pkg_name}-%{version}@g")\
-         chrpath -r $newrpath $prog\
-         ;;\
-    esac\
-  else\
-    echo "%%ghc_fix_dynamic_rpath: no such file $prog"\
-    exit 1\
-  fi\
-done\
-%endif\
-%{nil}
-
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
 # deprecated
