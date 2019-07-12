@@ -10,13 +10,13 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.9
-Release:        4%{?dist}
+Version:        1.10.0
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
 URL:            https://github.com/fedora-haskell/ghc-rpm-macros
-# Currently source is only in git but tarballs could be made if it helps
+# Currently source is only in pkg git but tarballs could be made if it helps
 Source0:        macros.ghc
 Source1:        COPYING
 Source2:        AUTHORS
@@ -41,8 +41,7 @@ BuildArch:	noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
-of the Fedora Haskell SIG.  ghc needs to be installed in order to make use of
-these macros.
+of the Fedora Haskell SIG.
 
 
 %package extra
@@ -204,6 +203,10 @@ EOF
 
 
 %changelog
+* Fri Jul 12 2019 Jens Petersen <petersen@redhat.com> - 1.10.0-1
+- drop devel subpackage scriplets (replaced by ghc-compiler triggers)
+- remove deprecated ghc_fix_dynamic_rpath
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.9-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
