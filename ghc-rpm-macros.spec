@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.10.0
+Version:        2.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -203,6 +203,9 @@ EOF
 
 
 %changelog
+* Sun Jul 14 2019 Jens Petersen <petersen@redhat.com> - 2.0-1
+- bring back doc and prof subpackages
+
 * Fri Jul 12 2019 Jens Petersen <petersen@redhat.com> - 1.10.0-1
 - drop devel subpackage scriplets (replaced by ghc-compiler triggers)
 - remove deprecated ghc_fix_dynamic_rpath

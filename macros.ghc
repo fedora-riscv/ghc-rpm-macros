@@ -69,36 +69,22 @@ fi\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
-%define docdir %{ghclibdocdir}/%{pkgnamever}\
-if [ -z "$(ls %{buildroot}%{ghclibdir}/package.conf.d/)" ]; then\
-echo "%{buildroot}%{ghclibdir}/package.conf.d/*.conf not found"\
+if [ -z "$(ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf)" ]; then\
+echo '%{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found'\
 exit 1\
 fi\
-rm -f %{basepkg}.files %{basepkg}-devel.files\
-touch %{basepkg}.files %{basepkg}-devel.files\
-ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
+rm -f %{basepkg}.files\
+touch %{basepkg}.files\
+ls %{buildroot}%{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so >> %{basepkg}.files\
 pkgdir="%{ghclibdir}/%{pkgnamever}"\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
-%if %{defined _ghcdynlibdir}\
-echo "${pkgdir}" >> %{basepkg}-devel.files\
-%else\
-echo "%%dir ${pkgdir}" >> %{basepkg}.files\
-find %{buildroot}${pkgdir} -mindepth 1 -type d | sed "s/^/%dir /" >> %{basepkg}-devel.files\
-find %{buildroot}${pkgdir} ! \\( -type d -o -name "libHS*.so" \\) >> %{basepkg}-devel.files\
-%endif\
-%if %{undefined ghc_without_shared}\
-echo "%%attr(755,root,root) %{?_ghcdynlibdir}%{!?_ghcdynlibdir:${pkgdir}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so" >> %{basepkg}.files\
-%endif\
+find %{buildroot}${pkgdir} -type d -fprintf %{basepkg}-devel.files '%%%%dir %p\\n' -o \\( -name '*.p_hi' -o -name 'libHS*_p.a' \\) -fprint %{basepkg}-prof.files -o -fprint %{basepkg}-devel.files\
+else\
+rm -f %{basepkg}-devel.files %{basepkg}-prof.files\
+touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
-if [ -d "%{buildroot}%{docdir}" ]; then\
-echo "%{docdir}" >> %{basepkg}-devel.files\
-fi\
-%if 0%{?1:1}\
-for i in $(ls %{buildroot}%{_ghclicensedir}/%{!?1:%{name}}%{?1:%{basepkg}}); do\
-echo "%%license %{?1:%{pkgnamever}/}$i" >> %{basepkg}.files\
-done\
-%endif\
-for i in %{basepkg}.files %{basepkg}-devel.files; do\
+ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
+for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-prof.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
 fi\
@@ -172,7 +158,7 @@ fi\
 # ghc_fix_rpath lib-ver ...
 %ghc_fix_rpath()\
 if ! type chrpath > /dev/null; then exit 1; fi\
-for i in $(find %{buildroot} -type f -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print); do\
+for i in $(find %{buildroot} -type f -executable -exec sh -c "file {} | grep -q 'dynamically linked'" \\; -print); do\
 for lib in %*; do\
   if [ -x "$i" ]; then\
     rpath=$(chrpath $i | sed -e "s@^$i: R.*PATH=@@")\
@@ -200,6 +186,7 @@ done\
 done\
 %{nil}
 
+# deprecated for f31
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
 # deprecated

@@ -12,14 +12,12 @@ print(name)\
 local pv = rpm.expand("%1")\
 print(string.sub(pv, string.find(pv, "[%d.]+$")))\
 }}\
+%define pkgnamever %{pkgname}-%{pkgver}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
 %package -n %{basepkg}\
 Summary:        Haskell %{pkgname} library\
-%if 0%{?rhel} && 0%{?rhel} < 6\
-Group:          System/Libraries\
-%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Url:            http://hackage.haskell.org/package/%{pkgname}\
@@ -30,9 +28,6 @@ This package provides the Haskell %{pkgname} library.\
 \
 %package -n %{basepkg}-devel\
 Summary:        Haskell %{pkgname} library development files\
-%if 0%{?rhel} && 0%{?rhel} < 6\
-Group:          Development/Languages/Other\
-%endif\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Requires: %{ghc_prefix}-compiler = %{ghc_version}%{?ghc_version_override:-%{release}}\
@@ -44,17 +39,42 @@ Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %description -n %{basepkg}-devel\
 This package provides the Haskell %{pkgname} library development files.\
 \
-%files -n %{basepkg} -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}.files\
-%if 0%{?rhel} && 0%{?rhel} < 6\
-%defattr(-,root,root,-)\
+%if %{undefined without_haddock}\
+%package -n %{basepkg}-doc\
+Summary:        Haskell %{pkgname} library documentation\
+%{?1:Version:        %{pkgver}}\
+%{-l:License:        %{-l*}}\
+Supplements:    (%{basepkg}-devel and ghc-doc)\
+\
+%description -n %{basepkg}-doc\
+This package provides the Haskell %{pkgname} library documentation.\
 %endif\
-%{?base_doc_files:%doc %base_doc_files}\
+\
+%if %{undefined without_prof}\
+%package -n %{basepkg}-prof\
+Summary:        Haskell %{pkgname} profiling library\
+%{?1:Version:        %{pkgver}}\
+%{-l:License:        %{-l*}}\
+Requires:       %{ghc_prefix}-%{pkgname}-devel%{?_isa} = %{pkgver}-%{release}\
+Supplements:    (%{basepkg}-devel and ghc-prof)\
+\
+%description -n %{basepkg}-prof\
+This package provides the Haskell %{pkgname} profiling library.\
+%endif\
+\
+%files -n %{basepkg} -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}.files\
+%{_ghclicensedir}/%{basepkg}\
 \
 %files -n %{basepkg}-devel -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-devel.files\
-%if 0%{?rhel} && 0%{?rhel} < 6\
-%defattr(-,root,root,-)\
+\
+%if %{undefined without_haddock}\
+%files -n %{basepkg}-doc\
+%{ghc_html_libraries_dir}/%{pkgnamever}\
 %endif\
-%{?devel_doc_files:%doc %devel_doc_files}\
+\
+%if %{undefined without_prof}\
+%files -n %{basepkg}-prof -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-prof.files\
+%endif\
 %{nil}
 
 # ghc_libs_build [name-version] ...
