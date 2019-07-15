@@ -30,7 +30,8 @@ This package provides the Haskell %{pkgname} library.\
 Summary:        Haskell %{pkgname} library development files\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
-Requires: %{ghc_prefix}-compiler = %{ghc_version}%{?ghc_version_override:-%{release}}\
+Provides:       %{basepkg}-static = %{pkgver}-%{release}\
+Requires:       %{ghc_prefix}-compiler = %{ghc_version}%{?ghc_version_override:-%{release}}\
 Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %{?ghc_pkg_c_deps:Requires:       %{ghc_pkg_c_deps}}\
 %{-c:Requires:       %{-c*}}\
