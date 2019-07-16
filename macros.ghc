@@ -73,8 +73,8 @@ if [ -z "$(ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf)" ]; t
 echo '%{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf not found'\
 exit 1\
 fi\
-rm -f %{basepkg}.files\
-touch %{basepkg}.files\
+rm -f %{basepkg}.files %{basepkg}-doc.files\
+touch %{basepkg}.files %{basepkg}-doc.files\
 ls %{buildroot}%{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so >> %{basepkg}.files\
 pkgdir="%{ghclibdir}/%{pkgnamever}"\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
@@ -84,7 +84,8 @@ rm -f %{basepkg}-devel.files %{basepkg}-prof.files\
 touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
 ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
-for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-prof.files; do\
+echo %{ghc_html_libraries_dir}/%{pkgnamever} >> %{basepkg}-doc.files\
+for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-doc.files %{basepkg}-prof.files; do\
 if [ -f "$i" ]; then\
 sed -i -e "s!%{buildroot}!!g" $i\
 fi\

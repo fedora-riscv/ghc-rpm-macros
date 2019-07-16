@@ -12,7 +12,6 @@ print(name)\
 local pv = rpm.expand("%1")\
 print(string.sub(pv, string.find(pv, "[%d.]+$")))\
 }}\
-%define pkgnamever %{pkgname}-%{pkgver}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
@@ -69,8 +68,7 @@ This package provides the Haskell %{pkgname} profiling library.\
 %files -n %{basepkg}-devel -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-devel.files\
 \
 %if %{undefined without_haddock}\
-%files -n %{basepkg}-doc\
-%{ghc_html_libraries_dir}/%{pkgnamever}\
+%files -n %{basepkg}-doc -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-doc.files\
 %endif\
 \
 %if %{undefined without_prof}\
