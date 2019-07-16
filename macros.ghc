@@ -121,14 +121,14 @@ fi\
 %if 0%{?rhel} && 0%{?rhel} < 8\
 licensedirversion=%{?2:-%2}\
 %endif\
-%cabal_configure %{!?without_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal_configure %{?with_ghc_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
 %cabal build %{?ghc_smp_mflags} %{?cabal_build_options}\
 %{nil}
 
 # ghc_lib_build [name] [version]
 %ghc_lib_build()\
 %ghc_lib_build_without_haddock %{?1} %{?2}\
-%if %{undefined without_haddock}\
+%if %{with haddock}\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 if [ -n dist/build/libHS%{pkgname}-%{pkgver}*.so ]; then\
@@ -198,13 +198,7 @@ done\
 # deprecated for f31
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
-# deprecated
-%ghc_bootstrap\
-%global without_prof 1\
-%global without_haddock 1\
-%global without_manual 1
-
 # skip prof libs and documentation
 %ghc_quick_build\
-%global without_prof 1\
-%global without_haddock 1
+%undefine with_ghc_prof\
+%undefine with_haddock

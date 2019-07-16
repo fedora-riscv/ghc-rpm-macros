@@ -39,7 +39,7 @@ Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %description -n %{basepkg}-devel\
 This package provides the Haskell %{pkgname} library development files.\
 \
-%if %{undefined without_haddock}\
+%if %{with haddock}\
 %package -n %{basepkg}-doc\
 Summary:        Haskell %{pkgname} library documentation\
 %{?1:Version:        %{pkgver}}\
@@ -50,7 +50,7 @@ Supplements:    (%{basepkg}-devel and ghc-doc)\
 This package provides the Haskell %{pkgname} library documentation.\
 %endif\
 \
-%if %{undefined without_prof}\
+%if %{with ghc_prof}\
 %package -n %{basepkg}-prof\
 Summary:        Haskell %{pkgname} profiling library\
 %{?1:Version:        %{pkgver}}\
@@ -67,11 +67,11 @@ This package provides the Haskell %{pkgname} profiling library.\
 \
 %files -n %{basepkg}-devel -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-devel.files\
 \
-%if %{undefined without_haddock}\
+%if %{with haddock}\
 %files -n %{basepkg}-doc -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-doc.files\
 %endif\
 \
-%if %{undefined without_prof}\
+%if %{with ghc_prof}\
 %files -n %{basepkg}-prof -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-prof.files\
 %endif\
 %{nil}
