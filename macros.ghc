@@ -75,6 +75,11 @@ exit 1\
 fi\
 rm -f %{basepkg}.files %{basepkg}-doc.files\
 touch %{basepkg}.files %{basepkg}-doc.files\
+%if 0%{?1:1}\
+for i in $(ls %{buildroot}%{_ghclicensedir}/%{basepkg}); do\
+echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
+done\
+%endif\
 ls %{buildroot}%{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so >> %{basepkg}.files\
 pkgdir="%{ghclibdir}/%{pkgnamever}"\
 if [ -d "%{buildroot}${pkgdir}" ]; then\

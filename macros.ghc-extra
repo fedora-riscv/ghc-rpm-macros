@@ -63,7 +63,6 @@ This package provides the Haskell %{pkgname} profiling library.\
 %endif\
 \
 %files -n %{basepkg} -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}.files\
-%{_ghclicensedir}/%{basepkg}\
 \
 %files -n %{basepkg}-devel -f %{!-d:%{pkgname}-%{pkgver}/}%{basepkg}-devel.files\
 \
