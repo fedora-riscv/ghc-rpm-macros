@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        1.9.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -204,6 +204,9 @@ EOF
 
 
 %changelog
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.9-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Sat May 18 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-3
 - ghc-conduit-combinators base package obsoleted in f30
 
