@@ -1,3 +1,5 @@
 # OS specific settings
 
 %_ghcdocdir %{_ghclicensedir}/%{name}-%{version}
+
+%ghc_without_dynamic 1

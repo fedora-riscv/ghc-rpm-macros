@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.0.11
+Version:        1.0.12
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -83,7 +83,6 @@ install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
 cat >> %{buildroot}/%{macros_dir}/macros.ghc <<EOF
 
 # shared libraries are only supported on primary intel archs
-%%ghc_without_dynamic 1
 %%ghc_without_shared 1
 EOF
 %endif
@@ -107,6 +106,9 @@ EOF
 
 
 %changelog
+* Sat Jul 27 2019 Jens Petersen <petersen@redhat.com> - 1.0.12-1
+- set ghc_without_dynamic for Haskell static executable
+
 * Sat Jul 28 2018 Jens Petersen <petersen@redhat.com> - 1.0.11-1
 - update url
 - add macros.ghc-os and cabal-tweak-drop-dep
