@@ -8,4 +8,4 @@
 %with_ghc_prof 1
 %with_haddock 1
 
-%cabal_install_options -v
+#%%cabal_install_options -v
