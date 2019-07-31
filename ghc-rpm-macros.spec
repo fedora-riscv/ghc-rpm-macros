@@ -203,20 +203,20 @@ EOF
 
 
 %changelog
-* Sun Jul 14 2019 Jens Petersen <petersen@redhat.com> - 2.0-1
+* Wed Jul 31 2019 Jens Petersen <petersen@redhat.com> - 2.0-1
 - bring back doc and prof subpackages
 
-* Fri Jul 12 2019 Jens Petersen <petersen@redhat.com> - 1.10.0-1
+* Fri Jul 26 2019 Jens Petersen <petersen@redhat.com> - 1.10.0-1
 - drop devel subpackage scriplets (replaced by ghc-compiler triggers)
 - remove deprecated ghc_fix_dynamic_rpath
 
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.9-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
-* Sat May 18 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-3
+* Sat May 18 2019 Jens Petersen <petersen@redhat.com> - 1.9.9-3
 - ghc-conduit-combinators base package obsoleted in f30
 
-* Fri May 10 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-2
+* Fri May 10 2019 Jens Petersen <petersen@redhat.com> - 1.9.9-2
 - obsoletes for f30 deprecated packages
   (including haskell-platform subpackaged libraries and enumerator)
 
