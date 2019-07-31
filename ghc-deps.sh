@@ -24,20 +24,25 @@ files=$(cat)
 for i in $files; do
     meta=""
     case $i in
-        */libHS*_p.a)
-            meta=prof
+        # exclude rts.conf
+        $pkgconfdir/*-*.conf)
+            name=$(grep "^name: " $i | sed -e "s/name: //")
+            ids=$($GHC_PKG field $name $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
+            for d in $ids; do
+                case $d in
+                    *-*) echo "ghc-devel($d)" ;;
+                    *) ;;
+                esac
+            done
             ;;
-        */libHS*.a)
-            meta=devel
+        */libHS*_p.a)
+            pkgver=$(basename $(dirname $i))
+            ids=$($GHC_PKG field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
+            for d in $ids; do
+                case $d in
+                    *-*) echo "ghc-prof($d)" ;;
+                esac
+            done
             ;;
     esac
-    if [ -n "$meta" ]; then
-        pkgver=$(basename $(dirname $i))
-        ids=$($GHC_PKG field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
-        for d in $ids; do
-            case $d in
-                *-*) echo "ghc-${meta}($d)" ;;
-            esac
-        done
-    fi
 done
