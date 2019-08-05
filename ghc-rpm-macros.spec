@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0
+Version:        2.0.1
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -203,6 +203,9 @@ EOF
 
 
 %changelog
+* Mon Aug  5 2019 Jens Petersen <petersen@redhat.com> - 2.0.1-1
+- ghc_lib_subpackage: provide static with isa suffix
+
 * Wed Jul 31 2019 Jens Petersen <petersen@redhat.com> - 2.0-1
 - bring back doc and prof subpackages
 
