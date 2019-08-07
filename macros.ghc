@@ -92,7 +92,9 @@ touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
 ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
 %if %{with haddock}\
+if [ -d %{buildroot}%{ghc_html_libraries_dir}/%{pkgnamever} ]; then\
 echo %{ghc_html_libraries_dir}/%{pkgnamever} >> %{basepkg}-doc.files\
+fi\
 %endif\
 for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-doc.files %{basepkg}-prof.files; do\
 if [ -f "$i" ]; then\
