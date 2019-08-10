@@ -40,7 +40,18 @@ for i in $files; do
             ids=$($GHC_PKG field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
             for d in $ids; do
                 case $d in
-                    *-*) echo "ghc-prof($d)" ;;
+                    *-*)
+                        case $field in
+                            id)
+                                echo "ghc-prof($d)"
+                                ;;
+                            *)
+                                if [ -f "$PKGBASEDIR/$pkgver/libHS${d}_p.a" -o -f "/usr/lib*/ghc-*/$pkgver/libHS${d}_p.a" ]; then
+                                    echo "ghc-prof($d)"
+                                fi
+                                ;;
+                        esac
+                        ;;
                 esac
             done
             ;;

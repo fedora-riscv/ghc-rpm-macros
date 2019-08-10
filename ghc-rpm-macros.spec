@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.2
+Version:        2.0.3
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -203,6 +203,9 @@ EOF
 
 
 %changelog
+* Sat Aug 10 2019 Jens Petersen <petersen@redhat.com> - 2.0.3-1
+- only depend on ghc-prof(pkgid) if libHSpkgid_p.a exists
+
 * Tue Aug  6 2019 Jens Petersen <petersen@redhat.com> - 2.0.2-1
 - check if doc haddock dir exists
 
