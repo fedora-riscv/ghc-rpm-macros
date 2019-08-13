@@ -1,0 +1,37 @@
+#!/bin/sh
+
+set -e +x
+
+USAGE="Usage: $0 dep"
+
+if [ $# -ne 1 ]; then
+    echo "$USAGE"
+    exit 1
+fi
+
+DEP=$1
+CABALFILE=$(ls *.cabal)
+
+if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
+   echo "There needs to be one .cabal file in the current dir!"
+   exit 1
+fi
+
+BREAK=[^[:alnum:]-]
+
+if ! grep -q "$BREAK$DEP$BREAK[^,]*" $CABALFILE; then
+   echo "$CABALFILE does not match: $DEP"
+   exit 1
+fi
+
+if [ ! -f $CABALFILE.orig ]; then
+    BACKUP=.orig
+fi
+
+if grep -q "$BREAK$DEP$BREAK[^,]*&&" $CABALFILE; then
+    sed -i$BACKUP -e "s/\($BREAK$DEP$BREAK[^&,]*[^ ]\+\) *&&[^,]*/\1/g" $CABALFILE
+fi
+
+if grep -q "$BREAK$DEP$BREAK[^,]*==" $CABALFILE; then
+    sed -i$BACKUP -e "s/\($BREAK$DEP$BREAK[^=,]*\)==\([^,*]*\)\.\*/\1>=\2/g" $CABALFILE
+fi

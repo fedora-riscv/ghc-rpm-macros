@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.3
+Version:        2.0.4
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -29,6 +29,7 @@ Source8:        ghc-pkg-wrapper
 Source9:        macros.ghc-os
 Source10:       Setup.hs
 Source11:       cabal-tweak-drop-dep
+Source12:       cabal-tweak-remove-upperbound
 Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
@@ -167,6 +168,7 @@ install -p -D -m 0644 %{SOURCE10} %{buildroot}/%{_datadir}/%{name}/Setup.hs
 install -p -D -m 0755 %{SOURCE4} %{buildroot}/%{_bindir}/cabal-tweak-dep-ver
 install -p -D -m 0755 %{SOURCE5} %{buildroot}/%{_bindir}/cabal-tweak-flag
 install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
+install -p -D -m 0755 %{SOURCE12} %{buildroot}/%{_bindir}/cabal-tweak-remove-upperbound
 install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
 %if 0%{?rhel} && 0%{?rhel} < 7
@@ -190,6 +192,7 @@ EOF
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-drop-dep
 %{_bindir}/cabal-tweak-flag
+%{_bindir}/cabal-tweak-remove-upperbound
 %{_datadir}/%{name}/Setup.hs
 
 
@@ -203,6 +206,9 @@ EOF
 
 
 %changelog
+* Tue Aug 13 2019 Jens Petersen <petersen@redhat.com> - 2.0.4-1
+- add cabal-tweak-remove-upperbound script
+
 * Sat Aug 10 2019 Jens Petersen <petersen@redhat.com> - 2.0.3-1
 - only depend on ghc-prof(pkgid) if libHSpkgid_p.a exists
 
