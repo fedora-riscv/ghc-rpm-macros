@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.4
+Version:        2.0.5
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -206,6 +206,9 @@ EOF
 
 
 %changelog
+* Tue Aug 27 2019 Jens Petersen <petersen@redhat.com> - 2.0.5-1
+- ghc-deps.sh: fix generation of prof deps
+
 * Tue Aug 13 2019 Jens Petersen <petersen@redhat.com> - 2.0.4-1
 - add cabal-tweak-remove-upperbound script
 
