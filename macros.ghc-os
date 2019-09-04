@@ -5,5 +5,3 @@
 %_ghcdynlibdir %{_libdir}
 
 %ghc_without_dynamic 1
-
-%cabal_install_options -v

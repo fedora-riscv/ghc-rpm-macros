@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        1.9.9
-Release:        3%{?dist}
+Version:        1.9.10
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -204,6 +204,12 @@ EOF
 
 
 %changelog
+* Thu Sep  5 2019 Jens Petersen <petersen@redhat.com> - 1.9.10-1
+- backports from 2.0.5 (F31):
+- ghc_lib_subpackage: provide static with isa suffix
+- speed up ghc_fix_rpath: only look at executable files
+- cabal_install no longer verbose
+
 * Sat May 18 2019 fedora-toolbox <petersen@redhat.com> - 1.9.9-3
 - ghc-conduit-combinators base package obsoleted in f30
 
