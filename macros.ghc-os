@@ -11,6 +11,3 @@
 
 # enable library documentation in doc subpkgs
 %with_haddock 1
-
-# devel suffix
-%ghc_devel_prof %{?with_ghc_prof:prof}%{!?with_ghc_prof:devel}
