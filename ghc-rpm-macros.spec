@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -206,6 +206,9 @@ EOF
 
 
 %changelog
+* Fri Sep 27 2019 Jens Petersen <petersen@redhat.com> - 2.0.5-2
+- define ghc_devel_prof
+
 * Tue Aug 27 2019 Jens Petersen <petersen@redhat.com> - 2.0.5-1
 - ghc-deps.sh: fix generation of prof deps
 
