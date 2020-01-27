@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -135,6 +135,7 @@ Obsoletes:      ghc-conduit-combinators < 1.3.1
 %if 0%{?fedora} >= 31
 # base package obsoleted above in f30
 Obsoletes:      ghc-conduit-combinators-devel < 1.3.1
+Obsoletes:      ghc-hgettext < 0.1.31.0-7, ghc-hgettext-devel < 0.1.31.0-7
 %endif
 
 %description -n ghc-obsoletes
@@ -206,6 +207,9 @@ EOF
 
 
 %changelog
+* Mon Jan 27 2020 Jens Petersen <petersen@redhat.com> - 2.0.5-4
+- obsolete ghc-hgettext
+
 * Fri Sep 27 2019 Jens Petersen <petersen@redhat.com> - 2.0.5-3
 - ghc_devel_prof macro not available early enough in koji
 
@@ -229,6 +233,7 @@ EOF
 
 * Wed Jul 31 2019 Jens Petersen <petersen@redhat.com> - 2.0-1
 - bring back doc and prof subpackages
+- ghc_lib_subpackage: provide static
 
 * Fri Jul 26 2019 Jens Petersen <petersen@redhat.com> - 1.10.0-1
 - drop devel subpackage scriplets (replaced by ghc-compiler triggers)
