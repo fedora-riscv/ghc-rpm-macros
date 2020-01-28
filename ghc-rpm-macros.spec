@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.5
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -207,6 +207,9 @@ EOF
 
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.5-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Mon Jan 27 2020 Jens Petersen <petersen@redhat.com> - 2.0.5-4
 - obsolete ghc-hgettext
 
