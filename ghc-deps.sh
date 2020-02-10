@@ -46,7 +46,7 @@ for i in $files; do
                                 echo "ghc-prof($d)"
                                 ;;
                             *)
-                                if [ -f /usr/lib*/ghc-*/*/libHS${d}_p.a -o -f "$PKGBASEDIR/$pkgver/libHS${d}_p.a" ]; then
+                                if [ -f /usr/lib*/ghc-*/*/libHS${d}_p.a -o -f $PKGBASEDIR/*/libHS${d}_p.a ]; then
                                     echo "ghc-prof($d)"
                                 fi
                                 ;;
