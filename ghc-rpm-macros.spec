@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -135,7 +135,11 @@ Obsoletes:      ghc-conduit-combinators < 1.3.1
 %if 0%{?fedora} >= 31
 # base package obsoleted above in f30
 Obsoletes:      ghc-conduit-combinators-devel < 1.3.1
-Obsoletes:      ghc-hgettext < 0.1.31.0-7, ghc-hgettext-devel < 0.1.31.0-7
+%endif
+%if 0%{?fedora} >= 32
+Obsoletes:      ghc-cabal-helper < 0.8.2.0-5, ghc-cabal-helper-devel < 0.8.2.0-5, ghc-cabal-helper-prof < 0.8.2.0-5
+Obsoletes:      ghc-cabal-plan < 0.4.0.0-5, ghc-cabal-plan-devel < 0.4.0.0-5, ghc-cabal-plan-prof < 0.4.0.0-5
+Obsoletes:      ghc-derive < 2.6.5-5, ghc-derive-devel < 2.6.5-5, ghc-derive-prof < 2.6.5-5
 %endif
 
 %description -n ghc-obsoletes
@@ -207,6 +211,10 @@ EOF
 
 
 %changelog
+* Tue Mar  3 2020 Jens Petersen <petersen@redhat.com> - 2.0.6-2
+- obsolete ghc-cabal-helper, ghc-cabal-plan, ghc-derive
+- unobsolete ghc-hgettext
+
 * Mon Feb 10 2020 Jens Petersen <petersen@redhat.com> - 2.0.6-1
 - ghc-deps.sh: fix prof deps for subpackages
 
