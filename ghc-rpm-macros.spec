@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.6
-Release:        2%{?dist}
+Version:        2.0.7
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -211,6 +211,9 @@ EOF
 
 
 %changelog
+* Mon Apr 27 2020 Jens Petersen <petersen@redhat.com> - 2.0.7-1
+- use -package Cabal to build Setup
+
 * Tue Mar  3 2020 Jens Petersen <petersen@redhat.com> - 2.0.6-2
 - obsolete ghc-cabal-helper, ghc-cabal-plan, ghc-derive
 - unobsolete ghc-hgettext
