@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -140,6 +140,7 @@ Obsoletes:      ghc-conduit-combinators-devel < 1.3.1
 Obsoletes:      ghc-cabal-helper < 0.8.2.0-5, ghc-cabal-helper-devel < 0.8.2.0-5, ghc-cabal-helper-prof < 0.8.2.0-5
 Obsoletes:      ghc-cabal-plan < 0.4.0.0-5, ghc-cabal-plan-devel < 0.4.0.0-5, ghc-cabal-plan-prof < 0.4.0.0-5
 Obsoletes:      ghc-derive < 2.6.5-5, ghc-derive-devel < 2.6.5-5, ghc-derive-prof < 2.6.5-5
+Obsoletes:      ghc-here < 1.2.13-17, ghc-here-devel < 1.2.13-17, ghc-here-prof < 1.2.13-17
 %endif
 
 %description -n ghc-obsoletes
@@ -211,6 +212,9 @@ EOF
 
 
 %changelog
+* Fri May  8 2020 Jens Petersen <petersen@redhat.com> - 2.0.7-2
+- obsolete ghc-here (dropped from hledger)
+
 * Mon Apr 27 2020 Jens Petersen <petersen@redhat.com> - 2.0.7-1
 - use -package Cabal to build Setup
 
