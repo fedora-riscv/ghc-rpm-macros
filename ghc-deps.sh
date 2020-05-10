@@ -30,6 +30,7 @@ for i in $files; do
             ids=$($GHC_PKG field $name $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
             for d in $ids; do
                 case $d in
+                    *-*-internal) ;;
                     *-*) echo "ghc-devel($d)" ;;
                     *) ;;
                 esac
@@ -40,6 +41,7 @@ for i in $files; do
             ids=$($GHC_PKG field $pkgver $field | sed -e "s/rts//" -e "s/bin-package-db-[^ ]\+//")
             for d in $ids; do
                 case $d in
+                    *-*-internal) ;;
                     *-*)
                         case $field in
                             id)

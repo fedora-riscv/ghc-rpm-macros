@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.7
-Release:        2%{?dist}
+Version:        2.0.8
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -212,6 +212,9 @@ EOF
 
 
 %changelog
+* Sun May 10 2020 Jens Petersen <petersen@redhat.com> - 2.0.8-1
+- ghc-deps.sh: ignore internal libraries (#1822444)
+
 * Fri May  8 2020 Jens Petersen <petersen@redhat.com> - 2.0.7-2
 - obsolete ghc-here (dropped from hledger)
 
