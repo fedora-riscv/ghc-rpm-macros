@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.8
+Version:        2.0.9
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -212,6 +212,10 @@ EOF
 
 
 %changelog
+* Thu Jun  4 2020 Jens Petersen <petersen@redhat.com> - 2.0.9-1
+- doc subpackages should own /usr/share/doc/ghc/, /usr/share/doc/ghc/html/,
+  and /usr/share/doc/ghc/html/libraries/ (#1795526)
+
 * Sun May 10 2020 Jens Petersen <petersen@redhat.com> - 2.0.8-1
 - ghc-deps.sh: ignore internal libraries (#1822444)
 
