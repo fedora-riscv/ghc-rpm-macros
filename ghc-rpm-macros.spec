@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.9
+Version:        2.0.10
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -212,6 +212,9 @@ EOF
 
 
 %changelog
+* Thu Jun 18 2020 Jens Petersen <petersen@redhat.com> - 2.0.10-1
+- cabal-tweak script now output errors to stderr
+
 * Thu Jun  4 2020 Jens Petersen <petersen@redhat.com> - 2.0.9-1
 - doc subpackages should own /usr/share/doc/ghc/, /usr/share/doc/ghc/html/,
   and /usr/share/doc/ghc/html/libraries/ (#1795526)

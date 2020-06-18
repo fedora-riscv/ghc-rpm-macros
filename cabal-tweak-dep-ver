@@ -2,11 +2,15 @@
 
 set -e +x
 
+function fail {
+    echo "$0: $1" >&2
+    exit 1
+}
+
 USAGE="Usage: $0 dep old new"
 
 if [ $# -ne 3 ]; then
-    echo "$USAGE"
-    exit 1
+    fail "$USAGE"
 fi
 
 DEP=$1
@@ -16,15 +20,13 @@ NEW=$3
 CABALFILE=$(ls *.cabal)
 
 if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
-   echo "There needs to be one .cabal file in the current dir!"
-   exit 1
+   fail "There needs to be one .cabal file in the current dir!"
 fi
 
 BREAK=[^[:alnum:]-]
 
 if ! grep -q "$BREAK$DEP$BREAK[^,]*$OLD" $CABALFILE; then
-   echo "$CABALFILE does not match: $DEP $OLD"
-   exit 1
+   fail "$CABALFILE does not match: $DEP $OLD"
 fi
 
 if [ ! -f $CABALFILE.orig ]; then

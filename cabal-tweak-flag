@@ -5,11 +5,15 @@
 
 set -e +x
 
+function fail {
+    echo "$0: $1" >&2
+    exit 1
+}
+
 USAGE="Usage: $0 FLAG [True|False]"
 
 if [ $# -ne 2 ]; then
-    echo "$USAGE"
-    exit 1
+    fail "$USAGE"
 fi
 
 FLAG=$1
@@ -24,23 +28,19 @@ esac
 CABALFILE=$(ls *.cabal)
 
 if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
-   echo "There needs to be one .cabal file in the current dir!"
-   exit 1
+   fail "There needs to be one .cabal file in the current dir!"
 fi
 
 if ! grep -q -i "^flag *$FLAG" $CABALFILE; then
-   echo "$CABALFILE does not have flag $FLAG"
-   exit 1
+   fail "$CABALFILE does not have flag $FLAG"
 fi
 
 if ! grep -A3 -i "^flag *$FLAG" $CABALFILE | grep -q -i "default:"; then
-   echo "$CABALFILE: $FLAG flag might not have a default"
-   exit 1
+   fail "$CABALFILE: $FLAG flag might not have a default"
 fi
 
 if ! grep -A3 -i "^flag *$FLAG" $CABALFILE | grep -q -i "default: *$OLD"; then
-   echo "$CABALFILE: $FLAG flag already defaults to $NEW"
-   exit 1
+   fail "$CABALFILE: $FLAG flag already defaults to $NEW"
 fi
 
 if [ ! -f $CABALFILE.orig ]; then

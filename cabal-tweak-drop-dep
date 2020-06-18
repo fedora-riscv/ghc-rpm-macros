@@ -2,11 +2,15 @@
 
 set -e +x
 
+function fail {
+    echo "$0: $1" >&2
+    exit 1
+}
+
 USAGE="Usage: $0 dep"
 
 if [ $# -ne 1 ]; then
-    echo "$USAGE"
-    exit 1
+    fail "$USAGE"
 fi
 
 DEP=$1
@@ -14,8 +18,7 @@ DEP=$1
 CABALFILE=$(ls *.cabal)
 
 if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
-   echo "There needs to be one .cabal file in the current dir!"
-   exit 1
+   fail "There needs to be one .cabal file in the current dir!"
 fi
 
 if [ ! -f $CABALFILE.orig ]; then
@@ -23,8 +26,7 @@ if [ ! -f $CABALFILE.orig ]; then
 fi
 
 if grep "$DEP" $CABALFILE | sed -e "s/$DEP//" | grep -q -e "[A-Za-z]"; then
-    echo "$0: deleting whole $DEP lines not safe - try more precise pattern"
-    exit 1
+    fail "$0: deleting whole $DEP lines not safe - try more precise pattern"
 fi
 
 sed -i$BACKUP -e "/$DEP/d" $CABALFILE

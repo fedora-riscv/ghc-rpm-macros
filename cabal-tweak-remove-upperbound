@@ -2,26 +2,28 @@
 
 set -e +x
 
+function fail {
+    echo "$0: $1" >&2
+    exit 1
+}
+
 USAGE="Usage: $0 dep"
 
 if [ $# -ne 1 ]; then
-    echo "$USAGE"
-    exit 1
+    fail "$USAGE"
 fi
 
 DEP=$1
 CABALFILE=$(ls *.cabal)
 
 if [ $(echo $CABALFILE | wc -w) -ne 1 ]; then
-   echo "There needs to be one .cabal file in the current dir!"
-   exit 1
+   fail "There needs to be one .cabal file in the current dir!"
 fi
 
 BREAK=[^[:alnum:]-]
 
 if ! grep -q "$BREAK$DEP$BREAK[^,]*" $CABALFILE; then
-   echo "$CABALFILE does not match: $DEP"
-   exit 1
+   fail "$CABALFILE does not match: $DEP"
 fi
 
 if [ ! -f $CABALFILE.orig ]; then
