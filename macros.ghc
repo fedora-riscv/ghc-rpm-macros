@@ -81,7 +81,11 @@ echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
 done\
 %endif\
 for i in %{buildroot}%{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
+if [ -x "$i" ]; then\
 echo $i >> %{basepkg}.files\
+else\
+echo 'Warning: %{buildroot}%{_ghcdynlibdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so not found'\
+fi\
 done\
 pkgdir="%{ghclibdir}/%{pkgnamever}"\
 if [ -d "%{buildroot}${pkgdir}" ]; then\
