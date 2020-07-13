@@ -150,12 +150,11 @@ This package can safely be removed.
 
 
 %prep
-%setup -c -T
-cp %{SOURCE1} %{SOURCE2} .
+%{nil}
 
 
 %build
-echo no build stage needed
+echo no build stage
 
 
 %install
