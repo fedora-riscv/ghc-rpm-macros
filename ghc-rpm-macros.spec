@@ -213,8 +213,9 @@ EOF
 
 %changelog
 * Wed Jun 24 2020 Jens Petersen <petersen@redhat.com> - 2.0.11-1
-- only add dynlib to file list if it exists
-  (this allows for metapkg subpackages)
+- handle meta subpackages:
+  - ghc_lib_subpackage -m
+  - only add dynlib to file-list if it exists
 
 * Thu Jun 18 2020 Jens Petersen <petersen@redhat.com> - 2.0.10-1
 - cabal-tweak script now output errors to stderr
