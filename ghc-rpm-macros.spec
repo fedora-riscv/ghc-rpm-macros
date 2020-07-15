@@ -150,7 +150,8 @@ This package can safely be removed.
 
 
 %prep
-%{nil}
+%setup -c -T
+cp %{SOURCE1} %{SOURCE2} .
 
 
 %build
