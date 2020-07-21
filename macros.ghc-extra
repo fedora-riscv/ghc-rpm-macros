@@ -50,6 +50,7 @@ This package provides the Haskell %{pkgname} library development files.\
 Summary:        Haskell %{pkgname} library documentation\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
+BuildArch:      noarch\
 Supplements:    (%{basepkg}-devel and ghc-doc)\
 \
 %description -n %{basepkg}-doc\

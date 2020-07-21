@@ -215,6 +215,7 @@ EOF
 
 %changelog
 * Tue Jul 21 2020 Jens Petersen <petersen@redhat.com> - 2.0.12-1
+- make doc packages noarch for subpackaging
 - obsoletes for ghc-gtksourceview2
 
 * Wed Jun 24 2020 Jens Petersen <petersen@redhat.com> - 2.0.11-1
