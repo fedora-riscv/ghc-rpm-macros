@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.12
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -142,6 +142,9 @@ Obsoletes:      ghc-derive < 2.6.5-5, ghc-derive-devel < 2.6.5-5, ghc-derive-pro
 Obsoletes:      ghc-here < 1.2.13-17, ghc-here-devel < 1.2.13-17, ghc-here-prof < 1.2.13-17
 %endif
 %if 0%{?fedora} >= 33
+Obsoletes:      ghc-easytest < 0.2.1-4, ghc-easytest-devel < 0.2.1-4, ghc-easytest-prof < 0.2.1-4,
+Obsoletes:      ghc-EdisonAPI < 1.3.1-23, ghc-EdisonAPI-devel < 1.3.1-23, ghc-EdisonAPI-prof < 1.3.1-23
+Obsoletes:      ghc-EdisonCore < 1.3.2.1-23, ghc-EdisonCore-devel < 1.3.2.1-23, ghc-EdisonCore-prof < 1.3.2.1-23
 Obsoletes:      ghc-gtksourceview2 < 0.13.3.1-14, ghc-gtksourceview2-devel < 0.13.3.1-14, ghc-gtksourceview2-prof < 0.13.3.1-14
 %endif
 
@@ -214,6 +217,9 @@ EOF
 
 
 %changelog
+* Wed Jul 22 2020 Jens Petersen <petersen@redhat.com> - 2.0.12-2
+- obsoletes for ghc-EdisonAPI, ghc-EdisonCore, ghc-easytest
+
 * Tue Jul 21 2020 Jens Petersen <petersen@redhat.com> - 2.0.12-1
 - make doc packages noarch for subpackaging
 - obsoletes for ghc-gtksourceview2
