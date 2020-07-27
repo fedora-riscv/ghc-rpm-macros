@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.12
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -217,6 +217,9 @@ EOF
 
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.12-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Wed Jul 22 2020 Jens Petersen <petersen@redhat.com> - 2.0.12-2
 - obsoletes for ghc-EdisonAPI, ghc-EdisonCore, ghc-easytest
 
