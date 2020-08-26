@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.13
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -147,6 +147,7 @@ Obsoletes:      ghc-EdisonAPI < 1.3.1-23, ghc-EdisonAPI-devel < 1.3.1-23, ghc-Ed
 Obsoletes:      ghc-EdisonCore < 1.3.2.1-23, ghc-EdisonCore-devel < 1.3.2.1-23, ghc-EdisonCore-prof < 1.3.2.1-23
 Obsoletes:      ghc-gtksourceview2 < 0.13.3.1-14, ghc-gtksourceview2-devel < 0.13.3.1-14, ghc-gtksourceview2-prof < 0.13.3.1-14
 %endif
+Obsoletes:      ghc-iwlib < 0.1.0-16, ghc-iwlib-devel < 0.1.0-16, ghc-iwlib-prof < 0.1.0-16
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -217,6 +218,9 @@ EOF
 
 
 %changelog
+* Wed Aug 26 2020 Jens Petersen <petersen@redhat.com> - 2.0.13-2
+- obsolete ghc-iwlib (xmobar)
+
 * Tue Aug  4 2020 Jens Petersen <petersen@redhat.com> - 2.0.13-1
 - disable LTO on (unregisterised) s390x (#1863601)
   to prevent linker warning flood for prof libraries
