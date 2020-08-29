@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.13
-Release:        2%{?dist}
+Version:        2.0.14
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -218,6 +218,9 @@ EOF
 
 
 %changelog
+* Sat Aug 29 2020 Jens Petersen <petersen@redhat.com> - 2.0.14-1
+- ghc-deps.sh: be careful when filtering out rts (#1873687)
+
 * Wed Aug 26 2020 Jens Petersen <petersen@redhat.com> - 2.0.13-2
 - obsolete ghc-iwlib (xmobar)
 
