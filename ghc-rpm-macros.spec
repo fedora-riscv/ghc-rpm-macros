@@ -11,7 +11,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.0.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -218,6 +218,9 @@ EOF
 
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.14-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Sat Aug 29 2020 Jens Petersen <petersen@redhat.com> - 2.0.14-1
 - ghc-deps.sh: be careful when filtering out rts (#1873687)
 
