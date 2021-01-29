@@ -12,6 +12,7 @@ print(name)\
 local pv = rpm.expand("%1")\
 print(string.sub(pv, string.find(pv, "[%d.]+$")))\
 }}\
+%global ghc_subpackages_list %{?ghc_subpackages_list} %{pkgname}-%{pkgver}\
 %{!-x:%{?1:%global ghc_packages_list %{?ghc_packages_list} %{pkgname}-%{pkgver}}}\
 %define ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}\
 %define basepkg %{ghc_prefix}-%{pkgname}\
