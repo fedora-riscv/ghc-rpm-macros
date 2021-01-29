@@ -128,14 +128,23 @@ install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.
 fi\
 %{nil}
 
+# workaround Cabal bug causing executable extra-source-files
+%ghc_fix_doc_perms\
+for f in $(ls | grep -i -e "^\(ANNOUNCE\|AUTHORS\|CHANGELOG\|CHANGES\|CONTRIBUTORS\|README\|TODO\)"); do\
+if [ -x $f ]; then chmod a-x $f; fi\
+done\
+%{nil}
+
 # ghc_bin_build
 %ghc_bin_build\
+%ghc_fix_doc_perms\
 %undefine _enable_debug_packages\
 %cabal_configure\
 %cabal build %{?ghc_smp_mflags} %{?cabal_build_options}
 
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
+%ghc_fix_doc_perms\
 %undefine _enable_debug_packages\
 %if 0%{?rhel} && 0%{?rhel} < 8\
 licensedirversion=%{?2:-%2}\
