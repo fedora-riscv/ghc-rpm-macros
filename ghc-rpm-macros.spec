@@ -10,8 +10,8 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.14
-Release:        2%{?dist}
+Version:        2.0.15
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -218,6 +218,10 @@ EOF
 
 
 %changelog
+* Sat Jan 30 2021 Jens Petersen <petersen@redhat.com> - 2.0.15-1
+- add ghc_fix_doc_perms and use it in ghc_bin_build and ghc_lib_build
+- ghc_lib_subpackage: define ghc_subpackages_list
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.14-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
