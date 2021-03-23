@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.0.15
+Version:        2.1.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -53,6 +53,14 @@ Requires:       chrpath
 %description extra
 Extra macros used for subpackaging of Haskell libraries,
 for example in ghc and haskell-platform.
+
+
+%package -n ghc-filesystem
+Summary:        Shared directories for Haskell documentation
+
+%description -n ghc-filesystem
+This package provides some common directories used for
+Haskell libraries documentation.
 
 
 # ideally packages should be obsoleted by some relevant package
@@ -140,6 +148,8 @@ install -p -D -m 0755 %{SOURCE11} %{buildroot}/%{_bindir}/cabal-tweak-drop-dep
 install -p -D -m 0755 %{SOURCE12} %{buildroot}/%{_bindir}/cabal-tweak-remove-upperbound
 install -p -D -m 0755 %{SOURCE8} %{buildroot}/%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
+mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
+
 %if 0%{?rhel} && 0%{?rhel} < 7
 cat >> %{buildroot}/%{_prefix}/lib/rpm/ghc-deps.sh <<EOF
 
@@ -168,6 +178,13 @@ EOF
 %files extra
 %{macros_dir}/macros.ghc-extra
 
+%files -n ghc-filesystem
+%dir %{_docdir}/ghc
+# %%{ghc_html_dir}
+%dir %{_docdir}/ghc/html
+# %%{ghc_html_libraries_dir}
+%dir %{_docdir}/ghc/html/libraries
+
 
 %if 0%{?fedora} >= 29
 %files -n ghc-obsoletes
@@ -175,6 +192,10 @@ EOF
 
 
 %changelog
+* Wed Mar 24 2021 Jens Petersen <petersen@redhat.com> - 2.1.0-1
+- add ghc-filesystem subpackage to own /usr/share/doc/ghc/{,html/{,libraries/}}
+  and subdirs (#1926757)
+
 * Sat Jan 30 2021 Jens Petersen <petersen@redhat.com> - 2.0.15-1
 - add ghc_fix_doc_perms and use it in ghc_bin_build and ghc_lib_build
 - ghc_lib_subpackage: define ghc_subpackages_list

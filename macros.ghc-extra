@@ -52,6 +52,7 @@ Summary:        Haskell %{pkgname} library documentation\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 BuildArch:      noarch\
+Requires:       ghc-filesystem\
 Supplements:    (%{basepkg}-devel and ghc-doc)\
 \
 %description -n %{basepkg}-doc\

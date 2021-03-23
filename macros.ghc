@@ -98,9 +98,6 @@ fi\
 ls %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
 %if %{with haddock}\
 if [ -d %{buildroot}%{ghc_html_libraries_dir}/%{pkgnamever} ]; then\
-echo %dir %{_docdir}/ghc >> %{basepkg}-doc.files\
-echo %dir %{ghc_html_dir} >> %{basepkg}-doc.files\
-echo %dir %{ghc_html_libraries_dir} >> %{basepkg}-doc.files\
 echo %{ghc_html_libraries_dir}/%{pkgnamever} >> %{basepkg}-doc.files\
 fi\
 %endif\
