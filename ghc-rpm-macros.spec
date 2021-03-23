@@ -59,49 +59,6 @@ for example in ghc and haskell-platform.
 # this is a last resort when there is no such appropriate package
 %package -n ghc-obsoletes
 Summary:        Dummy package to obsolete deprecated Haskell packages
-%if 0%{?fedora} >= 22
-# these 3 no longer build with ghc-7.8
-Obsoletes:      ghc-ForSyDe < 3.1.2, ghc-ForSyDe-devel < 3.1.2
-Obsoletes:      ghc-parameterized-data < 0.1.6
-Obsoletes:      ghc-parameterized-data-devel < 0.1.6
-Obsoletes:      ghc-type-level < 0.2.5, ghc-type-level-devel < 0.2.5
-Obsoletes:      leksah < 0.14, ghc-leksah < 0.14, ghc-leksah-devel < 0.14
-# dropped from HP 2014.2
-Obsoletes:      ghc-cgi < 3001.1.8,  ghc-cgi-devel < 3001.1.8
-%endif
-%if 0%{?fedora} >= 24
-Obsoletes:      ghc-citeproc-hs < 0.3.10-3, ghc-citeproc-hs-devel < 0.3.10-3
-Obsoletes:      ghc-hakyll < 4.5.4.0-6, ghc-hakyll-devel < 4.5.4.0-6
-Obsoletes:      ghc-leksah-server < 0.14.3.1-4, ghc-leksah-server-devel < 0.14.3.1-4
-%endif
-%if 0%{?fedora} >= 25
-Obsoletes:      ghc-cmdtheline <= 0.2.3, ghc-cmdtheline-devel <= 0.2.3
-Obsoletes:      ghc-concrete-typerep <= 0.1.0.2, ghc-concrete-typerep-devel <= 0.1.0.2
-Obsoletes:      ghc-glade <= 0.12.5.0, ghc-glade-devel <= 0.12.5.0
-Obsoletes:      bluetile <= 0.6, bluetile-core <= 0.6
-Obsoletes:      ghc-lambdabot-utils <= 4.2.2, ghc-lambdabot-utils-devel <= 4.2.2
-Obsoletes:      haddock <= 2.14.3, ghc-haddock <= 2.14.3, ghc-haddock-devel <= 2.14.3
-Obsoletes:      ghc-monad-unify <= 0.2.2, ghc-monad-unify-devel <= 0.2.2
-Obsoletes:      idris <= 0.9.9.1
-Obsoletes:      ghc-editline < 0.2.1.1-13, ghc-editline-devel < 0.2.1.1-13
-Obsoletes:      ghc-hashed-storage < 0.5.11-4, ghc-hashed-storage-devel < 0.5.11-4
-Obsoletes:      ghc-nats <= 0.2, ghc-nats-devel <= 0.2
-Obsoletes:      ghc-primes <= 0.2.1.0-11, ghc-primes-devel <= 0.2.1.0-11
-%endif
-%if 0%{?fedora} >= 26
-Obsoletes:      ghc-geniplate <= 0.6.0.5, ghc-geniplate-devel <= 0.6.0.5
-Obsoletes:      ghc-sized-types <= 0.3.4.0, ghc-sized-types-devel <= 0.3.4.0
-# dropped from HP 8.0.2
-Obsoletes:      ghc-cgi < 3001.2.2.2-5, ghc-cgi-devel < 3001.2.2.2-5
-Obsoletes:      ghc-multipart < 0.1.2-5, ghc-multipart-devel < 0.1.2-5
-%endif
-%if 0%{?fedora} >= 27
-Obsoletes:      ghc-webkit <= 0.14.2.1, ghc-webkit-devel <= 0.14.2.1
-%endif
-%if 0%{?fedora} >= 28
-Obsoletes:      ghc-fail < 4.9.0.0-2, ghc-fail-devel < 4.9.0.0-2
-Obsoletes:      ghc-ltk < 0.16, ghc-ltk-devel < 0.16
-%endif
 %if 0%{?fedora} >= 29
 Obsoletes:      ghc-content-store < 0.2.1-3, ghc-content-store-devel < 0.2.1-3
 Obsoletes:      ghc-bdcs < 0.6.1-3, ghc-bdcs-devel < 0.6.1-3
@@ -212,7 +169,7 @@ EOF
 %{macros_dir}/macros.ghc-extra
 
 
-%if 0%{?fedora} >= 22
+%if 0%{?fedora} >= 29
 %files -n ghc-obsoletes
 %endif
 
