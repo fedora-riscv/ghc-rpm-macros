@@ -36,9 +36,7 @@ Requires:       ghc-compiler
 %if %{undefined without_hscolour}
 Requires:       hscolour
 %endif
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
 BuildArch:	noarch
-%endif
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
