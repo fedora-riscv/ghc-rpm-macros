@@ -192,7 +192,10 @@ EOF
 %changelog
 * Wed Mar 24 2021 Jens Petersen <petersen@redhat.com> - 2.1.0-1
 - add ghc-filesystem subpackage to own /usr/share/doc/ghc/{,html/{,libraries/}}
-  and subdirs (#1926757)
+  (#1926757)
+- drop obsoletes from before f29
+- update url
+- fix ghc_fix_doc_perms grep regexp quoting
 
 * Sat Jan 30 2021 Jens Petersen <petersen@redhat.com> - 2.0.15-1
 - add ghc_fix_doc_perms and use it in ghc_bin_build and ghc_lib_build
