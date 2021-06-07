@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.1.0
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -190,6 +190,10 @@ EOF
 
 
 %changelog
+* Mon Jun  7 2021 Jens Petersen <petersen@redhat.com> - 2.2.0-1
+- ghc_fix_rpaths macro deletes all RPATHs, replacing ghc_fix_rpath(), for
+  https://fedoraproject.org/wiki/Changes/Broken_RPATH_will_fail_rpmbuild
+
 * Wed Mar 24 2021 Jens Petersen <petersen@redhat.com> - 2.1.0-1
 - add ghc-filesystem subpackage to own /usr/share/doc/ghc/{,html/{,libraries/}}
   (#1926757)
