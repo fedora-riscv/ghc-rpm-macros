@@ -191,7 +191,7 @@ EOF
 
 %changelog
 * Mon Jun  7 2021 Jens Petersen <petersen@redhat.com> - 2.2.0-1
-- ghc_fix_rpaths macro deletes all RPATHs, replacing ghc_fix_rpath(), for
+- ghc_delete_rpaths macro replaces ghc_fix_rpath(), needed for
   https://fedoraproject.org/wiki/Changes/Broken_RPATH_will_fail_rpmbuild
 
 * Wed Mar 24 2021 Jens Petersen <petersen@redhat.com> - 2.1.0-1
