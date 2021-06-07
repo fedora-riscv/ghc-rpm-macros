@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.2.0
+Version:        2.2.1
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -33,6 +33,7 @@ Source12:       cabal-tweak-remove-upperbound
 Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
+Requires:       chrpath
 %if %{undefined without_hscolour}
 Requires:       hscolour
 %endif
@@ -46,7 +47,6 @@ of the Fedora Haskell SIG.
 %package extra
 Summary:        Extra RPM macros for building Haskell library subpackages
 Requires:       %{name} = %{version}-%{release}
-Requires:       chrpath
 
 %description extra
 Extra macros used for subpackaging of Haskell libraries,
@@ -190,6 +190,9 @@ EOF
 
 
 %changelog
+* Tue Jun  8 2021 Jens Petersen <petersen@redhat.com> - 2.2.1-1
+- ghc-rpm-macros needs to require chrpath now instead of ghc-rpm-macros-extra
+
 * Mon Jun  7 2021 Jens Petersen <petersen@redhat.com> - 2.2.0-1
 - ghc_delete_rpaths macro replaces ghc_fix_rpath(), needed for
   https://fedoraproject.org/wiki/Changes/Broken_RPATH_will_fail_rpmbuild
