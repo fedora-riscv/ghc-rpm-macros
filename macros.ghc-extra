@@ -119,5 +119,4 @@ ver=$(echo $i | sed -e "s/.*-\\(.*\\)/\\1/")\
 %ghc_lib_install $name $ver\
 cd ..\
 done\
-%ghc_fix_rpath $args\
 %{nil}

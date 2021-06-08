@@ -10,7 +10,7 @@
 #%%global without_hscolour 1
 
 Name:           ghc-rpm-macros
-Version:        2.2.1
+Version:        2.2.2
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -190,6 +190,10 @@ EOF
 
 
 %changelog
+* Tue Jun  8 2021 Jens Petersen <petersen@redhat.com> - 2.2.2-1
+- restore ghc_fix_rpath for now for backward compatibility
+  and drop it from ghc_libs_install
+
 * Tue Jun  8 2021 Jens Petersen <petersen@redhat.com> - 2.2.1-1
 - ghc-rpm-macros needs to require chrpath now instead of ghc-rpm-macros-extra
 
