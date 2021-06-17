@@ -6,12 +6,9 @@
 %global macros_dir %{_sysconfdir}/rpm
 %endif
 
-# uncomment to bootstrap without hscolour
-#%%global without_hscolour 1
-
 Name:           ghc-rpm-macros
 Version:        2.2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -34,9 +31,6 @@ Requires:       redhat-rpm-config
 # for ghc_version
 Requires:       ghc-compiler
 Requires:       chrpath
-%if %{undefined without_hscolour}
-Requires:       hscolour
-%endif
 BuildArch:	noarch
 
 %description
@@ -190,6 +184,9 @@ EOF
 
 
 %changelog
+* Thu Jun 17 2021 Jens Petersen <petersen@redhat.com> - 2.2.2-2
+- haddock has not used hscolour for a long time
+
 * Tue Jun  8 2021 Jens Petersen <petersen@redhat.com> - 2.2.2-1
 - restore ghc_fix_rpath for now for backward compatibility
   and drop it from ghc_libs_install
