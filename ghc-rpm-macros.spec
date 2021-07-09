@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.2.2
-Release:        2%{?dist}
+Version:        2.2.3
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Sat Jul 10 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-1
+- fix ghc_fix_doc_perms only to touch files not dirs
+
 * Thu Jun 17 2021 Jens Petersen <petersen@redhat.com> - 2.2.2-2
 - haddock has not used hscolour for a long time
 

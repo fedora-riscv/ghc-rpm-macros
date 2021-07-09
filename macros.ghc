@@ -128,7 +128,7 @@ fi\
 # workaround Cabal bug causing executable extra-source-files
 %ghc_fix_doc_perms\
 for f in $(ls | grep -i -e '^\\(ANNOUNCE\\|AUTHORS\\|CHANGELOG\\|CHANGES\\|CONTRIBUTORS\\|README\\|TODO\\)'); do\
-if [ -x $f ]; then chmod a-x $f; fi\
+if [ -f $f -a -x $f ]; then chmod a-x $f; fi\
 done\
 %{nil}
 
