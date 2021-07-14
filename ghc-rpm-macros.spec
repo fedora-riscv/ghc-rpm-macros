@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -70,15 +70,6 @@ Obsoletes:      ghc-hoopl < 3.10.2.2-74, ghc-hoopl-devel < 3.10.2.2-74
 # language-ecmascript
 Obsoletes:      ghc-tagshare < 0.0-10, ghc-tagshare-devel < 0.0-10
 Obsoletes:      ghc-testing-feat < 0.4.0.3-10, ghc-testing-feat-devel < 0.4.0.3-10
-# haskell-platform
-Obsoletes :     ghc-fixed < 0.2.1.1-16, ghc-fixed-devel < 0.2.1.1-16
-Obsoletes :     ghc-GLURaw < 2.0.0.4, ghc-GLURaw-devel < 2.0.0.4
-Obsoletes :     ghc-GLUT < 2.7.0.13, ghc-GLUT-devel < 2.7.0.13
-Obsoletes :     ghc-half < 0.3, ghc-half-devel < 0.3
-Obsoletes :     ghc-haskell-src < 1.0.3.0, ghc-haskell-src-devel < 1.0.3.0
-Obsoletes :     ghc-ObjectName < 1.1.0.1-16, ghc-ObjectName-devel < 1.1.0.1-16
-Obsoletes :     ghc-OpenGL < 3.0.2.1, ghc-OpenGL-devel < 3.0.2.1
-Obsoletes :     ghc-OpenGLRaw < 3.2.6.0, ghc-OpenGLRaw-devel < 3.2.6.0
 # enumerator
 Obsoletes:      ghc-enumerator < 0.4.20-12, ghc-enumerator-devel < 0.4.20-12
 Obsoletes:      ghc-attoparsec-enumerator < 0.3.4-10, ghc-attoparsec-enumerator-devel < 0.3.4-10
@@ -94,7 +85,6 @@ Obsoletes:      ghc-conduit-combinators < 1.3.1
 Obsoletes:      ghc-conduit-combinators-devel < 1.3.1
 %endif
 %if 0%{?fedora} >= 32
-Obsoletes:      ghc-cabal-plan < 0.4.0.0-5, ghc-cabal-plan-devel < 0.4.0.0-5, ghc-cabal-plan-prof < 0.4.0.0-5
 Obsoletes:      ghc-derive < 2.6.5-5, ghc-derive-devel < 2.6.5-5, ghc-derive-prof < 2.6.5-5
 Obsoletes:      ghc-here < 1.2.13-17, ghc-here-devel < 1.2.13-17, ghc-here-prof < 1.2.13-17
 %endif
@@ -184,6 +174,10 @@ EOF
 
 
 %changelog
+* Wed Jul 14 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-2
+- drop obsoletes for haskell-platform GL graphics libraries
+  which have been packaged and cabal-plan
+
 * Sat Jul 10 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-1
 - fix ghc_fix_doc_perms only to touch files not dirs
 
