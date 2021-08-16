@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.2.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -95,6 +95,13 @@ Obsoletes:      ghc-EdisonCore < 1.3.2.1-23, ghc-EdisonCore-devel < 1.3.2.1-23, 
 Obsoletes:      ghc-gtksourceview2 < 0.13.3.1-14, ghc-gtksourceview2-devel < 0.13.3.1-14, ghc-gtksourceview2-prof < 0.13.3.1-14
 %endif
 Obsoletes:      ghc-iwlib < 0.1.0-16, ghc-iwlib-devel < 0.1.0-16, ghc-iwlib-prof < 0.1.0-16
+%if 0%{?fedora} >= 35
+Obsoletes:      pandoc-citeproc < 0.18, ghc-pandoc-citeproc < 0.18, ghc-pandoc-citeproc-devel < 0.18, ghc-pandoc-citeproc-doc < 0.18, ghc-pandoc-citeproc-prof < 0.18, pandoc-citeproc-common < 0.18
+Obsoletes:      ghc-HsYAML-aeson < 0.2.0.1, ghc-HsYAML-aeson-devel < 0.2.0.1, ghc-HsYAML-aeson-doc < 0.2.0.1, ghc-HsYAML-aeson-prof < 0.2.0.1
+Obsoletes:      ghc-chalmers-lava2000 < 1.6.2, ghc-chalmers-lava2000-devel < 1.6.2, ghc-chalmers-lava2000-doc < 1.6.2, ghc-chalmers-lava2000-prof < 1.6.2
+Obsoletes:      ghc-codec-rpm < 0.2.3, ghc-codec-rpm-devel < 0.2.3, ghc-codec-rpm-doc < 0.2.3, ghc-codec-rpm-prof < 0.2.3
+Obsoletes:      ghc-cpio-conduit < 0.7.1, ghc-cpio-conduit-devel < 0.7.1, ghc-cpio-conduit-doc < 0.7.1, ghc-cpio-conduit-prof < 0.7.1
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -174,6 +181,10 @@ EOF
 
 
 %changelog
+* Tue Aug 17 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-4
+- F35 obsoletes for pandoc-citeproc, HsYAML-aeson, chalmers-lava2000,
+  cpio-conduit, and codec-rpm
+
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.2.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
