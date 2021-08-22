@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.2.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -97,10 +97,12 @@ Obsoletes:      ghc-gtksourceview2 < 0.13.3.1-14, ghc-gtksourceview2-devel < 0.1
 Obsoletes:      ghc-iwlib < 0.1.0-16, ghc-iwlib-devel < 0.1.0-16, ghc-iwlib-prof < 0.1.0-16
 %if 0%{?fedora} >= 35
 Obsoletes:      pandoc-citeproc < 0.18, ghc-pandoc-citeproc < 0.18, ghc-pandoc-citeproc-devel < 0.18, ghc-pandoc-citeproc-doc < 0.18, ghc-pandoc-citeproc-prof < 0.18, pandoc-citeproc-common < 0.18
+Obsoletes:      ghc-base-noprelude < 4.13.0.1, ghc-base-noprelude-devel < 4.13.0.1, ghc-base-noprelude-doc < 4.13.0.1, ghc-base-noprelude-prof < 4.13.0.1
 Obsoletes:      ghc-HsYAML-aeson < 0.2.0.1, ghc-HsYAML-aeson-devel < 0.2.0.1, ghc-HsYAML-aeson-doc < 0.2.0.1, ghc-HsYAML-aeson-prof < 0.2.0.1
 Obsoletes:      ghc-chalmers-lava2000 < 1.6.2, ghc-chalmers-lava2000-devel < 1.6.2, ghc-chalmers-lava2000-doc < 1.6.2, ghc-chalmers-lava2000-prof < 1.6.2
 Obsoletes:      ghc-codec-rpm < 0.2.3, ghc-codec-rpm-devel < 0.2.3, ghc-codec-rpm-doc < 0.2.3, ghc-codec-rpm-prof < 0.2.3
 Obsoletes:      ghc-cpio-conduit < 0.7.1, ghc-cpio-conduit-devel < 0.7.1, ghc-cpio-conduit-doc < 0.7.1, ghc-cpio-conduit-prof < 0.7.1
+Obsoletes:      ghc-failure < 0.2.0.4, ghc-failure-devel < 0.2.0.4, ghc-failure-doc < 0.2.0.4, ghc-failure-prof < 0.2.0.4
 %endif
 
 %description -n ghc-obsoletes
@@ -181,6 +183,9 @@ EOF
 
 
 %changelog
+* Mon Aug 23 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-5
+- add F35 obsoletes for base-noprelude and failure
+
 * Tue Aug 17 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-4
 - F35 obsoletes for pandoc-citeproc, HsYAML-aeson, chalmers-lava2000,
   cpio-conduit, and codec-rpm
