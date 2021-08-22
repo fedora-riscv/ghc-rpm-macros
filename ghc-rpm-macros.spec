@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.2.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -103,6 +103,7 @@ Obsoletes:      ghc-chalmers-lava2000 < 1.6.2, ghc-chalmers-lava2000-devel < 1.6
 Obsoletes:      ghc-codec-rpm < 0.2.3, ghc-codec-rpm-devel < 0.2.3, ghc-codec-rpm-doc < 0.2.3, ghc-codec-rpm-prof < 0.2.3
 Obsoletes:      ghc-cpio-conduit < 0.7.1, ghc-cpio-conduit-devel < 0.7.1, ghc-cpio-conduit-doc < 0.7.1, ghc-cpio-conduit-prof < 0.7.1
 Obsoletes:      ghc-failure < 0.2.0.4, ghc-failure-devel < 0.2.0.4, ghc-failure-doc < 0.2.0.4, ghc-failure-prof < 0.2.0.4
+Obsoletes:      ghc-attempt < 0.4.0.2, ghc-attempt-devel < 0.4.0.2, ghc-attempt-doc < 0.4.0.2, ghc-attempt-prof < 0.4.0.2
 %endif
 
 %description -n ghc-obsoletes
@@ -183,6 +184,9 @@ EOF
 
 
 %changelog
+* Mon Aug 23 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-6
+- F35 obsoletes for attempt
+
 * Mon Aug 23 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-5
 - add F35 obsoletes for base-noprelude and failure
 
