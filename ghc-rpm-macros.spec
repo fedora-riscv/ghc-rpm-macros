@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.2.3
-Release:        6%{?dist}
+Version:        2.2.4
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Thu Sep  9 2021 Jens Petersen <petersen@redhat.com> - 2.2.4-1
+- cabal_configure: add -fhide-source-paths to ghc-options
+
 * Mon Aug 23 2021 Jens Petersen <petersen@redhat.com> - 2.2.3-6
 - F35 obsoletes for attempt
 
