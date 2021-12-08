@@ -164,17 +164,12 @@ fi\
 
 # install bin package
 %ghc_bin_install()\
-%{!?_fileattrsdir:%global _use_internal_dependency_generator 0}\
-%{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
 %ghc_delete_rpaths\
 %{nil}
 
 # ghc_lib_install [name] [version]
 %ghc_lib_install()\
-%{!?_fileattrsdir:%global _use_internal_dependency_generator 0}\
-%{!?_fileattrsdir:%global __find_provides %{_rpmconfigdir}/rpmdeps --provides}\
-%{!?_fileattrsdir:%global __find_requires %{_rpmconfigdir}/ghc-deps.sh %{buildroot}%{ghclibdir}}\
 %cabal_install\
 %cabal_pkg_conf %{?1} %{?2}\
 %ghc_gen_filelists %{?1} %{?2}\
