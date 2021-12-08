@@ -1,12 +1,16 @@
 #!/bin/sh
 # find rpm provides and requires for Haskell GHC libraries
 
-[ $# -ne 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghclibdir}" && exit 1
+[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghclibdir} [%{?ghc_name}]" && exit 1
 
 set +x
 
 MODE=$1
 PKGBASEDIR=$2
+if [ -z "$3" -o "$3" = "ghc" ];
+then GHCPREFIX=ghc
+else GHCPREFIX=$(basename $PKGBASEDIR)
+fi
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 
 GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
@@ -25,13 +29,13 @@ for i in $files; do
     meta=""
     case $i in
         # exclude rts.conf
-        $pkgconfdir/*-*.conf)
+        $PKGCONFDIR/*-*.conf)
             name=$(grep "^name: " $i | sed -e "s/name: //")
             ids=$($GHC_PKG field $name $field | sed -e "s/ rts\b//" -e "s/bin-package-db-[^ ]\+//")
             for d in $ids; do
                 case $d in
                     *-*-internal) ;;
-                    *-*) echo "ghc-devel($d)" ;;
+                    *-*) echo "$GHCPREFIX-devel($d)" ;;
                     *) ;;
                 esac
             done
@@ -45,11 +49,11 @@ for i in $files; do
                     *-*)
                         case $field in
                             id)
-                                echo "ghc-prof($d)"
+                                echo "$GHCPREFIX-prof($d)"
                                 ;;
                             *)
                                 if [ -f /usr/lib*/ghc-*/*/libHS${d}_p.a -o -f $PKGBASEDIR/*/libHS${d}_p.a ]; then
-                                    echo "ghc-prof($d)"
+                                    echo "$GHCPREFIX-prof($d)"
                                 fi
                                 ;;
                         esac
