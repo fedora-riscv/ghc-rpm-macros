@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.0
+Version:        2.3.1
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Fri Dec 17 2021 Jens Petersen <petersen@redhat.com> - 2.3.1-1
+- ghc_gen_filelists: support ghc Hadrian install
+
 * Wed Dec  8 2021 Jens Petersen <petersen@redhat.com> - 2.3.0-1
 - support fileattrs dependency generation for ghc9.2
 - drop dependency generation for rhel6
