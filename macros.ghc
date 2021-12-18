@@ -64,6 +64,14 @@ fi\
 
 %_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
+# needed for Cabal ppc64le
+%ghc_arch\
+%ifarch ppc64le\
+ppc64\
+%else\
+%{_arch}\
+%endif
+
 # ghc_gen_filelists [name] [version]
 %ghc_gen_filelists()\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
@@ -71,7 +79,7 @@ fi\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
 %define ghcliblib %{ghclibdir}%{?with_hadrian:/lib}\
-%define ghclibplatform %{ghcliblib}%{?with_hadrian:/%{_arch}-linux-ghc-%{ghc_version}}\
+%define ghclibplatform %{ghcliblib}%{?with_hadrian:/%{ghc_arch}-linux-ghc-%{ghc_version}}\
 if [ -z "$(ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf)" ]; then\
 echo '%{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf not found'\
 exit 1\

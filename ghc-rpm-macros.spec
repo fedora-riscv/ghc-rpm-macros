@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.1
+Version:        2.3.2
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Sat Dec 18 2021 Jens Petersen <petersen@redhat.com> - 2.3.2-1
+- Cabal uses ppc64 in paths for ppc64le
+
 * Fri Dec 17 2021 Jens Petersen <petersen@redhat.com> - 2.3.1-1
 - ghc_gen_filelists: support ghc Hadrian install
 
