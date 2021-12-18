@@ -186,6 +186,7 @@ EOF
 %changelog
 * Sat Dec 18 2021 Jens Petersen <petersen@redhat.com> - 2.3.2-1
 - Cabal uses ppc64 in paths for ppc64le
+- fix ghc-deps.sh dependency generation for Hadrian
 
 * Fri Dec 17 2021 Jens Petersen <petersen@redhat.com> - 2.3.1-1
 - ghc_gen_filelists: support ghc Hadrian install
