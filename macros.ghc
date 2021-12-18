@@ -72,14 +72,16 @@ ppc64\
 %{_arch}\
 %endif
 
+%ghcliblib %{ghclibdir}%{?with_hadrian:/lib}
+
+%ghclibplatform %{ghcliblib}%{?with_hadrian:/%{ghc_arch}-linux-ghc-%{ghc_version}}
+
 # ghc_gen_filelists [name] [version]
 %ghc_gen_filelists()\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
 %define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
-%define ghcliblib %{ghclibdir}%{?with_hadrian:/lib}\
-%define ghclibplatform %{ghcliblib}%{?with_hadrian:/%{ghc_arch}-linux-ghc-%{ghc_version}}\
 if [ -z "$(ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf)" ]; then\
 echo '%{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf not found'\
 exit 1\
