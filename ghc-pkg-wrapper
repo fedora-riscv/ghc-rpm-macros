@@ -1,13 +1,16 @@
 #!/bin/sh
 
-[ $# -lt 1 ] && echo "Usage: `basename $0` %{buildroot}%{ghclibdir} ..." && exit 1
+[ $# -lt 1 ] && echo "Usage: `basename $0` %{buildroot}%{ghcliblib} ..." && exit 1
 
 set +x
 
 PKGBASEDIR=$1
 shift
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
-GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
+case $(basename "$PKGBASEDIR") in
+    lib) GHC_VER=$(basename $(dirname $PKGBASEDIR) | sed -e s/ghc-//) ;;
+    *)  GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//) ;;
+esac
 
 # for a ghc build use the new ghc-pkg
 INPLACE_GHCPKG=$PKGBASEDIR/../../bin/ghc-pkg-$GHC_VER
