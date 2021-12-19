@@ -1,34 +1,21 @@
 #!/bin/sh
 
-[ $# -lt 1 ] && echo "Usage: `basename $0` %{buildroot}%{ghcliblib} ..." && exit 1
+[ $# -lt 1 ] && echo "Usage: `basename $0` %{buildroot}%{ghclibdir} ..." && exit 1
 
 set +x
 
 PKGBASEDIR=$1
 shift
-PKGCONFDIR=$PKGBASEDIR/package.conf.d
-case $(basename "$PKGBASEDIR") in
-    lib) GHC_VER=$(basename $(dirname $PKGBASEDIR) | sed -e s/ghc-//) ;;
-    *)  GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//) ;;
-esac
+if [ -d $PKGBASEDIR/lib ];
+then PKGCONFDIR=$PKGBASEDIR/lib/package.conf.d
+else PKGCONFDIR=$PKGBASEDIR/package.conf.d
+fi
 
 # for a ghc build use the new ghc-pkg
-INPLACE_GHCPKG=$PKGBASEDIR/../../bin/ghc-pkg-$GHC_VER
-
-if [ -x "$INPLACE_GHCPKG" ]; then
-    case $GHC_VER in
-        7.4.*)
-            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-conf=$PKGCONFDIR"
-            ;;
-        7.6.*)
-            GHC_PKG="$PKGBASEDIR/ghc-pkg --global-package-db=$PKGCONFDIR"
-            ;;
-        # 7.8 and 7.10
-        *)
-            GHC_PKG="env LD_LIBRARY_PATH=$(dirname $PKGBASEDIR) $PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
-            ;;
-    esac
+if [ -x "$PKGBASEDIR/bin/ghc-pkg" ]; then
+    GHC_PKG="env LD_LIBRARY_PATH=$(dirname $PKGBASEDIR) $PKGBASEDIR/bin/ghc-pkg --global-package-db=$PKGCONFDIR"
 else
+    GHC_VER=$(basename $PKGBASEDIR | sed -e s/ghc-//)
     GHC_PKG="/usr/bin/ghc-pkg-${GHC_VER} -f $PKGCONFDIR"
 fi
 
