@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.4
+Version:        2.3.5
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Sun Dec 19 2021 Jens Petersen <petersen@redhat.com> - 2.3.5-1
+- Hadrian haddock dirs are not versioned
+
 * Sun Dec 19 2021 Jens Petersen <petersen@redhat.com> - 2.3.4-1
 - move Cabal_arch into ghclibplatform macro
 

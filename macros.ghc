@@ -101,8 +101,9 @@ touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
 ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
 %if %{with haddock}\
-if [ -d %{buildroot}%{ghc_html_libraries_dir}/%{pkgnamever} ]; then\
-echo %{ghc_html_libraries_dir}/%{pkgnamever} >> %{basepkg}-doc.files\
+haddock_dir=%{ghc_html_libraries_dir}/%{?with_hadrian:%pkgname}%{!?with_hadrian:%pkgnamever}\
+if [ -d %{buildroot}$haddock_dir ]; then\
+echo $haddock_dir >> %{basepkg}-doc.files\
 fi\
 %endif\
 for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-doc.files %{basepkg}-prof.files; do\
