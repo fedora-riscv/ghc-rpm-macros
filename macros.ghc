@@ -236,7 +236,6 @@ done\
 done\
 %endif
 
-# deprecated for f31
 %ghc_pkg_recache %{_bindir}/ghc-pkg-%{ghc_version} recache --no-user-package-db || :
 
 # skip prof libs and documentation
