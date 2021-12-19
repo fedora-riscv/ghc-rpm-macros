@@ -1,7 +1,7 @@
 #!/bin/sh
 # find rpm provides and requires for Haskell GHC libraries
 
-[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghcliblib} [%{?ghc_name}]" && exit 1
+[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghclibdir} [%{?ghc_name}]" && exit 1
 
 set +x
 
@@ -11,7 +11,12 @@ if [ -z "$3" ];
 then GHCPREFIX=ghc
 else GHCPREFIX=$3
 fi
-PKGCONFDIR=$PKGBASEDIR/package.conf.d
+if [ -d $PKGBASEDIR/lib ];
+then PKGBASELIB=$PKGBASEDIR/lib
+     LIB=lib/
+else PKGBASELIB=$PKGBASEDIR
+fi
+PKGCONFDIR=$PKGBASELIB/package.conf.d
 
 GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
 
@@ -52,7 +57,7 @@ for i in $files; do
                                 echo "$GHCPREFIX-prof($d)"
                                 ;;
                             *)
-                                if [ -f /usr/lib*/ghc-*/*/libHS${d}_p.a -o -f $PKGBASEDIR/*/libHS${d}_p.a ]; then
+                                if [ -f /usr/lib*/ghc-*/$LIB*/libHS${d}_p.a -o -f $PKGBASELIB/*/libHS${d}_p.a ]; then
                                     echo "$GHCPREFIX-prof($d)"
                                 fi
                                 ;;
