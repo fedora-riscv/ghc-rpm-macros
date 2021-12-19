@@ -64,12 +64,9 @@ fi\
 
 %_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
-# needed for Cabal ppc64le
-%Cabal_arch %(arch | sed -e "s/ppc64le/ppc64/")
-
 %ghcliblib %{ghclibdir}%{?with_hadrian:/lib}
 
-%ghclibplatform %{ghcliblib}%{?with_hadrian:/%{Cabal_arch}-linux-ghc-%{ghc_version}}
+%ghclibplatform %{ghcliblib}%{?with_hadrian:/%(arch | sed -e "s/ppc64le/ppc64/")-linux-ghc-%{ghc_version}}
 
 # ghc_gen_filelists [name] [version]
 %ghc_gen_filelists()\
