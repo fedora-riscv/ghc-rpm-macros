@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.6
+Version:        2.3.7
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Mon Dec 20 2021 Jens Petersen <petersen@redhat.com> - 2.3.7-1
+- ghclibplatform: Cabal uses i386 for i686
+
 * Mon Dec 20 2021 Jens Petersen <petersen@redhat.com> - 2.3.6-1
 - fix missing Hadrian ghc dependency generation
 
