@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.8
+Version:        2.3.9
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Mon Dec 20 2021 Jens Petersen <petersen@redhat.com> - 2.3.9-1
+- ghc-deps.sh: only exclude unversioned rts.conf
+
 * Mon Dec 20 2021 Jens Petersen <petersen@redhat.com> - 2.3.8-1
 - _arch fits Cabal better for ghclibplatform
 
