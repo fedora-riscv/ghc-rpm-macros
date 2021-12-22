@@ -65,10 +65,11 @@ fi\
 %_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
 # needed for Cabal ppc64le
-%ifarch ppc64le
-%ghc_arch ppc64
-%else
-%ghc_arch %{_arch}
+%ghc_arch\
+%ifarch ppc64le\
+ppc64\
+%else\
+%{_arch}\
 %endif
 
 # ghc_gen_filelists [name] [version]
