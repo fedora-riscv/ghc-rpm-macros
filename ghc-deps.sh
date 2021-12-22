@@ -1,15 +1,15 @@
 #!/bin/sh
 # find rpm provides and requires for Haskell GHC libraries
 
-[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghclibdir} [%{?ghc_name}]" && exit 1
+[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghcliblib} [%{?ghc_name}]" && exit 1
 
 set +x
 
 MODE=$1
 PKGBASEDIR=$2
-if [ -z "$3" -o "$3" = "ghc" ];
+if [ -z "$3" ];
 then GHCPREFIX=ghc
-else GHCPREFIX=$(basename $PKGBASEDIR)
+else GHCPREFIX=$3
 fi
 PKGCONFDIR=$PKGBASEDIR/package.conf.d
 

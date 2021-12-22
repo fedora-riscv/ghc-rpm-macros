@@ -128,10 +128,10 @@ done\
 if [ -d %{pkgnamever}.conf ]; then\
 for i in $(ls "%{pkgnamever}.conf/"); do\
 sub=$(echo $i | sed -e "s/^[0-9]\\+-//")\
-install -D --mode=0644 %{pkgnamever}.conf/${i} %{buildroot}%{ghclibdir}/package.conf.d/${sub}.conf\
+install -D --mode=0644 %{pkgnamever}.conf/${i} %{buildroot}%{ghcliblib}/package.conf.d/${sub}.conf\
 done\
 else\
-install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghclibdir}/package.conf.d/%{pkgnamever}.conf\
+install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}.conf\
 fi\
 %{nil}
 
@@ -214,11 +214,11 @@ for lib in %*; do\
          *$PWD/$lib/dist/build*)\
          case %{ghc_version} in\
               7.10.*)\
-                pkgid=$(cd %{buildroot}%{ghclibdir}/package.conf.d; ls ${lib}* | sed -e "s/.conf$//")\
-                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --global --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $pkgid library-dirs) ;;\
+                pkgid=$(cd %{buildroot}%{ghcliblib}/package.conf.d; ls ${lib}* | sed -e "s/.conf$//")\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghcliblib} --global --package-db=%{buildroot}%{ghcliblib}/package.conf.d field $pkgid library-dirs) ;;\
               8.0)\
                 pkgid=$(cd %{buildroot}%{ghclibdir}; echo ${lib}*)\
-                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghclibdir} --global --package-db=%{buildroot}%{ghclibdir}/package.conf.d field $lib library-dirs | grep $pkgid) ;;\
+                syspath=$(%{_rpmconfigdir}/ghc-pkg-wrapper %{buildroot}%{ghcliblib} --global --package-db=%{buildroot}%{ghcliblib}/package.conf.d field $lib library-dirs | grep $pkgid) ;;\
               *)\
                 syspath="" ;;\
          esac\
