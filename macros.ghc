@@ -45,7 +45,7 @@ fi\
 %ghc_pkgdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
 # root dir for ghc docs (used by ghc.spec)
-%ghc_html_dir %{_docdir}/ghc/html
+%ghc_html_dir %{_docdir}/%{?ghc_name}%{!?ghc_name:ghc}/html
 # deprecates
 %ghcdocbasedir %ghc_html_dir
 
