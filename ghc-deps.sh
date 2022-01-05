@@ -36,7 +36,7 @@ for i in $files; do
         # exclude rts.conf
         $PKGCONFDIR/*-*.conf)
             name=$(grep "^name: " $i | sed -e "s/name: //")
-            ids=$($GHC_PKG field $name $field | sed -e "s/ rts / /")
+            ids=$($GHC_PKG field $name $field | sed -e "s/\(^\| \)rts\( \|$\)/ /")
             for d in $ids; do
                 case $d in
                     *-*-internal) ;;
@@ -47,7 +47,7 @@ for i in $files; do
             ;;
         */libHS*_p.a)
             pkgver=$(basename $(dirname $i))
-            ids=$($GHC_PKG field $pkgver $field | sed -e "s/ rts / /" -e "s/bin-package-db-[^ ]\+//")
+            ids=$($GHC_PKG field $pkgver $field | sed -e "s/\(^\| \)rts\( \|$\)/ /" -e "s/bin-package-db-[^ ]\+//")
             for d in $ids; do
                 case $d in
                     *-*-internal) ;;
