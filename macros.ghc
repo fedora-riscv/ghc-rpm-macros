@@ -19,6 +19,7 @@ CFLAGS="${CFLAGS:-$(echo %optflags | sed -e 's/-Wall //' -e 's/-Werror=format-se
 CFLAGS="${CFLAGS:-%optflags}"\
 %endif\
 export CFLAGS\
+%undefine _package_note_flags\
 %global _hardened_ldflags %{nil}\
 export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\
 %{nil}
