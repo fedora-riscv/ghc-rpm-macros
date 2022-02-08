@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.12
+Version:        2.3.13
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,8 +184,14 @@ EOF
 
 
 %changelog
+* Tue Feb  8 2022 Jens Petersen <petersen@redhat.com> - 2.3.13-1
+- ghc_set_gcc_flags: disable _lto_cflags for all archs
+  to address missing symbol linking errors across packages
+  (particularly those using FFI)
+
 * Fri Jan 21 2022 Jens Petersen <petersen@redhat.com> - 2.3.12-1
-- disable package notes since breaks all Haskell packages (#2043092)
+- disable package notes which broke all Haskell package builds (#2043092)
+  https://fedoraproject.org/wiki/Changes/Package_information_on_ELF_objects
 
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.11-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
