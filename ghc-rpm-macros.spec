@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.13
+Version:        2.3.14
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,10 @@ EOF
 
 
 %changelog
+* Sat Feb 12 2022 Jens Petersen <petersen@redhat.com> - 2.3.14-1
+- ghc_set_gcc_flags: also sed CFLAGS when preset in F36
+  because of https://fedoraproject.org/wiki/Changes/SetBuildFlagsBuildCheck
+
 * Tue Feb  8 2022 Jens Petersen <petersen@redhat.com> - 2.3.13-1
 - ghc_set_gcc_flags: disable _lto_cflags for all archs
   to address missing symbol linking errors across packages
