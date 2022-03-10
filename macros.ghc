@@ -12,6 +12,7 @@ LANG=C.utf8\
 
 %ghc_set_gcc_flags\
 %global _lto_cflags %{nil}\
+%global __brp_strip_lto %{nil}\
 # -Wunused-label is extremely noisy\
 %ifarch s390x\
 CFLAGS="$(echo ${CFLAGS:-%optflags} | sed -e 's/-Wall //' -e 's/-Werror=format-security //')"\

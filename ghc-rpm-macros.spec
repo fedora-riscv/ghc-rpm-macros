@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.14
+Version:        2.3.15
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -184,6 +184,9 @@ EOF
 
 
 %changelog
+* Thu Mar 10 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-1
+- ghc_set_gcc_flags: disable brp-strip-lto to avoid strip timestamp warnings
+
 * Sat Feb 12 2022 Jens Petersen <petersen@redhat.com> - 2.3.14-1
 - ghc_set_gcc_flags: also sed CFLAGS when preset in F36
   because of https://fedoraproject.org/wiki/Changes/SetBuildFlagsBuildCheck
