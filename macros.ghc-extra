@@ -21,7 +21,7 @@ print(string.sub(pv, string.find(pv, "[%d.]+$")))\
 Summary:        Haskell %{pkgname} library\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
-Url:            http://hackage.haskell.org/package/%{pkgname}\
+Url:            https://hackage.haskell.org/package/%{pkgname}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(%{ghc_prefix}-[^, ]*\\)-devel/\\1/g")}\
 \
 %description -n %{basepkg}\

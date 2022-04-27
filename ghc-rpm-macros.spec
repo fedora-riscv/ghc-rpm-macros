@@ -184,6 +184,10 @@ EOF
 
 
 %changelog
+* Wed Apr 27 2022 Tim Landscheidt <tim@tim-landscheidt.de>
+- Update license from https://www.gnu.org/licenses/
+- Use https for subpackage URLs
+
 * Thu Mar 10 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-1
 - ghc_set_gcc_flags: disable brp-strip-lto to avoid strip timestamp warnings
 
