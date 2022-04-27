@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.3.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -28,10 +28,9 @@ Source10:       Setup.hs
 Source11:       cabal-tweak-drop-dep
 Source12:       cabal-tweak-remove-upperbound
 Requires:       redhat-rpm-config
-# for ghc_version
-Requires:       ghc-compiler
+# ghc_version needs ghc-compiler or ghcX.Y-compiler-default
 Requires:       chrpath
-BuildArch:	noarch
+BuildArch:      noarch
 
 %description
 A set of macros for building GHC packages following the Haskell Guidelines
@@ -184,6 +183,9 @@ EOF
 
 
 %changelog
+* Wed Apr 27 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-2
+- drop ghc-compiler requires to allow using ghcX.Y-compiler-default
+
 * Wed Apr 27 2022 Tim Landscheidt <tim@tim-landscheidt.de>
 - Update license from https://www.gnu.org/licenses/
 - Use https for subpackage URLs
