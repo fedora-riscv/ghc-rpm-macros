@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.15
-Release:        2%{?dist}
+Version:        2.3.16
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -183,6 +183,9 @@ EOF
 
 
 %changelog
+* Mon May 16 2022 Jens Petersen <petersen@redhat.com> - 2.3.16-1
+- define ghc_prefix (used for ghcX.Y packaging)
+
 * Wed Apr 27 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-2
 - drop ghc-compiler requires to allow using ghcX.Y-compiler-default
 

@@ -46,8 +46,11 @@ fi\
 # no _pkgdocdir in EPEL <= 7
 %ghc_pkgdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
+# library package prefix
+%ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}
+
 # root dir for ghc docs (used by ghc.spec)
-%ghc_html_dir %{_docdir}/%{?ghc_name}%{!?ghc_name:ghc}/html
+%ghc_html_dir %{_docdir}/%{ghc_prefix}/html
 # deprecates
 %ghcdocbasedir %ghc_html_dir
 
@@ -76,7 +79,7 @@ fi\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
-%define basepkg %{?ghc_name}%{!?ghc_name:ghc}-%{pkgname}\
+%define basepkg %{ghc_prefix}-%{pkgname}\
 if [ -z "$(ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf)" ]; then\
 echo '%{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf not found'\
 exit 1\
