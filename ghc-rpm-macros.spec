@@ -185,6 +185,7 @@ EOF
 %changelog
 * Wed Jun  8 2022 Jens Petersen <petersen@redhat.com> - 2.3.16-1
 - define ghc_prefix (used for ghcX.Y packaging)
+- add _ghc_doc_dir
 
 * Wed Apr 27 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-2
 - drop ghc-compiler requires to allow using ghcX.Y-compiler-default
