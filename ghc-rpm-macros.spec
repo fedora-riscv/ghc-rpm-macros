@@ -183,7 +183,7 @@ EOF
 
 
 %changelog
-* Mon May 16 2022 Jens Petersen <petersen@redhat.com> - 2.3.16-1
+* Wed Jun  8 2022 Jens Petersen <petersen@redhat.com> - 2.3.16-1
 - define ghc_prefix (used for ghcX.Y packaging)
 
 * Wed Apr 27 2022 Jens Petersen <petersen@redhat.com> - 2.3.15-2

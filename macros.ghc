@@ -49,8 +49,11 @@ fi\
 # library package prefix
 %ghc_prefix %{?ghc_name}%{!?ghc_name:ghc}
 
+# top ghcdocdir
+%_ghc_doc_dir %{_docdir}/%{ghc_prefix}
+
 # root dir for ghc docs (used by ghc.spec)
-%ghc_html_dir %{_docdir}/%{ghc_prefix}/html
+%ghc_html_dir %{_ghc_doc_dir}/html
 # deprecates
 %ghcdocbasedir %ghc_html_dir
 
@@ -67,9 +70,9 @@ fi\
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
-%_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
-
 %ghcliblib %{ghclibdir}%{?with_hadrian:/lib}
+
+%_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
 # Cabal has specific arch names
 %ghclibplatform %{ghcliblib}%{?with_hadrian:/%(echo %{_arch} | sed -e "s/ppc64le/ppc64/")-linux-ghc-%{ghc_version}}
