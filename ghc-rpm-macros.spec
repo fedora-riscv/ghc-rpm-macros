@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.3.16
+Version:        2.4.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -183,6 +183,10 @@ EOF
 
 
 %changelog
+* Fri Jun 10 2022 Jens Petersen <petersen@redhat.com> - 2.4.0-1
+- change ghc-deps.sh, splitting buildroot path from ghclibdir
+  so that the ghc version can be used more precisely
+
 * Wed Jun  8 2022 Jens Petersen <petersen@redhat.com> - 2.3.16-1
 - define ghc_prefix (used for ghcX.Y packaging)
 - add _ghc_doc_dir
