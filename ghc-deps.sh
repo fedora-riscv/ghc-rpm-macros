@@ -1,24 +1,24 @@
 #!/bin/sh
 # find rpm provides and requires for Haskell GHC libraries
 
-[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot}%{ghclibdir} [%{?ghc_name}]" && exit 1
+[ $# -lt 2 ] && echo "Usage: $(basename $0) [--provides|--requires] %{buildroot} %{ghclibdir} [%{?ghc_name}]" && exit 1
 
 set +x
 
 MODE=$1
-PKGBASEDIR=$2
-if [ -z "$3" ];
+BUILDROOT=$2
+PKGBASEDIR=$3
+if [ -z "$4" ];
 then GHCPREFIX=ghc
-else GHCPREFIX=$3
+else GHCPREFIX=$4
 fi
-if [ -d $PKGBASEDIR/lib ];
+if [ -d $BUILDROOT$PKGBASEDIR/lib ];
 then PKGBASELIB=$PKGBASEDIR/lib
-     LIB=lib/
 else PKGBASELIB=$PKGBASEDIR
 fi
 PKGCONFDIR=$PKGBASELIB/package.conf.d
 
-GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $PKGBASEDIR"
+GHC_PKG="/usr/lib/rpm/ghc-pkg-wrapper $BUILDROOT$PKGBASEDIR"
 
 case $MODE in
     --provides) field=id ;;
@@ -34,7 +34,7 @@ for i in $files; do
     meta=""
     case $i in
         # exclude rts.conf
-        $PKGCONFDIR/*-*.conf)
+        $BUILDROOT$PKGCONFDIR/*-*.conf)
             name=$(grep "^name: " $i | sed -e "s/name: //")
             ids=$($GHC_PKG field $name $field | sed -e "s/\(^\| \)rts\( \|$\)/ /")
             for d in $ids; do
@@ -57,7 +57,7 @@ for i in $files; do
                                 echo "$GHCPREFIX-prof($d)"
                                 ;;
                             *)
-                                if [ -f /usr/lib*/ghc-*/$LIB*/libHS${d}_p.a -o -f $PKGBASELIB/*/libHS${d}_p.a ]; then
+                                if [ -f $PKGBASELIB/*/libHS${d}_p.a -o -f $BUILDROOT$PKGBASELIB/*/libHS${d}_p.a ]; then
                                     echo "$GHCPREFIX-prof($d)"
                                 fi
                                 ;;
