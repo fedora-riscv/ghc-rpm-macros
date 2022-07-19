@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.4.2
+Version:        2.4.3
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -46,12 +46,14 @@ Extra macros used for subpackaging of Haskell libraries,
 for example in ghc and haskell-platform.
 
 
+%if 0%{?fedora} < 37
 %package -n ghc-filesystem
 Summary:        Shared directories for Haskell documentation
 
 %description -n ghc-filesystem
 This package provides some common directories used for
 Haskell libraries documentation.
+%endif
 
 
 # ideally packages should be obsoleted by some relevant package
@@ -139,7 +141,9 @@ install -p -D -m 0755 %{SOURCE11} %{buildroot}%{_bindir}/cabal-tweak-drop-dep
 install -p -D -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/cabal-tweak-remove-upperbound
 install -p -D -m 0755 %{SOURCE8} %{buildroot}%{_prefix}/lib/rpm/ghc-pkg-wrapper
 
+%if 0%{?fedora} < 37
 mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
+%endif
 
 %if 0%{?rhel} && 0%{?rhel} < 7
 cat >> %{buildroot}%{_prefix}/lib/rpm/ghc-deps.sh <<EOF
@@ -169,12 +173,15 @@ EOF
 %files extra
 %{macros_dir}/macros.ghc-extra
 
+
+%if 0%{?fedora} < 37
 %files -n ghc-filesystem
 %dir %{_docdir}/ghc
 # %%{ghc_html_dir}
 %dir %{_docdir}/ghc/html
 # %%{ghc_html_libraries_dir}
 %dir %{_docdir}/ghc/html/libraries
+%endif
 
 
 %if 0%{?fedora} >= 29
@@ -183,6 +190,9 @@ EOF
 
 
 %changelog
+* Tue Jul 19 2022 Jens Petersen <petersen@redhat.com> - 2.4.3-1
+- in F37 ghc-filesystem is now a subpackage of ghc
+
 * Tue Jul 19 2022 Jens Petersen <petersen@redhat.com> - 2.4.2-1
 - ghc_bin_build,ghc_lib_build: define ghc_debuginfo to really enable debuginfo
 
