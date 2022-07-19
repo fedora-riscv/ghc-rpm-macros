@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.4.1
+Version:        2.4.2
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -183,6 +183,9 @@ EOF
 
 
 %changelog
+* Tue Jul 19 2022 Jens Petersen <petersen@redhat.com> - 2.4.2-1
+- ghc_bin_build,ghc_lib_build: define ghc_debuginfo to really enable debuginfo
+
 * Sun Jul 17 2022 Jens Petersen <petersen@redhat.com> - 2.4.1-1
 - ghc_bin_build,ghc_lib_build: use ghc_debuginfo to enable debuginfo
 
