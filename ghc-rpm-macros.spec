@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.4.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -190,6 +190,9 @@ EOF
 
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Tue Jul 19 2022 Jens Petersen <petersen@redhat.com> - 2.4.3-1
 - in F37 ghc-filesystem is now a subpackage of ghc
 
