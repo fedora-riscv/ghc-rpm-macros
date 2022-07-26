@@ -112,9 +112,17 @@ touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
 ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
 %if %{with haddock}\
-haddock_dir=%{ghc_html_libraries_dir}/%{?with_hadrian:%pkgname}%{!?with_hadrian:%pkgnamever}\
+haddock_dir=%{ghc_html_libraries_dir}/%{pkgnamever}\
 if [ -d %{buildroot}$haddock_dir ]; then\
 echo $haddock_dir >> %{basepkg}-doc.files\
+%if %{with hadrian}\
+# for < 9.4.1-rc1\
+else\
+haddock_dir=%{ghc_html_libraries_dir}/%{pkgname}\
+if [ -d %{buildroot}$haddock_dir ]; then\
+echo $haddock_dir >> %{basepkg}-doc.files\
+fi\
+%endif\
 fi\
 %endif\
 for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-doc.files %{basepkg}-prof.files; do\

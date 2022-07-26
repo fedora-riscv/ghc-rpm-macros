@@ -192,6 +192,7 @@ EOF
 %changelog
 * Tue Jul 26 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-1
 - ghc_gen_filelists: check pkg licensedir exists
+- in 9.4.1 Hadrian html docdirs are versioned again (breaks older Hadrian)
 
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
