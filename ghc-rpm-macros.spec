@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.4.3
-Release:        2%{?dist}
+Version:        2.4.4
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -190,6 +190,9 @@ EOF
 
 
 %changelog
+* Tue Jul 26 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-1
+- ghc_gen_filelists: check pkg licensedir exists
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
