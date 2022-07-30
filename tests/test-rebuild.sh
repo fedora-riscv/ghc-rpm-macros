@@ -28,7 +28,7 @@ if [ -f /etc/os-release ]; then
     else
         case $VERSION_ID in
             7.*) BRANCH=epel7 ;;
-            *) BRANCH=master ;;
+            *) BRANCH=rawhide ;;
         esac
     fi
 else
