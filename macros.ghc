@@ -90,9 +90,11 @@ fi\
 rm -f %{basepkg}.files %{basepkg}-doc.files\
 touch %{basepkg}.files %{basepkg}-doc.files\
 %if 0%{?1:1}\
+if [ -d "%{buildroot}%{_ghclicensedir}/%{basepkg}" ]; then\
 for i in $(ls %{buildroot}%{_ghclicensedir}/%{basepkg}); do\
 echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
 done\
+fi\
 %endif\
 for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
 if [ -x "$i" ]; then\
@@ -110,9 +112,17 @@ touch %{basepkg}-devel.files %{basepkg}-prof.files\
 fi\
 ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf >> %{basepkg}-devel.files\
 %if %{with haddock}\
-haddock_dir=%{ghc_html_libraries_dir}/%{?with_hadrian:%pkgname}%{!?with_hadrian:%pkgnamever}\
+haddock_dir=%{ghc_html_libraries_dir}/%{pkgnamever}\
 if [ -d %{buildroot}$haddock_dir ]; then\
 echo $haddock_dir >> %{basepkg}-doc.files\
+%if %{with hadrian}\
+# for < 9.4.1-rc1\
+else\
+haddock_dir=%{ghc_html_libraries_dir}/%{pkgname}\
+if [ -d %{buildroot}$haddock_dir ]; then\
+echo $haddock_dir >> %{basepkg}-doc.files\
+fi\
+%endif\
 fi\
 %endif\
 for i in %{basepkg}.files %{basepkg}-devel.files %{basepkg}-doc.files %{basepkg}-prof.files; do\
@@ -149,14 +159,14 @@ done\
 # ghc_bin_build
 %ghc_bin_build\
 %ghc_fix_doc_perms\
-%undefine _enable_debug_packages\
+%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
 %cabal_configure\
 %cabal build %{?ghc_smp_mflags} %{?cabal_build_options}
 
 # ghc_lib_build_without_haddock [name] [version]
 %ghc_lib_build_without_haddock()\
 %ghc_fix_doc_perms\
-%undefine _enable_debug_packages\
+%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
 %if 0%{?rhel} && 0%{?rhel} < 8\
 licensedirversion=%{?2:-%2}\
 %endif\
