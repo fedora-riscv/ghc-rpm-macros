@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.4.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -106,6 +106,9 @@ Obsoletes:      ghc-cpio-conduit < 0.7.1, ghc-cpio-conduit-devel < 0.7.1, ghc-cp
 Obsoletes:      ghc-failure < 0.2.0.4, ghc-failure-devel < 0.2.0.4, ghc-failure-doc < 0.2.0.4, ghc-failure-prof < 0.2.0.4
 Obsoletes:      ghc-attempt < 0.4.0.2, ghc-attempt-devel < 0.4.0.2, ghc-attempt-doc < 0.4.0.2, ghc-attempt-prof < 0.4.0.2
 %endif
+%if 0%{?fedora} >= 36
+Obsoletes:      ghc-regex-applicative-text < 0.1.0.1-16, ghc-regex-applicative-text-devel < 0.1.0.1-16, ghc-regex-applicative-text-doc < 0.1.0.1-16, ghc-regex-applicative-text-prof < 0.1.0.1-16
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
@@ -190,6 +193,9 @@ EOF
 
 
 %changelog
+* Sat Aug  6 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-2
+- F36 obsoletes regex-applicative-text
+
 * Tue Jul 26 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-1
 - ghc_gen_filelists: check pkg licensedir exists
 - in 9.4.1 Hadrian html docdirs are versioned again (breaks older Hadrian)
