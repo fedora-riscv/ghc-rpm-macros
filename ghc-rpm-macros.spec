@@ -7,7 +7,7 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.4.5
+Version:        2.5.0
 Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
@@ -27,6 +27,7 @@ Source9:        macros.ghc-os
 Source10:       Setup.hs
 Source11:       cabal-tweak-drop-dep
 Source12:       cabal-tweak-remove-upperbound
+Source13:       ghc-info.sh
 Requires:       redhat-rpm-config
 # ghc_version needs ghc-compiler or ghcX.Y-compiler-default
 Requires:       chrpath
@@ -131,6 +132,7 @@ install -p -D -m 0644 %{SOURCE6} %{buildroot}%{macros_dir}/macros.ghc-extra
 install -p -D -m 0644 %{SOURCE9} %{buildroot}%{macros_dir}/macros.ghc-os
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/ghc-deps.sh
+install -p -D -m 0755 %{SOURCE13} %{buildroot}%{_prefix}/lib/rpm/ghc-info.sh
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 install -p -D -m 0644 %{SOURCE7} %{buildroot}%{_prefix}/lib/rpm/fileattrs/ghc.attr
@@ -165,6 +167,7 @@ EOF
 %{_prefix}/lib/rpm/fileattrs/ghc.attr
 %endif
 %{_prefix}/lib/rpm/ghc-deps.sh
+%{_prefix}/lib/rpm/ghc-info.sh
 %{_prefix}/lib/rpm/ghc-pkg-wrapper
 %{_bindir}/cabal-tweak-dep-ver
 %{_bindir}/cabal-tweak-drop-dep
@@ -193,9 +196,10 @@ EOF
 
 
 %changelog
-* Thu Sep 15 2022 Jens Petersen <petersen@redhat.com> - 2.4.5-1
+* Thu Sep 15 2022 Jens Petersen <petersen@redhat.com> - 2.5.0-1
 - define ghc_smp_mflags to speed up package builds
 - ghc_configure and ghc_version now respect ghc_name for ghcX.Y (via rpmquery)
+- add ghc-info.sh to read fields from ghc --info
 
 * Sat Aug  6 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-2
 - F36 obsoletes regex-applicative-text
