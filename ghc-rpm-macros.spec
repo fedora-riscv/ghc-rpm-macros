@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.4.4
-Release:        2%{?dist}
+Version:        2.4.5
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -193,6 +193,9 @@ EOF
 
 
 %changelog
+* Thu Sep 15 2022 Jens Petersen <petersen@redhat.com> - 2.4.5-1
+- define ghc_smp_mflags to speed up package builds
+
 * Sat Aug  6 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-2
 - F36 obsoletes regex-applicative-text
 

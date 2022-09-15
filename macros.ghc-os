@@ -11,3 +11,6 @@
 
 # enable library documentation in doc subpkgs
 %with_haddock 1
+
+# %%{?_smp_ncpus_max:--jobs=%%{?_smp_ncpus_max}}
+%ghc_smp_mflags %{?_smp_mflags}
