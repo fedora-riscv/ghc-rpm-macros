@@ -195,6 +195,7 @@ EOF
 %changelog
 * Thu Sep 15 2022 Jens Petersen <petersen@redhat.com> - 2.4.5-1
 - define ghc_smp_mflags to speed up package builds
+- ghc_configure and ghc_version now respect ghc_name for ghcX.Y (via rpmquery)
 
 * Sat Aug  6 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-2
 - F36 obsoletes regex-applicative-text
