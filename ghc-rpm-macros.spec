@@ -150,13 +150,6 @@ install -p -D -m 0755 %{SOURCE8} %{buildroot}%{_prefix}/lib/rpm/ghc-pkg-wrapper
 mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} < 7
-cat >> %{buildroot}%{_prefix}/lib/rpm/ghc-deps.sh <<EOF
-
-echo \$files | tr [:blank:] '\n' | %{_rpmconfigdir}/rpmdeps --requires
-EOF
-%endif
-
 
 %files
 %license COPYING
