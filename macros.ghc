@@ -7,7 +7,7 @@ LANG=C.utf8\
 ./Setup
 
 # compiler version
-%ghc_version %{?ghc_version_override}%{!?ghc_version_override:%(rpm -q --qf %%{version} %{?ghc_name}%{!?ghc_name:ghc})}
+%ghc_version %{?ghc_version_override}%{!?ghc_version_override:%(rpm -q --qf %%{version} %{?ghc_name}%{!?ghc_name:ghc}-compiler)}
 
 %ghc_set_gcc_flags\
 %global _lto_cflags %{nil}\
