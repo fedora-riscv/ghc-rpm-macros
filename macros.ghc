@@ -79,8 +79,8 @@ fi\
 # Cabal has specific arch names
 %ghclibplatform %{ghcliblib}%{?with_hadrian:/%(echo %{_arch} | sed -e "s/ppc64le/ppc64/")-linux-ghc-%{ghc_version}}
 
-# ghc_gen_filelists [name] [version]
-%ghc_gen_filelists()\
+# ghc_gen_filelists [-m] [name] [version]
+%ghc_gen_filelists(m)\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
@@ -102,7 +102,10 @@ for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS
 if [ -x "$i" ]; then\
 echo $i >> %{basepkg}.files\
 else\
-echo 'Warning: %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so not found'\
+echo %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so not found\
+%if 0%{!-m:1}\
+exit 1\
+%endif\
 fi\
 done\
 pkgdir="%{ghclibplatform}/%{pkgnamever}"\
@@ -195,10 +198,10 @@ fi\
 %{nil}
 
 # ghc_lib_install [name] [version]
-%ghc_lib_install()\
+%ghc_lib_install(m)\
 %cabal_install\
 %cabal_pkg_conf %{?1} %{?2}\
-%ghc_gen_filelists %{?1} %{?2}\
+%ghc_gen_filelists %{-m} %{?1} %{?2}\
 %ghc_delete_rpaths\
 %{nil}
 
