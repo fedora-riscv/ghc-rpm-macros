@@ -84,11 +84,11 @@ fi\
 %define pkgname %{?1}%{!?1:%{pkg_name}}\
 %define pkgver %{?2}%{!?2:%{version}}\
 %define pkgnamever %{pkgname}-%{pkgver}\
-%define basepkg %{ghc_prefix}-%{pkgname}\
 if [ -z "$(ls %{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf)" ]; then\
-echo '%{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf not found'\
+echo "%{buildroot}%{ghcliblib}/package.conf.d/%{pkgnamever}*.conf not found"\
 exit 1\
 fi\
+%define basepkg %{ghc_prefix}-%{pkgname}\
 rm -f %{basepkg}.files %{basepkg}-doc.files\
 touch %{basepkg}.files %{basepkg}-doc.files\
 %if 0%{?1:1}\
