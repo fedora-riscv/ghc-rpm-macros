@@ -98,11 +98,11 @@ echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
 done\
 fi\
 %endif\
-for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
+for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%ghclibplatform%{!?with_hadrian:/%{pkgnamever}}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
 if [ -x "$i" ]; then\
 echo $i >> %{basepkg}.files\
 else\
-echo %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghclibplatform}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so not found\
+echo %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:$pkgdir}/libHS%{pkgnamever}-*ghc%{ghc_version}.so not found\
 %if 0%{!-m:1}\
 exit 1\
 %endif\
