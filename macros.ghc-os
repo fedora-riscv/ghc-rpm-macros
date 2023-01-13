@@ -2,7 +2,7 @@
 
 %_ghcdocdir %{_ghclicensedir}/%{name}
 
-%_ghcdynlibdir %{_libdir}
+# %%_ghcdynlibdir %%{_libdir}/ghc-%%{ghc_version}
 
 %ghc_without_dynamic 1
 
