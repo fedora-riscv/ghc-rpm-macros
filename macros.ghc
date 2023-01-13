@@ -30,9 +30,9 @@ export LDFLAGS="${LDFLAGS:-%{?__global_ldflags}}"\
 if ! [ -f Setup.hs -o -f Setup.lhs ]; then\
 cp %{_datadir}/ghc-rpm-macros/Setup.hs .\
 fi\
-if [ "$(/usr/lib/rpm/ghc-info.sh %{ghc_version} 'LibDir')" != "%{ghclibdir}" ]; then\
+%if %{with hadrian}\
 subsubdir=lib/\
-fi\
+%endif\
 %cabal --version\
 %cabal configure %{?ghc_name:--with-compiler=%{_bindir}/ghc-%{ghc_version}} --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_ghcdocdir} --libsubdir='$compiler'/${subsubdir}'$pkgid' --datasubdir='$pkgid' --libexecsubdir='$pkgid' --ghc --dynlibdir=%{?_ghcdynlibdir}%{?!_ghcdynlibdir:%{_libdir}/ghc-%{ghc_version}} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} --ghc-options="${CFLAGS:+$(echo ' '$CFLAGS | sed -e 's/ / -optc/g')} ${LDFLAGS:+$(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')} -fhide-source-paths" %{?cabal_configure_options} $cabal_configure_extra_options
 
@@ -72,7 +72,7 @@ fi\
 # top library dir
 %ghclibdir %{_libdir}/ghc-%{ghc_version}
 
-%ghcliblib %{?with_hadrian:%{ghclibdir}/lib}%{!?with_hadrian:%(/usr/lib/rpm/ghc-info.sh %{ghc_version} 'LibDir')}
+%ghcliblib %{ghclibdir}%{?with_hadrian:/lib}
 
 %_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
