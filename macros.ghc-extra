@@ -22,6 +22,7 @@ Summary:        Haskell %{pkgname} library\
 %{-l:License:        %{-l*}}\
 Url:            https://hackage.haskell.org/package/%{pkgname}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %(echo "%{ghc_pkg_obsoletes}" | sed -e "s/\\(%{ghc_prefix}-[^, ]*\\)-devel/\\1/g")}\
+%{?ghc_obsoletes_name:Obsoletes:        %{ghc_obsoletes_name}-%{pkgname} < %{pkgver}-%{release}}\
 \
 %description -n %{basepkg}\
 This package provides the Haskell %{pkgname} library.\
@@ -39,6 +40,7 @@ Requires:       %{ghc_prefix}-%{pkgname}%{?_isa} = %{pkgver}-%{release}\
 %endif\
 %{?ghc_pkg_c_deps:Requires:       %{ghc_pkg_c_deps}}\
 %{-c:Requires:       %{-c*}}\
+%{?ghc_obsoletes_name:Obsoletes:        %{ghc_obsoletes_name}-%{pkgname}-devel < %{pkgver}-%{release}}\
 %{?ghc_pkg_obsoletes:Obsoletes:      %{ghc_pkg_obsoletes}}\
 \
 %description -n %{basepkg}-devel\
@@ -52,6 +54,7 @@ Summary:        Haskell %{pkgname} library documentation\
 %{-l:License:        %{-l*}}\
 BuildArch:      noarch\
 Requires:       %{ghc_prefix}-filesystem\
+%{?ghc_obsoletes_name:Obsoletes:        %{ghc_obsoletes_name}-%{pkgname}-doc < %{pkgver}-%{release}}\
 Supplements:    (%{basepkg}-devel and %{ghc_prefix}-doc)\
 \
 %description -n %{basepkg}-doc\
@@ -64,6 +67,7 @@ Summary:        Haskell %{pkgname} profiling library\
 %{?1:Version:        %{pkgver}}\
 %{-l:License:        %{-l*}}\
 Requires:       %{ghc_prefix}-%{pkgname}-devel%{?_isa} = %{pkgver}-%{release}\
+%{?ghc_obsoletes_name:Obsoletes:        %{ghc_obsoletes_name}-%{pkgname}-prof < %{pkgver}-%{release}}\
 Supplements:    (%{basepkg}-devel and %{ghc_prefix}-prof)\
 \
 %description -n %{basepkg}-prof\
