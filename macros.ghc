@@ -218,6 +218,7 @@ fi\
 
 # ghc_delete_rpaths
 %ghc_delete_rpaths\
+%if %{defined _ghcdynlibdir}\
 %if %{undefined disable_ghc_delete_rpaths}\
 echo "running ghc_delete_rpaths:"\
 if ! type chrpath > /dev/null; then exit 1; fi\
@@ -229,6 +230,7 @@ for i in $(find %{buildroot} -type f -executable -exec sh -c "file {} | grep -q 
     exit 1\
   fi\
 done\
+%endif\
 %endif
 
 # deprecated by ghc_delete_rpaths in F35
