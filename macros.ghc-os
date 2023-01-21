@@ -2,8 +2,6 @@
 
 %_ghcdocdir %{_ghclicensedir}/%{name}
 
-# %%_ghcdynlibdir %%{_libdir}/ghc-%%{ghc_version}
-
 %ghc_without_dynamic 1
 
 # enable profiling libraries in prof subpkgs

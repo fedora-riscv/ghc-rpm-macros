@@ -130,6 +130,10 @@ install -p -D -m 0644 %{SOURCE0} %{buildroot}%{macros_dir}/macros.ghc
 install -p -D -m 0644 %{SOURCE6} %{buildroot}%{macros_dir}/macros.ghc-extra
 install -p -D -m 0644 %{SOURCE9} %{buildroot}%{macros_dir}/macros.ghc-os
 
+%if 0%{?fedora} < 38
+echo -e "\n%%_ghcdynlibdir %%{_libdir}" >> %{buildroot}%{macros_dir}/macros.ghc-os
+%endif
+
 install -p -D -m 0755 %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/ghc-deps.sh
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
