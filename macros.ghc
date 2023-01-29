@@ -34,7 +34,7 @@ if [ -d "%{ghclibdir}/lib" ]; then\
 subsubdir=/lib\
 fi\
 %cabal --version\
-%cabal configure %{!-W:%{?ghc_name:--with-compiler=%{_bindir}/ghc-%{ghc_version}}} --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_ghcdocdir} --libsubdir='$compiler'${subsubdir}/'$pkgid' --datasubdir='$pkgid' --libexecsubdir='$pkgid' --ghc --dynlibdir=%{?_ghcdynlibdir}%{?!_ghcdynlibdir:%{_libdir}/ghc-%{ghc_version}${subsubdir}/'$pkgid'} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} --ghc-options="${CFLAGS:+$(echo ' '$CFLAGS | sed -e 's/ / -optc/g')} ${LDFLAGS:+$(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')} -fhide-source-paths" %{?cabal_configure_options} $cabal_configure_extra_options
+%cabal configure %{!-W:%{?ghc_name:--with-compiler=%{_bindir}/ghc-%{ghc_version}}} --prefix=%{_prefix} --libdir=%{_libdir} --docdir=%{_ghcdocdir} --libsubdir='$compiler'${subsubdir}/'$pkgid' --datasubdir='$pkgid' --libexecsubdir='$pkgid' --ghc --dynlibdir=%{?_ghcdynlibdir}%{?!_ghcdynlibdir:%{_libdir}/ghc-%{ghc_version}${subsubdir}} %{!?ghc_without_dynamic:--enable-executable-dynamic} %{?with_tests:--enable-tests} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} --ghc-options="${CFLAGS:+$(echo ' '$CFLAGS | sed -e 's/ / -optc/g')} ${LDFLAGS:+$(echo ' '$LDFLAGS | sed -e 's/ / -optl/g')} -fhide-source-paths" %{?cabal_configure_options} $cabal_configure_extra_options
 
 # install
 %cabal_install %cabal copy --destdir=%{buildroot} %{?cabal_install_options}
@@ -106,7 +106,7 @@ echo "%%license %{pkgnamever}/$i" >> %{basepkg}.files\
 done\
 fi\
 %endif\
-for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghcliblib}${subsubdir}%{?with_hadrian:/%{ghcplatform}}%{!?with_hadrian:/%{pkgnamever}}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
+for i in %{buildroot}%{?_ghcdynlibdir}%{!?_ghcdynlibdir:%{ghcliblib}${subsubdir}%{?with_hadrian:/%{ghcplatform}}%{!?with_hadrian:%{?base_ver:/%{pkgnamever}}}}/libHS%{pkgnamever}-*ghc%{ghc_version}.so; do\
 if [ -x "$i" ]; then\
 echo $i >> %{basepkg}.files\
 else\
