@@ -190,9 +190,19 @@ mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
 
 
 %changelog
-* Thu Sep 15 2022 Jens Petersen <petersen@redhat.com> - 2.5.0-1
+* Sun Jan 29 2023 Jens Petersen <petersen@redhat.com> - 2.5.0-1
 - define ghc_smp_mflags to speed up package builds
 - ghc_configure and ghc_version now respect ghc_name for ghcX.Y (via rpmquery)
+- base ghc_version on compiler subpackage
+- ghc_gen_filelists: error if no .so file and not -m metapkg
+- use ghc upstream paths for libHS*.so unless using _ghcdynlibdir
+- F38: disable _ghcdynlibdir as default
+- ghc_bin_build -W to ignore ghc_name version in cabal_configure
+- ghc_lib_subpackage: with ghc_obsoletes_name obsolete ghc{ghc_major}-*
+- handle hadrian lib/ subdir consistently for packages
+- move with_ghc_prof to ghc-srpm-macros
+- cabal_configure: non-core shared libs go to ghcliblib
+- ghc_delete_rpaths: need to remove local RPATH for subpackaged libs
 
 * Sat Aug  6 2022 Jens Petersen <petersen@redhat.com> - 2.4.4-2
 - F36 obsoletes regex-applicative-text
