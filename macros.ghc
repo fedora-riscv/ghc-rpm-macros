@@ -9,6 +9,70 @@ LANG=C.utf8\
 # compiler version
 %ghc_version %{?ghc_version_override}%{!?ghc_version_override:%(rpm -q --qf %%{version} %{?ghc_name}%{!?ghc_name:ghc}-compiler)}
 
+# ghc_bin_build: -W: use default ghc (ie ignore ghc_name)
+%ghc_bin_build(W)\
+%ghc_fix_doc_perms\
+%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
+%cabal_configure\
+%cabal build %{?ghc_smp_mflags} %{?cabal_build_options}
+
+# ghc_lib_build_without_haddock [name] [version]
+%ghc_lib_build_without_haddock()\
+%ghc_fix_doc_perms\
+%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
+%if 0%{?rhel} && 0%{?rhel} < 8\
+licensedirversion=%{?2:-%2}\
+%endif\
+%cabal_configure %{?with_ghc_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
+%cabal build %{?ghc_smp_mflags} %{?cabal_build_options}\
+%{nil}
+
+# ghc_lib_build [name] [version]
+%ghc_lib_build()\
+%ghc_lib_build_without_haddock %{?1} %{?2}\
+%if %{with haddock}\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define pkgver %{?2}%{!?2:%{version}}\
+if [ -n dist/build/libHS%{pkgname}-%{pkgver}*.so ]; then\
+%cabal haddock --html --hyperlink-source --hoogle %{?cabal_haddock_options}\
+fi\
+%endif\
+%{nil}
+
+# install bin package
+%ghc_bin_install()\
+%cabal_install\
+%ghc_delete_rpaths\
+%{nil}
+
+# ghc_lib_install [name] [version]
+%ghc_lib_install(m)\
+%cabal_install\
+%cabal_pkg_conf %{?1} %{?2}\
+%ghc_gen_filelists %{-m} %{?1} %{?2}\
+%ghc_delete_rpaths\
+%{nil}
+
+# create and install package.conf file
+# cabal_pkg_conf [name] [version]
+%cabal_pkg_conf()\
+%define pkgname %{?1}%{!?1:%{pkg_name}}\
+%define pkgver %{?2}%{!?2:%{version}}\
+%define pkgnamever %{pkgname}-%{pkgver}\
+%cabal register --gen-pkg-config\
+if [ -d "%{ghclibdir}/lib" ]; then\
+subsubdir=/lib\
+fi\
+if [ -d %{pkgnamever}.conf ]; then\
+for i in $(ls "%{pkgnamever}.conf/"); do\
+sub=$(echo $i | sed -e "s/^[0-9]\\+-//")\
+install -D --mode=0644 %{pkgnamever}.conf/${i} %{buildroot}%{ghcliblib}${subsubdir}/package.conf.d/${sub}.conf\
+done\
+else\
+install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghcliblib}${subsubdir}/package.conf.d/%{pkgnamever}.conf\
+fi\
+%{nil}
+
 %ghc_set_gcc_flags\
 %global _lto_cflags %{nil}\
 %global __brp_strip_lto %{nil}\
@@ -145,75 +209,12 @@ fi\
 done\
 %{nil}
 
-# create and install package.conf file
-# cabal_pkg_conf [name] [version]
-%cabal_pkg_conf()\
-%define pkgname %{?1}%{!?1:%{pkg_name}}\
-%define pkgver %{?2}%{!?2:%{version}}\
-%define pkgnamever %{pkgname}-%{pkgver}\
-%cabal register --gen-pkg-config\
-if [ -d "%{ghclibdir}/lib" ]; then\
-subsubdir=/lib\
-fi\
-if [ -d %{pkgnamever}.conf ]; then\
-for i in $(ls "%{pkgnamever}.conf/"); do\
-sub=$(echo $i | sed -e "s/^[0-9]\\+-//")\
-install -D --mode=0644 %{pkgnamever}.conf/${i} %{buildroot}%{ghcliblib}${subsubdir}/package.conf.d/${sub}.conf\
-done\
-else\
-install -D --mode=0644 %{pkgnamever}.conf %{buildroot}%{ghcliblib}${subsubdir}/package.conf.d/%{pkgnamever}.conf\
-fi\
-%{nil}
 
 # workaround Cabal bug causing executable extra-source-files
 %ghc_fix_doc_perms\
 for f in $(ls | grep -i -e '^\\(ANNOUNCE\\|AUTHORS\\|CHANGELOG\\|CHANGES\\|CONTRIBUTORS\\|README\\|TODO\\)'); do\
 if [ -f $f -a -x $f ]; then chmod a-x $f; fi\
 done\
-%{nil}
-
-# ghc_bin_build: -W: use default ghc (ie ignore ghc_name)
-%ghc_bin_build(W)\
-%ghc_fix_doc_perms\
-%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
-%cabal_configure\
-%cabal build %{?ghc_smp_mflags} %{?cabal_build_options}
-
-# ghc_lib_build_without_haddock [name] [version]
-%ghc_lib_build_without_haddock()\
-%ghc_fix_doc_perms\
-%{?!ghc_debuginfo:%undefine _enable_debug_packages}\
-%if 0%{?rhel} && 0%{?rhel} < 8\
-licensedirversion=%{?2:-%2}\
-%endif\
-%cabal_configure %{?with_ghc_prof:-p} %{!?ghc_without_shared:--enable-shared} %{?ghc_without_shared:--disable-shared} %{?pkg_name:--htmldir=%{ghclibdocdir}/%{pkg_name}-%{version}} %{?1:--docdir=%{_ghclicensedir}/ghc-%1${licensedirversion} --htmldir=%{ghclibdocdir}/%1-%2} %{?ghc_subpackaging:--user}%{!?ghc_subpackaging:--global} %{?ghc_with_lib_for_ghci:--enable-library-for-ghci}\
-%cabal build %{?ghc_smp_mflags} %{?cabal_build_options}\
-%{nil}
-
-# ghc_lib_build [name] [version]
-%ghc_lib_build()\
-%ghc_lib_build_without_haddock %{?1} %{?2}\
-%if %{with haddock}\
-%define pkgname %{?1}%{!?1:%{pkg_name}}\
-%define pkgver %{?2}%{!?2:%{version}}\
-if [ -n dist/build/libHS%{pkgname}-%{pkgver}*.so ]; then\
-%cabal haddock --html --hyperlink-source --hoogle %{?cabal_haddock_options}\
-fi\
-%endif\
-%{nil}
-
-# install bin package
-%ghc_bin_install()\
-%cabal_install\
-%ghc_delete_rpaths\
-%{nil}
-
-# ghc_lib_install [name] [version]
-%ghc_lib_install(m)\
-%cabal_install\
-%cabal_pkg_conf %{?1} %{?2}\
-%ghc_gen_filelists %{-m} %{?1} %{?2}\
-%ghc_delete_rpaths\
 %{nil}
 
 # ghc_delete_rpaths
