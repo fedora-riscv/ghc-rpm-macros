@@ -2,10 +2,11 @@
 
 [ $# -lt 1 ] && echo "Usage: `basename $0` %{buildroot}%{ghclibdir} ..." && exit 1
 
-set +x
+set +x -e
 
 PKGBASEDIR=$1
 shift
+
 if [ -d $PKGBASEDIR/lib ];
 then PKGCONFDIR=$PKGBASEDIR/lib/package.conf.d
 else PKGCONFDIR=$PKGBASEDIR/package.conf.d
