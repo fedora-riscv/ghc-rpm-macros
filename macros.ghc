@@ -9,6 +9,8 @@ LANG=C.utf8\
 # compiler version
 %ghc_version %{?ghc_version_override}%{!?ghc_version_override:%(rpm -q --qf %%{version} %{?ghc_name}%{!?ghc_name:ghc}-compiler)}
 
+%ghc_major_version %(echo %{ghc_version} | sed -e "s/\\(.*\\)\\.[0-9]\\+/\\1/")
+
 # ghc_bin_build: -W: use default ghc (ie ignore ghc_name)
 %ghc_bin_build(W)\
 %ghc_fix_doc_perms\
