@@ -7,8 +7,8 @@
 %endif
 
 Name:           ghc-rpm-macros
-Version:        2.5.2
-Release:        4%{?dist}
+Version:        2.5.3
+Release:        1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -206,6 +206,12 @@ mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
 
 
 %changelog
+* Fri Aug  4 2023 Jens Petersen <petersen@redhat.com> - 2.5.3-1
+- ghc-deps.sh: correctly map internal library id to internal package .conf
+- tweak cabal_configure to only set --htmldir once for subpackaging
+- add ghc_major_version
+- F39: obsolete geniplate-mirror
+
 * Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2.5.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
 
