@@ -142,7 +142,6 @@ fi\
 
 %_ghclicensedir %{?_defaultlicensedir}%{!?_defaultlicensedir:%_docdir}
 
-# deprecated
 %ghclibplatform %{ghcliblib}%{?with_hadrian:/%{ghcplatform}}
 
 # Cabal has specific arch names
