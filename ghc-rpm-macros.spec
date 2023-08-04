@@ -122,6 +122,9 @@ Obsoletes:      ghc-topograph < 1.0.0.2, ghc-topograph-devel < 1.0.0.2, ghc-topo
 Obsoletes:      ghc-indexed-profunctors < 0.1.1-18, ghc-indexed-profunctors-devel < 0.1.1-18, ghc-indexed-profunctors-doc < 0.1.1-18, ghc-indexed-profunctors-prof < 0.1.1-18
 Obsoletes:      ghc-regex-compat-tdfa < 0.95.1.4-38, ghc-regex-compat-tdfa-devel < 0.95.1.4-38, ghc-regex-compat-tdfa-doc < 0.95.1.4-38, ghc-regex-compat-tdfa-prof < 0.95.1.4-38
 %endif
+%if 0%{?fedora} >= 39
+Obsoletes:      ghc-geniplate-mirror < 0.7.9-39, ghc-geniplate-mirror-devel < 0.95.1.4-38, ghc-geniplate-mirror-doc < 0.95.1.4-38, ghc-geniplate-mirror-prof < 0.95.1.4-38
+%endif
 
 %description -n ghc-obsoletes
 Meta package for obsoleting deprecated Haskell packages.
