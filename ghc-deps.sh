@@ -63,9 +63,12 @@ for i in $files; do
                                 echo "$GHCPREFIX-prof($d)"
                                 ;;
                             *)
-                                if [ -f "$PKGBASELIB"/*/libHS"${d}"_p.a -o -f "$BUILDROOT$PKGBASELIB"/*/libHS"${d}"_p.a -o -f "$PKGBASELIB"/*/*/libHS"${d}"_p.a -o -f "$BUILDROOT$PKGBASELIB"/*/*/libHS"${d}"_p.a ]; then
-                                    echo "$GHCPREFIX-prof($d)"
-                                fi
+                                for f in "$PKGBASELIB"/*/libHS"${d}"_p.a "$BUILDROOT$PKGBASELIB"/*/libHS"${d}"_p.a "$PKGBASELIB"/*/*/libHS"${d}"_p.a "$BUILDROOT$PKGBASELIB"/*/*/libHS"${d}"_p.a; do
+                                    if [ -f $f ]; then
+                                        echo "$GHCPREFIX-prof($d)"
+                                        break
+                                    fi
+                                done
                                 ;;
                         esac
                         ;;
