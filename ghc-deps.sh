@@ -46,9 +46,14 @@ for i in $files; do
             done
             ;;
         */libHS*_p.a)
-            conf=$(echo $(basename "$i") | sed -e "s%libHS%$BUILDROOT$PKGCONFDIR/%" -e 's%_p.a%.conf%')
-            name=$(grep "^name: " "$conf" | sed -e "s/name: *//")
-            ids=$($GHC_PKG field "$name" "$field" | sed -e "s/\(^\| \)rts\( \|$\)/ /" -e "s/bin-package-db-[^ ]\+//")
+            pkgver=$(basename "$(dirname "$i")")
+            if [ -e "$BUILDROOT$PKGCONFDIR/$pkgver.conf" ]; then
+                ids=$($GHC_PKG field "$pkgver" "$field" | sed -e "s/\(^\| \)rts\( \|$\)/ /" -e "s/bin-package-db-[^ ]\+//")
+            else
+                conf=$(basename "$i" | sed -e "s%libHS%$BUILDROOT$PKGCONFDIR/%" -e 's%_p.a%.conf%')
+                name=$(grep "^name: " "$conf" | sed -e "s/name: *//")
+                ids=$($GHC_PKG field "$name" "$field" | sed -e "s/\(^\| \)rts\( \|$\)/ /" -e "s/bin-package-db-[^ ]\+//")
+            fi
             for d in $ids; do
                 case $d in
                     *-*-internal) ;;
