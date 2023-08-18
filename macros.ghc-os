@@ -8,4 +8,8 @@
 %with_haddock 1
 
 # %%{?_smp_ncpus_max:--jobs=%%{?_smp_ncpus_max}}
+%ifnarch riscv64
 %ghc_smp_mflags %{?_smp_mflags}
+%else
+%ghc_smp_mflags -j1
+%fi

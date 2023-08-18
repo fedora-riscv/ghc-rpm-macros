@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.5.2
-Release:        3%{?dist}
+Release:        3.rv64%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
@@ -203,6 +203,9 @@ mkdir -p %{buildroot}%{_docdir}/ghc/html/libraries
 
 
 %changelog
+* Fri Aug 18 2023 Songsong Zhang <U2FsdGVkX1@gmail.com> - 2.5.2-3.rv64
+- f38: also obsolete regex-compat-tdfa
+
 * Mon Mar 27 2023 Jens Petersen <petersen@redhat.com> - 2.5.2-3
 - f38: also obsolete regex-compat-tdfa
 
