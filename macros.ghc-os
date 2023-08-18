@@ -12,4 +12,4 @@
 %ghc_smp_mflags %{?_smp_mflags}
 %else
 %ghc_smp_mflags -j1
-%fi
+%endif
