@@ -8,8 +8,4 @@
 %with_haddock 1
 
 # %%{?_smp_ncpus_max:--jobs=%%{?_smp_ncpus_max}}
-%ifnarch riscv64
-%ghc_smp_mflags %{?_smp_mflags}
-%else
-%ghc_smp_mflags -j1
-%endif
+%ghc_smp_mflags %[ "%{_target_cpu}" == "riscv64" ? "-j1" : "%{?_smp_mflags}" ]
