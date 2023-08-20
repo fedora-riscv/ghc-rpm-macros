@@ -8,7 +8,7 @@
 
 Name:           ghc-rpm-macros
 Version:        2.5.2
-Release:        3.rv64%{?dist}
+Release:        3.rv64.1%{?dist}
 Summary:        RPM macros for building Haskell packages for GHC
 
 License:        GPLv3+
